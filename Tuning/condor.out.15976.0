@@ -1,0 +1,39 @@
+[1] "SVM"
+[1] "---"
+[1] "acc_svm"
+acc.test.mean 
+    0.9500027 
+[1] "---"
+[1] "f1_svm"
+f1.test.mean 
+   0.1670205 
+[1] "---"
+[1] "gmean_svm"
+gmean.test.mean 
+      0.5077375 
+[1] "SVM WEIGHT"
+[1] "---"
+[1] "acc_svm"
+acc.test.mean 
+    0.9500001 
+[1] "---"
+[1] "f1_svm"
+f1.test.mean 
+   0.2537101 
+[1] "---"
+[1] "gmean_svm"
+gmean.test.mean 
+              0 
+[1] "RF"
+[1] "---"
+[1] "acc_RF"
+acc.test.mean 
+    0.9496489 
+[1] "---"
+[1] "f1_rf"
+f1.test.mean 
+   0.2080783 
+[1] "---"
+[1] "gmean_rf"
+gmean.test.mean 
+      0.3614535 

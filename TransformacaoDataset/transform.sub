@@ -1,0 +1,10 @@
+N=1
+universe                = vanilla
+executable            = transform.sh
+arguments               = $(Process)
+
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) 
