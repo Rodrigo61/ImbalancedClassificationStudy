@@ -28,7 +28,7 @@ DEBUG = F
 ################################################################
 
 #Lendo lista dos datasets
-dataset_list = read.csv("dataset_list_RECOD", header=F)
+dataset_list = read.csv("dataset_list", header=F)
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
@@ -102,7 +102,8 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
     res_f1 = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = f1, weight_space = weight_space)
     #Realizando Tuning com métrica gmean
     res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = gmean, weight_space = weight_space)
-    
+    #Realizando Tuning com métrica MCC
+    res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = mcc, weight_space = weight_space)
     #sem weight space
     new_row = c(learner_str, weight_space, 
                 res_acc$performance_tuned, 
@@ -119,13 +120,16 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
       print(learner_str)
       print("---")
       print("acc")
-      print(res_acc$y)
+      print(res_acc$performance_tuned)
+      print(res_acc$performance_trained)
       print("---")
       print("f1")
-      print(res_f1$y)
+      print(res_f1$performance_tuned)
+      print(res_f1$performance_trained)
       print("---")
       print("gmean")
-      print(res_gmean$y)
+      print(res_gmean$performance_tuned)
+      print(res_gmean$performance_trained)
     }
   }
   return(measures_compilation)
