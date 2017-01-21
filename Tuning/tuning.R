@@ -103,15 +103,17 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
     #Realizando Tuning com métrica gmean
     res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = gmean, weight_space = weight_space)
     #Realizando Tuning com métrica MCC
-    res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = mcc, weight_space = weight_space)
+    res_mcc = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = mcc, weight_space = weight_space)
     #sem weight space
     new_row = c(learner_str, weight_space, 
                 res_acc$performance_tuned, 
                 res_f1$performance_tuned, 
                 res_gmean$performance_tuned,
+                res_mcc$peformance_tuned,
                 res_acc$performance_trained, 
                 res_f1$performance_trained, 
-                res_gmean$performance_trained, i)
+                res_gmean$performance_trained, 
+                res_mcc$peformance_trained, i)
     
 
     measures_compilation[[i]] = new_row
@@ -192,7 +194,7 @@ for(i in 1:ITERS){
 #Adicionando informacoes extras ao csv
 colnames(out_df) = c("learner", "weight_space", 
                      "acc_tuned", "f1_tuned", 
-                     "gmeans_tuned", "acc_trained", 
-                     "f1_trained", "gmeans_trained", "time")
+                     "gmeans_tuned", "mcc_tuned", "acc_trained", 
+                     "f1_trained", "gmeans_trained","mcc_trained", "time")
 out_path = paste(str_sub(dataset_path, start = 1, end = -5), "_summary.csv", sep="")
 write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
