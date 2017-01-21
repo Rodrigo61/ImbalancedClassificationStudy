@@ -9,7 +9,6 @@
 
 library(mlr)
 library(stringr)
-library(caTools)
 library(caret)
 set.seed(3)
 
@@ -22,14 +21,14 @@ MAX_IT = 1L
 #parametro K do K-folds
 ITERS = 3L
 
-DEBUG = T
+DEBUG = F
 
 ################################################################
 ####################  LENDO DATASET   ##########################
 ################################################################
 
 #Lendo lista dos datasets
-dataset_list = read.csv("dataset_list", header=F)
+dataset_list = read.csv("dataset_list_RECOD", header=F)
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
@@ -39,6 +38,8 @@ dataset_dir = dirname(dataset_path)
 
 #Carregando dataset
 dataset = read.csv(dataset_path, header = T)
+table(dataset_path)
+table(dataset[,'y_data'])
 
 #Definindo Data frame com resultados para saida
 out_df = NULL
@@ -66,6 +67,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   #Definindo variavel de retorno da funcao
   result = NULL
   
+
   #Seperando treino e teste
   train_index = createDataPartition(1:length(dataset[,'y_data']), 
                                     times = 1,
@@ -73,25 +75,25 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
                                     list = F)
   train = dataset[train_index,]
   test = dataset[-train_index,]
-  
+
   #Realizando o tuning com a métrica escolhida
-  res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data', positive='1'), resampling = rdesc,
+  res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                            par.set = num_ps, control = ctrl, measure=measure, show.info = DEBUG)
   result$performance_tuned = res_tuneParams$y
   
   #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
   learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)
-  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive='1'))
-  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive='1'))
+  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
+  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
   result$performance_trained = performance(p, measures = acc)
-  
+
   return(result)
 }
 
 
 gen_all_measures_inline = function(search_space, dataset, learner_str, weight_space){
   
-  measures_compilation = NULL
+  measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
     #Realizando Tuning com métrica acurácia
@@ -110,7 +112,8 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
                 res_f1$performance_trained, 
                 res_gmean$performance_trained, i)
     
-    measures_compilation = list(measures_compilation, new_row)
+
+    measures_compilation[[i]] = new_row
     
     if(DEBUG == T){
       print(learner_str)
