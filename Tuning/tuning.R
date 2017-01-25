@@ -17,7 +17,7 @@ set.seed(3)
 ################################################################
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 1L
+MAX_IT = 300L
 #parametro K do K-folds
 ITERS = 3L
 
@@ -28,7 +28,7 @@ DEBUG = F
 ################################################################
 
 #Lendo lista dos datasets
-dataset_list = read.csv("dataset_list", header=F)
+dataset_list = read.csv("dataset_list_RECOD", header=F)
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
@@ -104,18 +104,17 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
     res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = gmean, weight_space = weight_space)
     #Realizando Tuning com métrica MCC
     res_mcc = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = mcc, weight_space = weight_space)
-    #sem weight space
+  
     new_row = c(learner_str, weight_space, 
                 res_acc$performance_tuned, 
                 res_f1$performance_tuned, 
                 res_gmean$performance_tuned,
-                res_mcc$peformance_tuned,
+                res_mcc$performance_tuned,
                 res_acc$performance_trained, 
                 res_f1$performance_trained, 
                 res_gmean$performance_trained, 
-                res_mcc$peformance_trained, i)
+                res_mcc$performance_trained, i)
     
-
     measures_compilation[[i]] = new_row
     
     if(DEBUG == T){
@@ -192,6 +191,8 @@ for(i in 1:ITERS){
 ################################################################
 
 #Adicionando informacoes extras ao csv
+print("DIM")
+dim(out_df)
 colnames(out_df) = c("learner", "weight_space", 
                      "acc_tuned", "f1_tuned", 
                      "gmeans_tuned", "mcc_tuned", "acc_trained", 
