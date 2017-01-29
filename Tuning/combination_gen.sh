@@ -11,6 +11,7 @@ R_PATH_STR=""
 ## recriando run_all.sh 
 run_all_path="run_all.sh"
 echo "#!/bin/bash" > $run_all_path
+chmod 755 $run_all_path
 
 
 ## criando combinacoes
