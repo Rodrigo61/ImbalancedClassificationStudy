@@ -1,9 +1,9 @@
 ##
 # Script responsável por calcular a melhor performance a respeito
-# das métricas de Acurácia, F1 e G-Means para os algoritmos SVM
-# RF e XGboost. É realizado um CV k-fold e um randomSearch para
+# das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
 # hiperparametros. Alguns parametros sao setados ao inicio do 
-# script
+# script. O script deve ser extensivel e totalmente independente, de modo que o tuning
+# eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez.
 ##
 
 
@@ -12,42 +12,26 @@ library(stringr)
 library(caret)
 set.seed(3)
 
-################################################################
-####################  PARAMETROS DE CV  ########################
-################################################################
+#**************************************************************#
+#*******************  CONSTANTES   ****************************#
+#**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 300L
+MAX_IT = 1L
 #parametro K do K-folds
 ITERS = 3L
+DEBUG = T
+SVM_STR = "classif.ksvm"
+RF_STR = "classif.randomForest"
+SUMMARY_FOLDER_NAME = "summary_files"
+DATASET_LIST_FILENAME = "dataset_list"
+COLUMNS_NAMES = c("learner", "weight_space", 
+                  "tuning_measure", "holdout_measure",
+                  "iteration_count")
 
-DEBUG = F
-
-################################################################
-####################  LENDO DATASET   ##########################
-################################################################
-
-#Lendo lista dos datasets
-dataset_list = read.csv("dataset_list_RECOD", header=F)
-
-#Selecionando dataset pela posicao na lista
-args = commandArgs(trailingOnly=TRUE)
-dataset_id = as.numeric(args[1]) + 1
-dataset_path = as.character(dataset_list[dataset_id,])
-dataset_dir = dirname(dataset_path)
-
-#Carregando dataset
-dataset = read.csv(dataset_path, header = T)
-table(dataset_path)
-table(dataset[,'y_data'])
-
-#Definindo Data frame com resultados para saida
-out_df = NULL
-
-
-################################################################
-####################  FUNCOES     ##############################
-################################################################
+#**************************************************************#
+#*******************  FUNCOES     ******************************
+#**************************************************************#
 get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F){
   
   #Definindo variáveis de controle
@@ -78,124 +62,202 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 
   #Realizando o tuning com a métrica escolhida
   res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
-                           par.set = num_ps, control = ctrl, measure=measure, show.info = DEBUG)
+                           par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)
   result$performance_tuned = res_tuneParams$y
   
   #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
   learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
-  result$performance_trained = performance(p, measures = acc)
+  result$performance_holdout = performance(p, measures = acc)
 
   return(result)
 }
 
+#----------------------#
+print_debug = function(str){
+  if(!is.character(str)){
+    str = paste(str, collapse = "")
+  }
+  if(DEBUG){
+    print(paste("[DEBUG]", str, sep=""))
+  }
+}
 
-gen_all_measures_inline = function(search_space, dataset, learner_str, weight_space){
+#----------------------#
+gen_all_measures_inline = function(search_space, dataset, learner_str, weight_space, measure){
   
   measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
+    
     #Realizando Tuning com métrica acurácia
-    res_acc = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = acc, weight_space = weight_space)
-    #Realizando Tuning com métrica F1
-    res_f1 = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = f1, weight_space = weight_space)
-    #Realizando Tuning com métrica gmean
-    res_gmean = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = gmean, weight_space = weight_space)
-    #Realizando Tuning com métrica MCC
-    res_mcc = get_measures_from_tuneParams(search_space = num_ps, dataset = dataset, learner_str = learner_str, measure = mcc, weight_space = weight_space)
+    measures = get_measures_from_tuneParams(search_space = search_space, 
+                                           dataset = dataset, 
+                                           learner_str = learner_str, 
+                                           measure = measure, 
+                                           weight_space = weight_space)
   
-    new_row = c(learner_str, weight_space, 
-                res_acc$performance_tuned, 
-                res_f1$performance_tuned, 
-                res_gmean$performance_tuned,
-                res_mcc$performance_tuned,
-                res_acc$performance_trained, 
-                res_f1$performance_trained, 
-                res_gmean$performance_trained, 
-                res_mcc$performance_trained, i)
+    new_row = c(learner_str, weight_space, measures$performance_tuned, 
+                measures$performance_holdout, i)
     
     measures_compilation[[i]] = new_row
     
-    if(DEBUG == T){
-      print(learner_str)
-      print("---")
-      print("acc")
-      print(res_acc$performance_tuned)
-      print(res_acc$performance_trained)
-      print("---")
-      print("f1")
-      print(res_f1$performance_tuned)
-      print(res_f1$performance_trained)
-      print("---")
-      print("gmean")
-      print(res_gmean$performance_tuned)
-      print(res_gmean$performance_trained)
-    }
   }
   return(measures_compilation)
 }
 
-################################################################
-####################  TUNING SVM  ##############################
-################################################################
-#Definindo Search space
-num_ps = makeParamSet(
-  makeNumericParam("C", lower = -10, upper = 10, trafo = function(x) 10^x),
-  makeNumericParam("sigma", lower = -10, upper = 10, trafo = function(x) 10^x)
-)
-
-#Gerando performance para o cenário normal e weight de treinamento
-normal_learn = gen_all_measures_inline(search_space = num_ps, 
-                                       dataset = dataset,
-                                       learner_str = "classif.ksvm",
-                                       weight_space = F)
-weight_space_learn = gen_all_measures_inline(search_space = num_ps, 
-                                             dataset = dataset,
-                                             learner_str = "classif.ksvm",
-                                             weight_space = T)
-
-#Armazenando resultados das perfomances no dataframe final 
-for(i in 1:ITERS){
-  out_df = rbind(out_df, normal_learn[[i]])
-  out_df = rbind(out_df, weight_space_learn[[i]])
+#----------------------#
+select_measure = function(arg){
+  if(is.na(arg) | is.null(arg)){
+    warning("Nao foi informado a metrica desejada")
+    stop()
+  }
+  
+  if(arg == "acc"){
+    return(acc)
+  }else if(arg == "f1"){
+    return(f1)
+  }else if(arg == "gmeans"){
+    return(gmeans)
+  }else if(arg == "mcc"){
+    return(mcc)
+  }else{
+    warning("Selecione uma das seguintes metricas: acc, f1, gmeans, mcc")
+    stop()
+  }
 }
 
-################################################################
-####################  TUNING RF  ###############################
-################################################################
-
-#Definindo Search space
-num_ps = makeParamSet(
-  makeDiscreteParam("mtry", c(1:(ncol(dataset)-1)))
-)
-
-#Gerando performance para o cenário normal e weight de treinamento
-normal_learn = gen_all_measures_inline(search_space = num_ps, 
-                                       dataset = dataset,
-                                       learner_str = "classif.randomForest",
-                                       weight_space = F)
-weight_space_learn = gen_all_measures_inline(search_space = num_ps, 
-                                             dataset = dataset,
-                                             learner_str = "classif.randomForest",
-                                             weight_space = T)
-
-#Armazenando resultados das perfomances no dataframe final 
-for(i in 1:ITERS){
-  out_df = rbind(out_df, normal_learn[[i]])
-  out_df = rbind(out_df, weight_space_learn[[i]])
+#----------------------#
+select_learner = function(arg){
+  if(is.na(arg) | is.null(arg)){
+    warning("Nao foi informado o algoritmo desejado")
+    stop()
+  }
+  
+  if(arg == "svm"){
+    return(SVM_STR)
+  }else if(arg == "rf"){
+    return(RF_STR)
+  }else{
+    warning("Selecione um dos seguintes algoritmos: svm, rf")
+    stop()
+  }
 }
 
-################################################################
-####################  GERANDO SAIDA  ###########################
-################################################################
+#----------------------#
+select_weight_space = function(arg){
+  if(arg == "true"){
+    return(T)
+  }else if(arg == "false"){
+    return(F)
+  }else {
+    warning("Selecione se o treinamento sera com weight space (true/false)")
+    stop()
+  }
+}
 
-#Adicionando informacoes extras ao csv
-print("DIM")
-dim(out_df)
-colnames(out_df) = c("learner", "weight_space", 
-                     "acc_tuned", "f1_tuned", 
-                     "gmeans_tuned", "mcc_tuned", "acc_trained", 
-                     "f1_trained", "gmeans_trained","mcc_trained", "time")
-out_path = paste(str_sub(dataset_path, start = 1, end = -5), "_summary.csv", sep="")
-write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
+#----------------------#
+select_search_space = function(learner_str){
+  if(learner_str == SVM_STR){
+    return(
+      makeParamSet(
+        makeNumericParam("C", lower = -10, upper = 10, trafo = function(x) 10^x),
+        makeNumericParam("sigma", lower = -10, upper = 10, trafo = function(x) 10^x)
+      )
+    )
+  }else if(learner_str == RF_STR){
+    return(
+      makeParamSet(
+        makeDiscreteParam("mtry", c(1:(ncol(dataset)-1)))
+      )
+    )
+  }else{
+    warning(paste("Nao existe um search_space definido para o algoritmo ", learner_str, sep=""))
+    stop()
+  }
+}
+
+#----------------------#
+exec_tuning = function(dataset, learner_str, measure, weight_space){
+  
+  search_space = select_search_space(learner_str)
+  
+  tuning_and_holdout = gen_all_measures_inline(search_space = search_space, 
+                                               dataset = dataset,
+                                               learner_str = learner_str,
+                                               weight_space = weight_space,
+                                               measure = measure)
+  
+  print_debug("Resultados do tuning:")
+  print_debug(paste(COLUMNS_NAMES, collapse=" | "))
+  print(tuning_and_holdout)
+}
+
+
+#----------------------#
+save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_str, measure, weight_space){
+  
+  #compilando a lista de metricas em um unico dataframe
+  out_df = NULL
+  for(i in 1:ITERS){
+    out_df = rbind(out_df, measure_list[[i]])
+  }
+  
+  colnames(out_df) = COLUMNS_NAMES
+  
+  #Criando caso nao exista a pasta para salvar os arquivos com os resultados
+  dirname = paste(SUMMARY_FOLDER_NAME, as.character(dataset_imba_rate), sep="")
+  dir.create(file.path(dirname(dataset_path), dirname), showWarnings = DEBUG)
+  
+  #Salvando dados
+  out_filename = paste(learner_str, measure$name, as.character(weight_space), sep ="_")
+  out_path = str_replace_all(paste(dirname(dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
+  write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
+  print_debug(paste("Tuning salvo em: ", out_path, sep=""))
+}
+
+#**************************************************************#
+#*******************  MAIN   **********************************#
+#**************************************************************#
+
+#Lendo os paramestros do script
+args = commandArgs(trailingOnly=TRUE)
+
+#Lendo lista dos datasets
+dataset_list = read.csv(DATASET_LIST_FILENAME, header=F)
+
+#Selecionando dataset pela posicao na lista
+dataset_id = as.numeric(args[1]) + 1
+dataset_path = as.character(dataset_list[dataset_id,])
+dataset_dir = dirname(dataset_path)
+dataset_imba_rate = str_extract(dataset_path, "0.[0-9]{2,3}")
+
+#Selecionando
+measure = select_measure(args[2])
+learner_str = select_learner(args[3])
+weight_space = select_weight_space(args[4])
+
+#Carregando dataset
+dataset = read.csv(dataset_path, header = T)
+table(dataset_path)
+table(dataset[,'y_data'])
+
+#Executando e armazenando os valores obtidos com o tuning
+print_debug("Executando o tuning com os seguintes parametros:")
+print_debug(paste("dataset: ", dataset_path))
+print_debug(paste("algoritmo: ", learner_str))
+print_debug(paste("Metrica: ", measure$name))
+print_debug(paste("Weitgh space: ", weight_space))
+
+measure_list = exec_tuning(dataset = dataset, 
+                           learner_str = learner_str, 
+                           measure = measure, 
+                           weight_space = weight_space)
+
+save_tuning(measure_list = measure_list, 
+            dataset_path = dataset_path, 
+            dataset_imba_rate, 
+            learner_str=learner_str, 
+            measure = measure, 
+            weight_space = weight_space)
