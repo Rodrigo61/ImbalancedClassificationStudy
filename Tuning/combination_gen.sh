@@ -38,7 +38,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $normal_file_sub
-		echo "condor_submit $normal_file_sub" >> $run_all_path # append no run_all.sh
+		echo "condor_submit $normal_file_sub $ sleep 1" >> $run_all_path # append no run_all.sh
 
 
 		#gerando arquivo com aprendizado weight space
@@ -61,7 +61,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ws_file_sub
-		echo "condor_submit $ws_file_sub" >> $run_all_path # append no run_all.sh
+		echo "condor_submit $ws_file_sub $ sleep 1" >> $run_all_path # append no run_all.sh
 	done
 done
 
