@@ -27,7 +27,7 @@ export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
 $content_normal" > $normal_file
 		chmod 755 $normal_file
 		
-		#gerando arquivo com aprendizado normal (.sub)
+		#gerando arquivo com aprendizado normal(false) (.sub)
 		normal_file_sub="${measure}_${learner}_false.sub"
 		echo 'N=196
 universe                = vanilla
@@ -39,7 +39,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $normal_file_sub
-		echo "condor_submit $normal_file_sub & sleep 20" >> $run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $normal_file_sub" >> $run_all_path # append no run_all.sh
 
 
 		#gerando arquivo com aprendizado weight space
@@ -50,8 +50,8 @@ export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
 $content_ws" > $ws_file
 		chmod 755 $ws_file
 		
-		#gerando arquivo com aprendizado weight space (.sub)
-		ws_file_sub="${measure}_${learner}_false.sub"
+		#gerando arquivo com aprendizado weight space(true) (.sub)
+		ws_file_sub="${measure}_${learner}_true.sub"
 		echo 'N=196
 universe                = vanilla
 executable            = '$ws_file'
@@ -62,7 +62,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ws_file_sub
-		echo "condor_submit $ws_file_sub & sleep 20" >> $run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $ws_file_sub" >> $run_all_path # append no run_all.sh
 	done
 done
 
