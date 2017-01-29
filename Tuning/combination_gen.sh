@@ -21,7 +21,7 @@ do
 	do
 		#gerando arquivo com aprendizado normal (.SH)
 		normal_file="${measure}_${learner}_false.sh"
-		content_normal="Rscript --vanilla tuning.R $@ $measure $learner false"
+		content_normal='Rscript --vanilla tuning.R $@ '$measure' '$learner' false'
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_normal" > $normal_file
@@ -44,7 +44,7 @@ queue $(N) ' > $normal_file_sub
 
 		#gerando arquivo com aprendizado weight space
 		ws_file="${measure}_${learner}_true.sh"
-		content_ws="Rscript --vanilla tuning.R $@ $measure $learner true"
+		content_ws='Rscript --vanilla tuning.R $@ '$measure' '$learner' true'
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin.sh
 $content_ws" > $ws_file
