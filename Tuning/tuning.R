@@ -221,7 +221,7 @@ save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_st
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
-#Lendo os paramestros do script
+#Lendo os parametros do script
 args = commandArgs(trailingOnly=TRUE)
 
 #Lendo lista dos datasets
