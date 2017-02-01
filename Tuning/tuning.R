@@ -19,11 +19,11 @@ set.seed(3)
 #Quantas iteracoes serao feitas no random search
 MAX_IT = 1L
 #parametro K do K-folds
-ITERS = 3L
+ITERS = 15L
 DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
-SUMMARY_FOLDER_NAME = "summary_files"
+SUMMARY_FOLDER_NAME = "summary_files_RECOD"
 DATASET_LIST_FILENAME = "dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", 
                   "tuning_measure", "holdout_measure",
