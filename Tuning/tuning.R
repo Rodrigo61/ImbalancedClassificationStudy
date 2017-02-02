@@ -23,6 +23,7 @@ ITERS = 3L
 DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
+XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
 DATASET_LIST_FILENAME = "dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", 
@@ -139,6 +140,8 @@ select_learner = function(arg){
     return(SVM_STR)
   }else if(arg == "rf"){
     return(RF_STR)
+  }else if(arg == "xgboost"){
+    return(XGBOOST_STR)
   }else{
     warning("Selecione um dos seguintes algoritmos: svm, rf")
     stop()
@@ -169,7 +172,15 @@ select_search_space = function(learner_str){
   }else if(learner_str == RF_STR){
     return(
       makeParamSet(
-        makeDiscreteParam("mtry", c(1:(ncol(dataset)-1)))
+        makeDiscreteParam("mtry", c(1:(ncol(dataset)-1))),
+        makeDiscreteParam("ntree", c(20:150))
+      )
+    )
+  }else if(learner_str == XGBOOST_STR){
+    return(
+      makeParamSet(
+        makeDiscreteParam("max_depth", c(1:6)),
+        makeNumericParam("eta", lower=0.005, upper = 0.5)
       )
     )
   }else{
