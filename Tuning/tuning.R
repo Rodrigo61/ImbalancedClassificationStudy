@@ -10,6 +10,7 @@
 library(mlr)
 library(stringr)
 library(caret)
+library("optparse")
 set.seed(3)
 
 #**************************************************************#
@@ -17,9 +18,9 @@ set.seed(3)
 #**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 1L
+MAX_IT = 15L
 #parametro K do K-folds
-ITERS = 15L
+ITERS = 3L
 DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
@@ -33,6 +34,30 @@ COLUMNS_NAMES = c("learner", "weight_space",
 #**************************************************************#
 #*******************  FUNCOES     ******************************
 #**************************************************************#
+
+get_args = function(){
+  description = " Script responsável por calcular a melhor performance a respeito
+     das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
+     hiperparametros. Alguns parametros sao setados ao inicio do 
+     script. O script deve ser extensivel e totalmente independente, de modo que o tuning
+     eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez"
+  
+  option_list = list(
+    make_option(c("--dataset_id"), type="integer", default=NULL, 
+                help="métrica utilizada para otimizacao"),
+    make_option(c("--measure"), type="character", default=NULL, 
+                help="métrica utilizada para otimizacao"),
+    make_option(c("--model"), type="character", default=NULL, 
+                help="algoritmo que será realizado o tuning"),
+    make_option(c("--weigth_space"), action= "store_true", default=NULL, 
+                help="se presente a flag o treinamento será feito com weight_space")
+  )
+  
+  opt_parser = OptionParser(option_list=option_list, description = description)
+  return(parse_args(opt_parser))
+}
+
+#----------------------#
 get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F){
   
   #Definindo variáveis de controle
@@ -149,18 +174,6 @@ select_learner = function(arg){
 }
 
 #----------------------#
-select_weight_space = function(arg){
-  if(arg == "true"){
-    return(T)
-  }else if(arg == "false"){
-    return(F)
-  }else {
-    warning("Selecione se o treinamento sera com weight space (true/false)")
-    stop()
-  }
-}
-
-#----------------------#
 select_search_space = function(learner_str){
   if(learner_str == SVM_STR){
     return(
@@ -205,7 +218,6 @@ exec_tuning = function(dataset, learner_str, measure, weight_space){
   print(tuning_and_holdout)
 }
 
-
 #----------------------#
 save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_str, measure, weight_space){
   
@@ -232,22 +244,22 @@ save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_st
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
-#Lendo os parametros do script
-args = commandArgs(trailingOnly=TRUE)
+#Lendo os parametros o script
+opt = get_args()
 
 #Lendo lista dos datasets
 dataset_list = read.csv(DATASET_LIST_FILENAME, header=F)
 
 #Selecionando dataset pela posicao na lista
-dataset_id = as.numeric(args[1]) + 1
+dataset_id = as.numeric(opt$dataset_id) + 1
 dataset_path = as.character(dataset_list[dataset_id,])
 dataset_dir = dirname(dataset_path)
 dataset_imba_rate = str_extract(dataset_path, "0.[0-9]{2,3}")
 
-#Selecionando
-measure = select_measure(args[2])
-learner_str = select_learner(args[3])
-weight_space = select_weight_space(args[4])
+#Selecionando os parametros para o tuning
+measure = select_measure(opt$measure)
+learner_str = select_learner(opt$model)
+weight_space = opt$weigth_space
 
 #Carregando dataset
 dataset = read.csv(dataset_path, header = T)
@@ -256,8 +268,8 @@ table(dataset[,'y_data'])
 
 #Executando e armazenando os valores obtidos com o tuning
 print_debug("Executando o tuning com os seguintes parametros:")
-print_debug(paste("dataset: ", dataset_path))
-print_debug(paste("algoritmo: ", learner_str))
+print_debug(paste("Dataset: ", dataset_path))
+print_debug(paste("Algoritmo: ", learner_str))
 print_debug(paste("Metrica: ", measure$name))
 print_debug(paste("Weitgh space: ", weight_space))
 
