@@ -26,7 +26,7 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_FILENAME = "dataset_list"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", 
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
@@ -49,7 +49,7 @@ get_args = function(){
                 help="métrica utilizada para otimizacao"),
     make_option(c("--model"), type="character", default=NULL, 
                 help="algoritmo que será realizado o tuning"),
-    make_option(c("--weigth_space"), action= "store_true", default=NULL, 
+    make_option(c("--weight_space"), action= "store_true", default=NULL, 
                 help="se presente a flag o treinamento será feito com weight_space")
   )
   
@@ -63,9 +63,9 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   #Definindo variáveis de controle
   
   if(weight_space == T){
-    MAJORITY_WEIGHT = length(which(dataset['y_data'] == 1))/length(which(dataset['y_data'] == 0))  
+    MAJORITY_weight = length(which(dataset['y_data'] == 1))/length(which(dataset['y_data'] == 0))  
   }else{
-    MAJORITY_WEIGHT = 1 #remove a influencia do cost learn
+    MAJORITY_weight = 1 #remove a influencia do cost learn
   }
   
   TRAIN_PERCENT = 0.8
@@ -174,26 +174,36 @@ select_learner = function(arg){
 }
 
 #----------------------#
+select_weight_space = function(arg){
+  if(is.null(arg)){
+   return(F)
+  }else{
+   return(T)
+  }
+}
+
+#----------------------#
 select_search_space = function(learner_str){
   if(learner_str == SVM_STR){
     return(
       makeParamSet(
-        makeNumericParam("C", lower = -10, upper = 10, trafo = function(x) 10^x),
-        makeNumericParam("sigma", lower = -10, upper = 10, trafo = function(x) 10^x)
+        makeNumericParam("C", lower = 2**(-5), upper = 2**15),
+        makeNumericParam("sigma", lower = 2**(-15), upper = 2**3)
       )
     )
   }else if(learner_str == RF_STR){
     return(
       makeParamSet(
         makeDiscreteParam("mtry", c(1:(ncol(dataset)-1))),
-        makeDiscreteParam("ntree", c(20:150))
+        makeDiscreteParam("ntree", c((2**4):(2**12)))
       )
     )
   }else if(learner_str == XGBOOST_STR){
     return(
       makeParamSet(
         makeDiscreteParam("max_depth", c(1:6)),
-        makeNumericParam("eta", lower=0.005, upper = 0.5)
+        makeNumericParam("eta", lower=0.005, upper = 0.5),
+        makeDiscreteParam("nrounds", c(20:150))
       )
     )
   }else{
@@ -244,11 +254,13 @@ save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_st
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
+print_debug(getwd())
+
 #Lendo os parametros o script
 opt = get_args()
 
 #Lendo lista dos datasets
-dataset_list = read.csv(DATASET_LIST_FILENAME, header=F)
+dataset_list = read.csv(DATASET_LIST_PATH, header=F)
 
 #Selecionando dataset pela posicao na lista
 dataset_id = as.numeric(opt$dataset_id) + 1
@@ -259,7 +271,7 @@ dataset_imba_rate = str_extract(dataset_path, "0.[0-9]{2,3}")
 #Selecionando os parametros para o tuning
 measure = select_measure(opt$measure)
 learner_str = select_learner(opt$model)
-weight_space = opt$weigth_space
+weight_space = select_weight_space(opt$weight_space)
 
 #Carregando dataset
 dataset = read.csv(dataset_path, header = T)

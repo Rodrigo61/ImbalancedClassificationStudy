@@ -4,7 +4,7 @@
 declare -a measures=("acc" "f1" "gmeans" "mcc")
 
 ## vetor de algoritmos
-declare -a learners=("svm" "rf")
+declare -a learners=("svm" "rf" "xgboost")
 
 
 ## recriando run_all.sh 
@@ -25,7 +25,7 @@ do
 	do
 		#gerando arquivo com aprendizado normal (.SH)
 		normal_file="${measure}_${learner}_false.sh"
-		content_normal='Rscript --vanilla tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
+		content_normal='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
 		echo "#!/bin/bash 
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_normal" > $normal_file
@@ -50,7 +50,7 @@ queue $(N) ' > $normal_file_sub
 
 		#gerando arquivo com aprendizado weight space
 		ws_file="${measure}_${learner}_true.sh"
-		content_ws='Rscript --vanilla tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --weight_space'
+		content_ws='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --weight_space'
 		echo "#!/bin/bash 
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin.sh
 $content_ws" > $ws_file
