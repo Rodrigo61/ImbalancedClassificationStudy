@@ -43,7 +43,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $normal_file_sub
-		echo "sleep 20 | condor_submit $normal_file_sub" >> ../$run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $submission_files_dir/$normal_file_sub" >> ../$run_all_path # append no run_all.sh
 
 
 
@@ -68,7 +68,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ws_file_sub
-		echo "sleep 20 | condor_submit $ws_file_sub" >> ../$run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $submission_files_dir/$ws_file_sub" >> ../$run_all_path # append no run_all.sh
 	done
 done
 
