@@ -6,17 +6,22 @@ declare -a measures=("acc" "f1" "gmeans" "mcc")
 ## vetor de algoritmos
 declare -a learners=("svm" "rf" "xgboost")
 
+## criando caso nao exista o diretório submission_files
+submission_files_dir="submission_files"
+mkdir -p $submission_files_dir
+echo "pasta 'submission_files' criado no diretorio $HOME_PATH"
+
 
 ## recriando run_all.sh 
 run_all_path="run_all.sh"
 echo "#!/bin/bash" > $run_all_path
+echo "cd $submission_files_dir" >> $run_all_path
 chmod 755 $run_all_path
 
-## criando caso nao exista o diretório submission_files
-submission_files_dir="submission_files"
-mkdir -p $submission_files_dir
+
+# Agora vamos trabalhar dentro do diretorio de arquivos de submissao
 cd $submission_files_dir
-echo "pasta 'submission_files' criado no diretorio $HOME_PATH"
+
 
 ## criando combinacoes
 for measure in "${measures[@]}"
@@ -43,7 +48,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $normal_file_sub
-		echo "sleep 20 | condor_submit $submission_files_dir/$normal_file_sub" >> ../$run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $normal_file_sub" >> ../$run_all_path # append no run_all.sh
 
 
 
@@ -68,7 +73,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ws_file_sub
-		echo "sleep 20 | condor_submit $submission_files_dir/$ws_file_sub" >> ../$run_all_path # append no run_all.sh
+		echo "sleep 20 | condor_submit $ws_file_sub" >> ../$run_all_path # append no run_all.sh
 	done
 done
 
