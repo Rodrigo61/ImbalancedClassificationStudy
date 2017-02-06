@@ -15,6 +15,8 @@ chmod 755 $run_all_path
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
 mkdir -p $submission_files_dir
+cd $submission_files_dir
+echo "pasta 'submission_files' criado no diretorio $HOME_PATH"
 
 ## criando combinacoes
 for measure in "${measures[@]}"
@@ -22,7 +24,7 @@ do
 	for learner in "${learners[@]}"
 	do
 		#gerando arquivo com aprendizado normal (.SH)
-		normal_file="$submission_files_dir/${measure}_${learner}_false.sh"
+		normal_file="${measure}_${learner}_false.sh"
 		content_normal='Rscript --vanilla tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
 		echo "#!/bin/bash 
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -30,7 +32,7 @@ $content_normal" > $normal_file
 		chmod 755 $normal_file
 		
 		#gerando arquivo com aprendizado normal(false) (.sub)
-		normal_file_sub="$submission_files_dir/${measure}_${learner}_false.sub"
+		normal_file_sub="${measure}_${learner}_false.sub"
 		echo 'N=196
 universe                = vanilla
 executable            = '$normal_file'
@@ -47,7 +49,7 @@ queue $(N) ' > $normal_file_sub
 
 
 		#gerando arquivo com aprendizado weight space
-		ws_file="$submission_files_dir/${measure}_${learner}_true.sh"
+		ws_file="${measure}_${learner}_true.sh"
 		content_ws='Rscript --vanilla tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --weight_space'
 		echo "#!/bin/bash 
 export PATH=/home/rodrigoaf/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin.sh
@@ -55,7 +57,7 @@ $content_ws" > $ws_file
 		chmod 755 $ws_file
 		
 		#gerando arquivo com aprendizado weight space(true) (.sub)
-		ws_file_sub="$submission_files_dir/${measure}_${learner}_true.sub"
+		ws_file_sub="${measure}_${learner}_true.sub"
 		echo 'N=196
 universe                = vanilla
 executable            = '$ws_file'

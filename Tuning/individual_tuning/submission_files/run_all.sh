@@ -1,0 +1,16 @@
+sleep 20 | condor_submit acc_svm_false.sub
+sleep 20 | condor_submit acc_svm_true.sub
+sleep 20 | condor_submit acc_rf_false.sub
+sleep 20 | condor_submit acc_rf_true.sub
+sleep 20 | condor_submit f1_svm_false.sub
+sleep 20 | condor_submit f1_svm_true.sub
+sleep 20 | condor_submit f1_rf_false.sub
+sleep 20 | condor_submit f1_rf_true.sub
+sleep 20 | condor_submit gmeans_svm_false.sub
+sleep 20 | condor_submit gmeans_svm_true.sub
+sleep 20 | condor_submit gmeans_rf_false.sub
+sleep 20 | condor_submit gmeans_rf_true.sub
+sleep 20 | condor_submit mcc_svm_false.sub
+sleep 20 | condor_submit mcc_svm_true.sub
+sleep 20 | condor_submit mcc_rf_false.sub
+sleep 20 | condor_submit mcc_rf_true.sub
