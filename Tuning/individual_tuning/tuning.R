@@ -19,7 +19,7 @@ set.seed(3)
 #**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 200L
+MAX_IT = 1L
 #parametro K do K-folds
 ITERS = 3L
 DEBUG = T
@@ -27,8 +27,8 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-COLUMNS_NAMES = c("learner", "weight_space", 
+DATASET_LIST_PATH = "../dataset_list"
+COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
 
@@ -59,10 +59,13 @@ get_args = function(){
 }
 
 #----------------------#
-get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F){
+get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F, nrounds=150){
+  
+  #AUX do xgboost
+  best_nrounds = 20
+  best_measure = 0
   
   #Definindo variáveis de controle
-  
   if(weight_space == T){
     MAJORITY_weight = length(which(dataset['y_data'] == 1))/length(which(dataset['y_data'] == 0))  
   }else{
@@ -88,12 +91,34 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   test = dataset[-train_index,]
 
   #Realizando o tuning com a métrica escolhida
-  res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
-                           par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)
+  if(learner_str == XGBOOST_STR){
+    for(nrounds in seq(20, 150, 20)){
+        learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
+        res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
+                                  par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
+        
+        if(res_tuneParams$y > best_measure){
+          best_nrounds = nrounds
+          best_measure = res_tuneParams$y
+        }
+    }
+    
+    print_debug("BEST NROUNDS")
+    print_debug(best_nrounds)
+  }else{
+    res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
+                                par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
+  }
+  
   result$performance_tuned = res_tuneParams$y
   
   #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
-  learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)
+  if(learner_str == XGBOOST_STR){
+    learner = setHyperPars(makeLearner(learner_str, par.vals = list(nrounds = best_nrounds)), par.vals = res_tuneParams$x)  
+  }else{
+    learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)  
+  }
+  
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
   result$performance_holdout = performance(p, measures = acc)
@@ -120,12 +145,12 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
     
     #Realizando Tuning com métrica acurácia
     measures = get_measures_from_tuneParams(search_space = search_space, 
-                                           dataset = dataset, 
-                                           learner_str = learner_str, 
-                                           measure = measure, 
-                                           weight_space = weight_space)
-  
-    new_row = c(learner_str, weight_space, measures$performance_tuned, 
+                                            dataset = dataset, 
+                                            learner_str = learner_str, 
+                                            measure = measure, 
+                                            weight_space = weight_space)
+ 
+    new_row = c(learner_str, weight_space, measure$name, measures$performance_tuned, 
                 measures$performance_holdout, i)
     
     measures_compilation[[i]] = new_row
@@ -146,7 +171,7 @@ select_measure = function(arg){
   }else if(arg == "f1"){
     return(f1)
   }else if(arg == "gmeans"){
-    return(gmeans)
+    return(gmean)
   }else if(arg == "mcc"){
     return(mcc)
   }else{
@@ -203,8 +228,7 @@ select_search_space = function(learner_str){
     return(
       makeParamSet(
         makeDiscreteParam("max_depth", c(1:6)),
-        makeNumericParam("eta", lower=0.005, upper = 0.5),
-        makeDiscreteParam("nrounds", c(20:150))
+        makeNumericParam("eta", lower=0.005, upper = 0.5)
       )
     )
   }else{
