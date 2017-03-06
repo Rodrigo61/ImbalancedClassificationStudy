@@ -1,3 +1,6 @@
+
+
+
 ##
 # Script responsável por calcular a melhor performance a respeito
 # das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
@@ -9,6 +12,7 @@
 
 library(mlr)
 library(stringr)
+library(xgboost)
 library(caret)
 library(optparse)
 set.seed(3)
@@ -97,10 +101,16 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
         res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                                   par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
         
+print_debug("TESTE DE DEBUG")
+print(generateHyperParsEffectData(res_tuneParams, trafo = F, include.diagnostics = T) )
+
+
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
           best_measure = res_tuneParams$y
         }
+
+
     }
     
     print_debug("BEST NROUNDS")
@@ -109,7 +119,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
     res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                                 par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
   }
-  
+
   result$performance_tuned = res_tuneParams$y
   
   #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
@@ -302,6 +312,13 @@ weight_space = select_weight_space(opt$weight_space)
 dataset = read.csv(dataset_path, header = T)
 table(dataset_path)
 table(dataset[,'y_data'])
+
+print_debug("Summary")
+print(summary(dataset))
+print_debug("Dimension")
+print(dim(dataset))
+print_debug("dataset")
+print(dataset)
 
 #Executando e armazenando os valores obtidos com o tuning
 print_debug("Executando o tuning com os seguintes parametros:")
