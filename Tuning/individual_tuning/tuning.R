@@ -25,7 +25,7 @@ set.seed(3)
 #Quantas iteracoes serao feitas no random search
 MAX_IT = 20L
 #parametro K do K-folds
-ITERS = 3L
+ITERS = 4L
 DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
@@ -96,7 +96,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 
   #Realizando o tuning com a métrica escolhida
   if(learner_str == XGBOOST_STR){
-    for(nrounds in seq(20, 150, 20)){
+    for(nrounds in seq(1, 20, 150, 20)){
         learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
         res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                                   par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
@@ -104,7 +104,9 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 print_debug("TESTE DE DEBUG")
 print(generateHyperParsEffectData(res_tuneParams, trafo = F, include.diagnostics = T) )
 
-
+        if(is.nan(res_tuneParams$y)){
+          res_tuneParams$y = 0
+        }
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
           best_measure = res_tuneParams$y
