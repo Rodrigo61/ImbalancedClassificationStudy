@@ -17,6 +17,9 @@ library(caret)
 library(optparse)
 set.seed(3)
 
+print("Package Version: ")
+print(packageVersion("mlr"))
+print(measureMCC)
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
@@ -25,7 +28,7 @@ set.seed(3)
 #Quantas iteracoes serao feitas no random search
 MAX_IT = 20L
 #parametro K do K-folds
-ITERS = 4L
+ITERS = 3L
 DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
@@ -96,7 +99,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 
   #Realizando o tuning com a métrica escolhida
   if(learner_str == XGBOOST_STR){
-    for(nrounds in seq(1, 20, 150, 20)){
+    for(nrounds in seq(20, 150, 20)){
         learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
         res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                                   par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
@@ -315,12 +318,6 @@ dataset = read.csv(dataset_path, header = T)
 table(dataset_path)
 table(dataset[,'y_data'])
 
-print_debug("Summary")
-print(summary(dataset))
-print_debug("Dimension")
-print(dim(dataset))
-print_debug("dataset")
-print(dataset)
 
 #Executando e armazenando os valores obtidos com o tuning
 print_debug("Executando o tuning com os seguintes parametros:")
@@ -334,6 +331,8 @@ measure_list = exec_tuning(dataset = dataset,
                            measure = measure, 
                            weight_space = weight_space)
 
+print("Warnings:")
+print(warnings())
 save_tuning(measure_list = measure_list, 
             dataset_path = dataset_path, 
             dataset_imba_rate, 
