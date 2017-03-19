@@ -104,12 +104,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
         res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
                                   par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
         
-print_debug("TESTE DE DEBUG")
-print(generateHyperParsEffectData(res_tuneParams, trafo = F, include.diagnostics = T) )
 
-        if(is.nan(res_tuneParams$y)){
-          res_tuneParams$y = 0
-        }
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
           best_measure = res_tuneParams$y
