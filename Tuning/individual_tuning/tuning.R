@@ -34,7 +34,8 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
@@ -67,7 +68,7 @@ get_args = function(){
 
 #----------------------#
 get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F, nrounds=150){
-  
+  print("get_measures_from_tuneParams !!!!!!!!!!!!!!!!")
   #AUX do xgboost
   best_nrounds = 20
   best_measure = 0
@@ -79,8 +80,6 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
     MAJORITY_weight = 1 #remove a influencia do cost learn
   }
   
-  TRAIN_PERCENT = 0.8
-  
   #Definindo configuracoes pro CV(k_fold  )
   ctrl = makeTuneControlRandom(maxit = MAX_IT)
   rdesc = makeResampleDesc("CV", iters = ITERS)
@@ -89,30 +88,36 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   result = NULL
   
 
-  #Seperando treino e teste
-  train_index = createDataPartition(1:length(dataset[,'y_data']), 
-                                    times = 1,
-                                    p = TRAIN_PERCENT,
-                                    list = F)
-  train = dataset[train_index,]
-  test = dataset[-train_index,]
-
+  #Seperando treino e teste (Holdout estratificado). 80%(4/5) dos dados para treino e 
+  #o restante para teste.
+  folds = createFolds(dataset[, 'y_data'], 5);
+  train = dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
+  test = dataset[folds$Fold5,]
+  
   #Realizando o tuning com a métrica escolhida
   if(learner_str == XGBOOST_STR){
-    for(nrounds in seq(20, 150, 20)){
-        learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
-        res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
-                                  par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
-        
 
+    for(nrounds in seq(20, 150, 20)){  
+
+        learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
+
+        res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc, par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
+
+        learner = setHyperPars(learner, par.vals = res_tuneParams$x)
+        print(learner)
+        learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
+        p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
+        
+        print(calculateConfusionMatrix(p, relative=T))
+        print("Warnings:")
+        print(warnings())
+        
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
           best_measure = res_tuneParams$y
         }
 
-
     }
-    
     print_debug("BEST NROUNDS")
     print_debug(best_nrounds)
   }else{
