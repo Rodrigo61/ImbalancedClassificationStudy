@@ -1,6 +1,3 @@
-
-
-
 ##
 # Script responsável por calcular a melhor performance a respeito
 # das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
@@ -34,8 +31,8 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-#DATASET_LIST_PATH = "../dataset_list_RECOD"
-DATASET_LIST_PATH = "../dataset_list"
+DATASET_LIST_PATH = "../dataset_list_RECOD"
+#DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
@@ -93,7 +90,9 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   folds = createFolds(dataset[, 'y_data'], 5);
   train = dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
   test = dataset[folds$Fold5,]
-  
+
+  print("distribuicao no conjunto de teste ")
+  print(table(test[,'y_data']))
   #Realizando o tuning com a métrica escolhida
   if(learner_str == XGBOOST_STR){
 
