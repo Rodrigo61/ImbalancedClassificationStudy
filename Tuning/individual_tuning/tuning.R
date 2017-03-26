@@ -13,10 +13,33 @@ library(xgboost)
 library(caret)
 library(optparse)
 set.seed(3)
+#' @export measureMCC
+#' @rdname measures
+#' @format none
+measureMCC = function(truth, response, negative, positive) {
+  tn = as.numeric(measureTN(truth, response, negative))
+  tp = as.numeric(measureTP(truth, response, positive))
+  fn = as.numeric(measureFN(truth, response, negative))
+  fp = as.numeric(measureFP(truth, response, positive))
+  
+  denominator = as.numeric(sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)))
+  if(denominator == 0){
+    denominator = 1
+  }
+  
+  (tp * tn - fp * fn) / denominator
+}
+##TESTES COM MCC
+mcc = makeMeasure(id = "mcc", minimize = FALSE,
+    properties = c("classif", "req.pred", "req.truth"), best = 1, worst = -1,
+    name = "Matthews correlation coefficient",
+    note = "Defined as sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))",
+    fun = function(task, model, pred, feats, extra.args) {
+      measureMCC(pred$data$truth, pred$data$response, pred$task.desc$negative, pred$task.desc$positive)
+    }
+)
 
-print("Package Version: ")
-print(packageVersion("mlr"))
-print(measureMCC)
+
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
