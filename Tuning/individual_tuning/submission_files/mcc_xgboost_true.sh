@@ -1,3 +1,3 @@
 #!/bin/bash 
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-Rscript --vanilla ../tuning.R --dataset_id=170 --measure=mcc --model=xgboost --weight_space
+Rscript --vanilla ../tuning.R --dataset_id=$@ --measure=mcc --model=xgboost --weight_space

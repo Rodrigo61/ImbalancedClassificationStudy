@@ -1,6 +1,13 @@
 #!/bin/bash
 
 PATH_2_ANALYZE=$1
-PATTERN="halted"
 
-grep -rwl $PATH_2_ANALYZE -e $PATTERN 
+#grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error' -e 'warnings()'
+
+grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
+
+#grep -rwl $PATH_2_ANALYZE  -e 'mcc'
+
+
+
+

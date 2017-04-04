@@ -13,33 +13,6 @@ library(xgboost)
 library(caret)
 library(optparse)
 set.seed(3)
-#' @export measureMCC
-#' @rdname measures
-#' @format none
-measureMCC = function(truth, response, negative, positive) {
-  tn = as.numeric(measureTN(truth, response, negative))
-  tp = as.numeric(measureTP(truth, response, positive))
-  fn = as.numeric(measureFN(truth, response, negative))
-  fp = as.numeric(measureFP(truth, response, positive))
-  
-  denominator = as.numeric(sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)))
-  if(denominator == 0){
-    denominator = 1
-  }
-  
-  (tp * tn - fp * fn) / denominator
-}
-##TESTES COM MCC
-mcc = makeMeasure(id = "mcc", minimize = FALSE,
-    properties = c("classif", "req.pred", "req.truth"), best = 1, worst = -1,
-    name = "Matthews correlation coefficient",
-    note = "Defined as sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))",
-    fun = function(task, model, pred, feats, extra.args) {
-      measureMCC(pred$data$truth, pred$data$response, pred$task.desc$negative, pred$task.desc$positive)
-    }
-)
-
-
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
@@ -88,7 +61,6 @@ get_args = function(){
 
 #----------------------#
 get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F, nrounds=150){
-  print("get_measures_from_tuneParams !!!!!!!!!!!!!!!!")
   #AUX do xgboost
   best_nrounds = 20
   best_measure = 0
@@ -114,8 +86,6 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
   train = dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
   test = dataset[folds$Fold5,]
 
-  print("distribuicao no conjunto de teste ")
-  print(table(test[,'y_data']))
   #Realizando o tuning com a métrica escolhida
   if(learner_str == XGBOOST_STR){
 
@@ -125,15 +95,6 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 
         res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc, par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
 
-        learner = setHyperPars(learner, par.vals = res_tuneParams$x)
-        print(learner)
-        learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
-        p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
-        
-        print(calculateConfusionMatrix(p, relative=T))
-        print("Warnings:")
-        print(warnings())
-        
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
           best_measure = res_tuneParams$y
@@ -355,6 +316,7 @@ measure_list = exec_tuning(dataset = dataset,
 
 print("Warnings:")
 print(warnings())
+
 save_tuning(measure_list = measure_list, 
             dataset_path = dataset_path, 
             dataset_imba_rate, 
