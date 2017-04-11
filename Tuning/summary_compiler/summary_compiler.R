@@ -54,6 +54,9 @@ for(file_path in summary_file_list){
   #lendo o df presente no arquivo atual
   print_debug(paste("File path: ", file_path))
   df = read.csv(file_path, header = T)
+
+  print("df")
+  print(df)
   
   #acumulando no dataframe final
   df_final = rbind(df_final, df)
