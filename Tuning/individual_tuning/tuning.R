@@ -120,7 +120,7 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
     print_debug(best_nrounds)
   }else{
     res_tuneParams = tuneParams(learner_str, 
-                                task = makeClassifTask(data=train, target='y_data'), 
+                                task = makeClassifTask(data=train, target='y_data', positive="1"), 
                                 resampling = rdesc,
                                 par.set = search_space, 
                                 control = ctrl, 
@@ -137,9 +137,9 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
     learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)  
   }
   
-  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data'))
-  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data'))
-  result$performance_holdout = performance(p, measures = acc)
+  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive="1"))
+  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive="1"))
+  result$performance_holdout = performance(p, measures = measure)
 
   return(result)
 }
