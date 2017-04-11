@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## vetor de metricas
-declare -a measures=("acc" "f1" "gmeans" "mcc")
+declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 
 ## vetor de algoritmos
 declare -a learners=("svm" "rf" "xgboost")

@@ -170,6 +170,8 @@ select_measure = function(arg){
     return(f1)
   }else if(arg == "gmeans"){
     return(gmean)
+  }else if(arg == "auc"){
+    return(auc)
   }else if(arg == "mcc"){
     return(mcc)
   }else{
