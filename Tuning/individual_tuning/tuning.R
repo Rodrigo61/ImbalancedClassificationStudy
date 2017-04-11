@@ -27,8 +27,8 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-#DATASET_LIST_PATH = "../dataset_list"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
@@ -93,7 +93,22 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
 
         learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
 
-        res_tuneParams = tuneParams(learner, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc, par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
+        print_debug("TESTEEEEEEEE. Quero saber quem é o primeiro level de train, i.e, a classe positiva")
+        print(as.factor(train[,'y_data']))
+        
+        if(identical(measure, auc)){
+          #to calculate AUC we need some continuous output, so we set 
+          #predictType to probabilities
+          learner = setPredictType(learner, "prob")
+        }
+        
+        res_tuneParams = tuneParams(learner, 
+                                    task = makeClassifTask(data=train, target='y_data', positive="1"), 
+                                    resampling = rdesc, 
+                                    par.set = search_space, 
+                                    control = ctrl, 
+                                    measure=measure, 
+                                    show.info = DEBUG)    
 
         if(res_tuneParams$y > best_measure){
           best_nrounds = nrounds
@@ -104,8 +119,13 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
     print_debug("BEST NROUNDS")
     print_debug(best_nrounds)
   }else{
-    res_tuneParams = tuneParams(learner_str, task = makeClassifTask(data=train, target='y_data'), resampling = rdesc,
-                                par.set = search_space, control = ctrl, measure=measure, show.info = DEBUG)    
+    res_tuneParams = tuneParams(learner_str, 
+                                task = makeClassifTask(data=train, target='y_data'), 
+                                resampling = rdesc,
+                                par.set = search_space, 
+                                control = ctrl, 
+                                measure=measure, 
+                                show.info = DEBUG)    
   }
 
   result$performance_tuned = res_tuneParams$y
