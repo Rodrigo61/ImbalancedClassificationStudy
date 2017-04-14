@@ -1,4 +1,9 @@
+#####################################
+############ CONSTANTES #############
+#####################################
 
+#DATASET_LIST_NAME = "original_dataset_list"
+DATASET_LIST_NAME = "original_dataset_list_RECOD"
 #####################################
 ############ FUNCOES ################
 #####################################
@@ -39,7 +44,7 @@ imba_sample = function(x_data, y_data, minority_percent, warning=F){
       new_indexes = c(minority_indexes, majority_indexes[1:needed_majority_abs_count])
       
       #Guardando todos as obs. da classe majoritaria que seriam eliminadas na lista de residuos
-      residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : ncol(majority_indexes)])
+      residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)])
       
       #Criando dataset desbalanceado de retorno da funcao
       imba_dataset = cbind(x_data[new_indexes,], y_data[new_indexes])
@@ -135,8 +140,8 @@ dataset_to_binary_form = function(y_data){
 #####################################
 
 #Lendo lista de datasets
-#dataset_list = read.csv("original_dataset_list", header=F)
-dataset_list = read.csv("original_dataset_list_RECOD", header=F)
+dataset_list = read.csv(DATASET_LIST_NAME, header=F)
+
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
