@@ -1,4 +1,3 @@
-#!/usr/bin/env Rscript
 
 #####################################
 ############ FUNCOES ################
@@ -7,9 +6,15 @@
 #Funcao de criacao dos datasets desbalanceados
 #Essa funcao recebe como parametros os preditores(x_data) e a classe(y_data) de um dataset. Recebe como parametro a porcentagem exigida de classe minoritária para um novo dataset. 
 #É feito apenas undersampling, nenhum dado é replicado. O undersampling sempre favorece a retirada da classe 
-#majoritária, assim preservando o maximo possível a classe minoritária.
-##BEGIN
+#majoritária, assim preservando o maximo possível a classe minoritária. 
+#As observacoes que serão descartadas para possibilitar o desbalanceamento artificial também sao dadas como retorno.
 imba_sample = function(x_data, y_data, minority_percent, warning=F){
+  
+  #Variavel de retorno
+  ret = NULL
+  
+  #Variavel de armazenamento de obs. que serão descartadas para o desbalanceamento artificial.
+  residual_indexes = NULL
   
   if(length(which(y_data == 1)) < 10){
     if(warning == T){
@@ -18,30 +23,42 @@ imba_sample = function(x_data, y_data, minority_percent, warning=F){
     return()
   }
   
-  minority_indexs = which(y_data == 1)
-  majority_indexs = which(y_data == 0)
+  minority_indexes = which(y_data == 1)
+  majority_indexes = which(y_data == 0)
   
   #Devemos ter no mínimo 10 observacoes da classe minoritária(regra do estudo)
-  while(length(minority_indexs) >= 10){
+  while(length(minority_indexes) >= 10){
     
     #Calculamos o necessário de obs. da classe majoritária para que a classe minoritária represente
     # o valor de 'minority_percent' no conjunto total
-    needed_majority_abs_count = ceiling(length(minority_indexs)*(1-minority_percent)/minority_percent)
+    needed_majority_abs_count = ceiling(length(minority_indexes)*(1-minority_percent)/minority_percent)
     
-    if(length(majority_indexs) >= needed_majority_abs_count){
+    if(length(majority_indexes) >= needed_majority_abs_count){
       
       #Indices do novo dataset desbalanceado
-      new_indexs = c(minority_indexs, majority_indexs[1:needed_majority_abs_count])
+      new_indexes = c(minority_indexes, majority_indexes[1:needed_majority_abs_count])
       
-      new_dataset = cbind(x_data[new_indexs,], y_data[new_indexs])
-      names(new_dataset)[ncol(new_dataset)] = 'y_data'
-      return(new_dataset)
+      #Guardando todos as obs. da classe majoritaria que seriam eliminadas na lista de residuos
+      residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : ncol(majority_indexes)])
+      
+      #Criando dataset desbalanceado de retorno da funcao
+      imba_dataset = cbind(x_data[new_indexes,], y_data[new_indexes])
+      names(imba_dataset)[ncol(imba_dataset)] = 'y_data'
+      ret$imba_dataset = imba_dataset
+      
+      #Criando dataset de residuos de retorno da funcao
+      residual_dataset = cbind(x_data[residual_indexes,], y_data[residual_indexes])
+      names(residual_dataset)[ncol(residual_dataset)] = 'y_data'
+      ret$residual_dataset = residual_dataset
+      
+      return(ret)
     }else{
       #Caso não tenhamos o numero necessário de obs. da classe majoritária, nós retiramos uma obs. da minoritária
       # e tentamos novamente.
       
-      #removendo um indice da minoritaria
-      minority_indexs = minority_indexs[-1]
+      #removendo um indice da minoritaria, mas antes armazenando na lista de residuos
+      residual_indexes = c(residual_indexes, minority_indexes[1])
+      minority_indexes = minority_indexes[-1]
     }
   }
   if(warning == T){
@@ -96,11 +113,11 @@ y_data = dataset[,ncol(dataset)]
 #Convertendo os labels(classes) para numerico
 y_data = as.numeric(y_data)
 
-#Escolhendo a classe minotiraria
-#quero escolher a menor classe cuja proporcao(vs. all) seja maior que 5%
-#minority_class = find_minority_class(y_data)
 
-
+# Utilizando Brute force para calcular o maior numero possivel de datasets. i.e. Procurando
+# qual é a melhor escolha para considerarmos como classe minoritária entre toda as classes
+# presentes no dataset. Isso é feito escolhendo a classe com a qual conseguimos gerar o maior
+# numero de desbalanceamentos artificias
 max_ds_gen = 0
 max_ds_gen_class = 0
 max_ds_gen_class_size = 0
@@ -114,7 +131,7 @@ for(minority_class in unique(y_data)){
   y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
   
   
-  #Gerando Datasets
+  #Gerando Datasets e seus residuos
   ds_0.05 = imba_sample(x_data, y_data_bin, 0.05)
   ds_0.03 = imba_sample(x_data, y_data_bin, 0.03)
   ds_0.01 = imba_sample(x_data, y_data_bin, 0.01)
@@ -154,6 +171,7 @@ for(minority_class in unique(y_data)){
 #Agora podemos calcular o maximo de datasets utilizando a classe na variável 'max_ds_gen_class'
 # como classe minoritária
 minority_class = max_ds_gen_class
+
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
 #obs: Todas as outras classes são compiladas em uma só majoritária
 y_data_bin = replace(y_data, y_data == minority_class, -1)
@@ -162,11 +180,17 @@ y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
 y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
 
 
-#Gerando Datasets
-ds_0.05 = imba_sample(x_data, y_data_bin, 0.05, warning = T)
-ds_0.03 = imba_sample(x_data, y_data_bin, 0.03, warning = T)
-ds_0.01 = imba_sample(x_data, y_data_bin, 0.01, warning = T)
-ds_0.001 = imba_sample(x_data, y_data_bin, 0.001, warning = T)
+#Gerando Datasets e seus residuos
+imba_0.05 = imba_sample(x_data, y_data_bin, 0.05, warning = T)
+imba_0.03 = imba_sample(x_data, y_data_bin, 0.03, warning = T)
+imba_0.01 = imba_sample(x_data, y_data_bin, 0.01, warning = T)
+imba_0.001 = imba_sample(x_data, y_data_bin, 0.001, warning = T)
+
+#Apenas os Datasets desbalanceados
+ds_0.05 = imba_0.05$imba_dataset
+ds_0.03 = imba_0.03$imba_dataset
+ds_0.01 = imba_0.01$imba_dataset
+ds_0.001 = imba_0.01$imba_dataset
 
 #Salvando datasets
 if(length(ds_0.05) != 0){
