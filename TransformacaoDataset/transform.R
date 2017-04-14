@@ -68,23 +68,66 @@ imba_sample = function(x_data, y_data, minority_percent, warning=F){
   
 }
 
-
+# Funcao que calcula a melhor escolha de classe minoritaria em um dataset binario/nao binario.
+# Utilizando Brute force para calcular o maior numero possivel de datasets. i.e. Procurando
+# qual é a melhor escolha para considerarmos como classe minoritária entre toda as classes
+# presentes no dataset. Isso é feito escolhendo a classe com a qual conseguimos gerar o maior
+# numero de desbalanceamentos artificias
 find_minority_class = function(y_data){
-  minority_class = 0
-  class_count = Inf
-  percent_vector = c(0.05, 0.03, 0.01, 0.001)
-  current_percent_index = 1
-  found = F
-  while(!found){
-    for (i in unique(y_data)){
-      if(as.numeric(table(y_data)[as.character(i)])/length(y_data) > percent_vector[current_percent_index]){
-        
-        if(as.numeric(table(y_data)[as.character(i)]) < class_count){
-          minority_class = i
-        }
-      }
+
+  max_ds_gen = 0
+  max_ds_gen_class = 0
+  max_ds_gen_class_size = 0
+  for(minority_class in unique(y_data)){
+    
+    #Binarizando o dataset (1 = minoritária, 0 = majoritária)
+    #obs: Todas as outras classes são compiladas em uma só majoritária
+    y_data_bin = replace(y_data, y_data == minority_class, -1)
+    y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
+    y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
+    y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
+    
+    
+    #Gerando Datasets e seus residuos
+    ds_0.05 = imba_sample(x_data, y_data_bin, 0.05)
+    ds_0.03 = imba_sample(x_data, y_data_bin, 0.03)
+    ds_0.01 = imba_sample(x_data, y_data_bin, 0.01)
+    ds_0.001 = imba_sample(x_data, y_data_bin, 0.001)
+    
+    
+    #Calculando quantos Datasets foram possiveis de serem gerados
+    gen_ds_count = 0
+    if(length(ds_0.05) != 0){
+      gen_ds_count = gen_ds_count + 1
+    }
+    if(length(ds_0.03) != 0){
+      gen_ds_count = gen_ds_count + 1
+    }
+    if(length(ds_0.01) != 0){
+      gen_ds_count = gen_ds_count + 1
+    }
+    if(length(ds_0.001) != 0){
+      gen_ds_count = gen_ds_count + 1
+    }
+    
+    if(gen_ds_count >= max_ds_gen){
+      max_ds_gen = gen_ds_count
+      max_ds_gen_class = minority_class
+      max_ds_gen_class_size = length(which(y_data_bin == minority_class))
     }
   }
+}
+
+#Binarizando o dataset (1 = minoritária, 0 = majoritária)
+#obs: Todas as outras classes são compiladas em uma só majoritária
+dataset_to_binary_form = function(y_data){
+
+  y_data_bin = replace(y_data, y_data == minority_class, -1)
+  y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
+  y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
+  y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
+  
+  return(y_data_bin)
 }
 
 #####################################
@@ -113,71 +156,11 @@ y_data = dataset[,ncol(dataset)]
 #Convertendo os labels(classes) para numerico
 y_data = as.numeric(y_data)
 
-
-# Utilizando Brute force para calcular o maior numero possivel de datasets. i.e. Procurando
-# qual é a melhor escolha para considerarmos como classe minoritária entre toda as classes
-# presentes no dataset. Isso é feito escolhendo a classe com a qual conseguimos gerar o maior
-# numero de desbalanceamentos artificias
-max_ds_gen = 0
-max_ds_gen_class = 0
-max_ds_gen_class_size = 0
-for(minority_class in unique(y_data)){
-  
-  #Binarizando o dataset (1 = minoritária, 0 = majoritária)
-  #obs: Todas as outras classes são compiladas em uma só majoritária
-  y_data_bin = replace(y_data, y_data == minority_class, -1)
-  y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
-  y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
-  y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
-  
-  
-  #Gerando Datasets e seus residuos
-  ds_0.05 = imba_sample(x_data, y_data_bin, 0.05)
-  ds_0.03 = imba_sample(x_data, y_data_bin, 0.03)
-  ds_0.01 = imba_sample(x_data, y_data_bin, 0.01)
-  ds_0.001 = imba_sample(x_data, y_data_bin, 0.001)
-  
-  
-  #Calculando quantos Datasets foram possiveis de serem gerados
-  gen_ds_count = 0
-  if(length(ds_0.05) != 0){
-    gen_ds_count = gen_ds_count + 1
-  }
-  if(length(ds_0.03) != 0){
-    gen_ds_count = gen_ds_count + 1
-  }
-  if(length(ds_0.01) != 0){
-    gen_ds_count = gen_ds_count + 1
-  }
-  if(length(ds_0.001) != 0){
-    gen_ds_count = gen_ds_count + 1
-  }
-  
-  if(gen_ds_count >= max_ds_gen){
-    if(gen_ds_count > max_ds_gen){
-      max_ds_gen = gen_ds_count
-      max_ds_gen_class = minority_class
-      max_ds_gen_class_size = length(which(y_data_bin == minority_class))
-    
-    }else if(length(which(y_data_bin == minority_class)) < max_ds_gen_class){
-      #Se for empate quero o menor numero absoluto possivel
-      max_ds_gen = gen_ds_count
-      max_ds_gen_class = minority_class
-      max_ds_gen_class_size = length(which(y_data_bin == minority_class))
-    }
-  }
-}
-
-#Agora podemos calcular o maximo de datasets utilizando a classe na variável 'max_ds_gen_class'
-# como classe minoritária
-minority_class = max_ds_gen_class
+minority_class = find_minority_class(y_data)
 
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
 #obs: Todas as outras classes são compiladas em uma só majoritária
-y_data_bin = replace(y_data, y_data == minority_class, -1)
-y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
-y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
-y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
+y_data_bin = dataset_to_binary_form(y_data)
 
 
 #Gerando Datasets e seus residuos
@@ -192,11 +175,21 @@ ds_0.03 = imba_0.03$imba_dataset
 ds_0.01 = imba_0.01$imba_dataset
 ds_0.001 = imba_0.01$imba_dataset
 
+#Apenas os residuos
+residual_0.05 = imba_0.05$residual_dataset
+residual_0.03 = imba_0.03$residual_dataset
+residual_0.01 = imba_0.01$residual_dataset
+residual_0.001 = imba_0.01$residual_dataset
+
 #Salvando datasets
 if(length(ds_0.05) != 0){
   print("porcentagem 0.05")
   print(length(which(ds_0.05 == 1))/dim(ds_0.05)[1])
+  #Escrevendo dataset
   write.table(ds_0.05, file=paste(dataset_dir, "/ds_0.05.csv", sep=""), col.names = T, row.names = F, sep=",")
+  #Escrevendo residuo
+  write.table(residual_0.05, file=paste(dataset_dir, "/residual_0.05.csv", sep=""), col.names = T, row.names = F, sep=",")
+  
 }else{
   write.table(ds_0.05, file=paste(dataset_dir, "/ds_0.05FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
@@ -204,7 +197,10 @@ if(length(ds_0.05) != 0){
 if(length(ds_0.03) != 0){
   print("porcentagem 0.03")
   print(length(which(ds_0.03 == 1))/dim(ds_0.03)[1])
+  #Escrevendo dataset
   write.table(ds_0.03, file=paste(dataset_dir, "/ds_0.03.csv", sep=""), col.names = T, row.names = F, sep=",")
+  #Escrevendo residuo
+  write.table(residual_0.03, file=paste(dataset_dir, "/residual_0.03.csv", sep=""), col.names = T, row.names = F, sep=",")
 }else{
   write.table(ds_0.03, file=paste(dataset_dir, "/ds_0.03FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
@@ -212,7 +208,10 @@ if(length(ds_0.03) != 0){
 if(length(ds_0.01) != 0){
   print("porcentagem 0.01")
   print(length(which(ds_0.01 == 1))/dim(ds_0.01)[1])
+  #Escrevendo dataset
   write.table(ds_0.01, file=paste(dataset_dir, "/ds_0.01.csv", sep=""), col.names = T, row.names = F, sep=",")
+  #Escrevendo residuo
+  write.table(residual_0.01, file=paste(dataset_dir, "/residual_0.01.csv", sep=""), col.names = T, row.names = F, sep=",")
 }else{
   write.table(ds_0.01, file=paste(dataset_dir, "/ds_0.01FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
@@ -220,7 +219,10 @@ if(length(ds_0.01) != 0){
 if(length(ds_0.001) != 0){
   print("porcentagem 0.001")
   print(length(which(ds_0.001 == 1))/dim(ds_0.001)[1])
+  #Escrevendo dataset
   write.table(ds_0.001, file=paste(dataset_dir, "/ds_0.001.csv", sep=""), col.names = T, row.names = F, sep=",")
+  #Escrevendo residuo
+  write.table(residual_0.001, file=paste(dataset_dir, "/residual_0.001.csv", sep=""), col.names = T, row.names = F, sep=",")
 }else{
   write.table(ds_0.001, file=paste(dataset_dir, "/ds_0.001FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
