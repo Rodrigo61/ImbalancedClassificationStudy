@@ -4,6 +4,7 @@
 # hiperparametros. Alguns parametros sao setados ao inicio do 
 # script. O script deve ser extensivel e totalmente independente, de modo que o tuning
 # eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez.
+#
 ##
 
 
@@ -33,11 +34,24 @@ COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure",
                   "iteration_count")
 
+NEGATIVE_CLASS = "0"
+POSITIVE_CLASS = "1"
+
+
+#**************************************************************#
+#*******************  VAR. GLOBAIS ****************************#
+#**************************************************************#
+c.dataset = NULL
+c.dataset_path = NULL
+c.learner_str = NULL
+c.measure = NULL
+c.weight_space = FALSE
+
 #**************************************************************#
 #*******************  FUNCOES     ******************************
 #**************************************************************#
 
-get_args = function(){
+c.get_args = function(){
   description = " Script responsável por calcular a melhor performance a respeito
      das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
      hiperparametros. Alguns parametros sao setados ao inicio do 
@@ -46,13 +60,16 @@ get_args = function(){
   
   option_list = list(
     make_option(c("--dataset_id"), type="integer", default=NULL, 
-                help="métrica utilizada para otimizacao"),
+                help="ID do dataset a ser utilizado"),
     make_option(c("--measure"), type="character", default=NULL, 
-                help="métrica utilizada para otimizacao"),
+                help="nome da métrica utilizada para otimizacao"),
     make_option(c("--model"), type="character", default=NULL, 
-                help="algoritmo que será realizado o tuning"),
+                help="nome do algoritmo que será realizado o tuning"),
     make_option(c("--weight_space"), action= "store_true", default=NULL, 
-                help="se presente a flag o treinamento será feito com weight_space")
+                help="se presente a flag o treinamento será feito com weight_space"),
+    make_option(c("--oversampling"), action= "character", default=NULL, 
+                help="nome do algoritmo de oversampling que será utilizado no dataset corrente")
+    
   )
   
   opt_parser = OptionParser(option_list=option_list, description = description)
@@ -60,50 +77,83 @@ get_args = function(){
 }
 
 #----------------------#
-get_measures_from_tuneParams = function(search_space, dataset, learner_str, measure, weight_space=F, nrounds=150){
+#Funcao que centraliza o calculo para separacao de 4/5 treino 1/5 test do holdout
+c.create_holdout_train_test = function(){
+  
+  folds = createFolds(c.dataset[, 'y_data'], 5);
+  train = c.dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
+  test = c.dataset[folds$Fold5,]
+  
+  holdout_sets = NULL
+  holdout_sets$train = train
+  holdout_sets$test = test
+  
+  return(holdout_sets)
+}
+
+#----------------------#
+#Funcao que retorna o custo da classe majoritaria para o class_weight learning
+c.get_majority_weight = function(){
+  if(c.weight_space == T){
+    #Definimos essa razao como o custo de erro da classe majoritária.
+    MAJORITY_weight = length(which(c.dataset['y_data'] == 1))/length(which(c.dataset['y_data'] == 0))  
+  }else{
+    MAJORITY_weight = 1 #remove a influencia do cost learn
+  }
+}
+
+#----------------------#
+#Funcao que criar um learner e já empacota opcoes de parametro e class_weight 
+makeLernerWrapped = function(par.vals, hiper.par.vals){
+  
+  #Defidindo peso da classe majoritaria. Se o weight_space for False esse peso nao vai interferir em nada
+  majority_weight = c.get_majority_weight()
+  
+  learner = makeLearner(c.learner_str, par.vals = par.vals)
+  learner = makeWeightedClassesWrapper(learner, wcw.param = NEGATIVE_CLASS, wcw.weight = majority_weight)
+  learner = setHyperPars(learner, par.vals = hiper.par.vals)  
+  
+  if(identical(measure, auc)){
+    #to calculate AUC we need some continuous output, so we set 
+    #predictType to probabilities
+    learner = setPredictType(learner, "prob")
+  }
+  
+  return(learner)
+}
+
+#----------------------#
+c.get_measures_from_tuneParams = function(){
   #AUX do xgboost
   best_nrounds = 20
   best_measure = 0
   
-  #Definindo variáveis de controle
-  if(weight_space == T){
-    MAJORITY_weight = length(which(dataset['y_data'] == 1))/length(which(dataset['y_data'] == 0))  
-  }else{
-    MAJORITY_weight = 1 #remove a influencia do cost learn
-  }
   
-  #Definindo configuracoes pro CV(k_fold  )
+  #Definindo configuracoes pro CV(k_fold)
   ctrl = makeTuneControlRandom(maxit = MAX_IT)
   rdesc = makeResampleDesc("CV", iters = ITERS)
   
   #Definindo variavel de retorno da funcao
   result = NULL
-  
 
   #Seperando treino e teste (Holdout estratificado). 80%(4/5) dos dados para treino e 
   #o restante para teste.
-  folds = createFolds(dataset[, 'y_data'], 5);
-  train = dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
-  test = dataset[folds$Fold5,]
-
+  holdout_aux = c.create_holdout_train_test(c.dataset = c.dataset[, 'y_data']);
+  train = holdout_aux$train
+  test = holdout_aux$test
+  
+  
+  
   #Realizando o tuning com a métrica escolhida
-  if(learner_str == XGBOOST_STR){
+  if(c.learner_str == XGBOOST_STR){
 
+    #O parametro nrounds não é comtemplado pelo search_space do XGboost no MLR. De modo que devemos realiza-lo
+    # de fora do tuning manualmente.
     for(nrounds in seq(20, 150, 20)){  
 
-        learner = makeLearner(XGBOOST_STR, par.vals = list(nrounds = nrounds))
-
-        print_debug("TESTEEEEEEEE. Quero saber quem é o primeiro level de train, i.e, a classe positiva")
-        print(as.factor(train[,'y_data']))
-        
-        if(identical(measure, auc)){
-          #to calculate AUC we need some continuous output, so we set 
-          #predictType to probabilities
-          learner = setPredictType(learner, "prob")
-        }
-        
+        learner = makeLernerWrapped(par.vals = list(nrounds = nrounds))
         res_tuneParams = tuneParams(learner, 
-                                    task = makeClassifTask(data=train, target='y_data', positive="1"), 
+                                    task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                                     resampling = rdesc, 
                                     par.set = search_space, 
                                     control = ctrl, 
@@ -116,36 +166,41 @@ get_measures_from_tuneParams = function(search_space, dataset, learner_str, meas
         }
 
     }
-    print_debug("BEST NROUNDS")
-    print_debug(best_nrounds)
+    c.print_debug("BEST NROUNDS")
+    c.print_debug(best_nrounds)
+    
   }else{
-    res_tuneParams = tuneParams(learner_str, 
-                                task = makeClassifTask(data=train, target='y_data', positive="1"), 
+    # Todos os outros algoritmos tem seus hiperparametros corretamente listado no seach_space.
+    res_tuneParams = tuneParams(c.learner_str, 
+                                task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                                 resampling = rdesc,
                                 par.set = search_space, 
                                 control = ctrl, 
-                                measure=measure, 
+                                measure=c.measure, 
                                 show.info = DEBUG)    
   }
 
+  #Armazenando melhor resultado obtido internamente no tuning
   result$performance_tuned = res_tuneParams$y
   
   #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
-  if(learner_str == XGBOOST_STR){
-    learner = setHyperPars(makeLearner(learner_str, par.vals = list(nrounds = best_nrounds)), par.vals = res_tuneParams$x)  
+  if(c.learner_str == XGBOOST_STR){
+    #Novamente temos que escrever codigo adicional para adicionar o hiperparametro nrounds ao xgboost
+    learner = makeLernerWrapped(hiper.par.vals =res_tuneParams$x, par.vals = list(nrounds = nrounds))
   }else{
-    learner = setHyperPars(makeLearner(learner_str), par.vals = res_tuneParams$x)  
+    learner = makeLernerWrapped(hiper.par.vals =res_tuneParams$x)
   }
   
-  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive="1"))
-  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive="1"))
-  result$performance_holdout = performance(p, measures = measure)
+  #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
+  learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS))
+  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
+  result$performance_holdout = performance(p, measures = c.measure)
 
   return(result)
 }
 
 #----------------------#
-print_debug = function(str){
+c.print_debug = function(str){
   if(!is.character(str)){
     str = paste(str, collapse = "")
   }
@@ -155,20 +210,20 @@ print_debug = function(str){
 }
 
 #----------------------#
-gen_all_measures_inline = function(search_space, dataset, learner_str, weight_space, measure){
+c.gen_all_measures_inline = function(){
   
   measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
     
     #Realizando Tuning com métrica acurácia
-    measures = get_measures_from_tuneParams(search_space = search_space, 
-                                            dataset = dataset, 
-                                            learner_str = learner_str, 
-                                            measure = measure, 
-                                            weight_space = weight_space)
+    measures = c.get_measures_from_tuneParams(search_space = search_space, 
+                                            dataset = c.dataset, 
+                                            learner_str = c.learner_str, 
+                                            measure = c.measure, 
+                                            weight_space = c.weight_space)
  
-    new_row = c(learner_str, weight_space, measure$name, measures$performance_tuned, 
+    new_row = c(c.learner_str, c.weight_space, c.measure$name, measures$performance_tuned, 
                 measures$performance_holdout, i)
     
     measures_compilation[[i]] = new_row
@@ -178,7 +233,7 @@ gen_all_measures_inline = function(search_space, dataset, learner_str, weight_sp
 }
 
 #----------------------#
-select_measure = function(arg){
+c.select_measure = function(arg){
   if(is.na(arg) | is.null(arg)){
     warning("Nao foi informado a metrica desejada")
     stop()
@@ -201,7 +256,7 @@ select_measure = function(arg){
 }
 
 #----------------------#
-select_learner = function(arg){
+c.select_learner = function(arg){
   if(is.na(arg) | is.null(arg)){
     warning("Nao foi informado o algoritmo desejado")
     stop()
@@ -220,7 +275,7 @@ select_learner = function(arg){
 }
 
 #----------------------#
-select_weight_space = function(arg){
+c.select_weight_space = function(arg){
   if(is.null(arg)){
    return(F)
   }else{
@@ -229,22 +284,22 @@ select_weight_space = function(arg){
 }
 
 #----------------------#
-select_search_space = function(learner_str){
-  if(learner_str == SVM_STR){
+c.select_search_space = function(){
+  if(c.learner_str == SVM_STR){
     return(
       makeParamSet(
         makeNumericParam("C", lower = 2**(-5), upper = 2**15),
         makeNumericParam("sigma", lower = 2**(-15), upper = 2**3)
       )
     )
-  }else if(learner_str == RF_STR){
+  }else if(c.learner_str == RF_STR){
     return(
       makeParamSet(
-        makeDiscreteParam("mtry", c(1:(ncol(dataset)-1))),
+        makeDiscreteParam("mtry", c(1:(ncol(c.dataset)-1))),
         makeDiscreteParam("ntree", c((2**4):(2**12)))
       )
     )
-  }else if(learner_str == XGBOOST_STR){
+  }else if(c.learner_str == XGBOOST_STR){
     return(
       makeParamSet(
         makeDiscreteParam("max_depth", c(1:6)),
@@ -252,29 +307,29 @@ select_search_space = function(learner_str){
       )
     )
   }else{
-    warning(paste("Nao existe um search_space definido para o algoritmo ", learner_str, sep=""))
+    warning(paste("Nao existe um search_space definido para o algoritmo ", c.learner_str, sep=""))
     stop()
   }
 }
 
 #----------------------#
-exec_tuning = function(dataset, learner_str, measure, weight_space){
+c.exec_tuning = function(){
   
-  search_space = select_search_space(learner_str)
+  search_space = c.select_search_space()
   
-  tuning_and_holdout = gen_all_measures_inline(search_space = search_space, 
-                                               dataset = dataset,
-                                               learner_str = learner_str,
-                                               weight_space = weight_space,
-                                               measure = measure)
+  tuning_and_holdout = c.gen_all_measures_inline(search_space = search_space, 
+                                               dataset = c.dataset,
+                                               learner_str = c.learner_str,
+                                               weight_space = c.weight_space,
+                                               measure = c.measure)
   
-  print_debug("Resultados do tuning:")
-  print_debug(paste(COLUMNS_NAMES, collapse=" | "))
+  c.print_debug("Resultados do tuning:")
+  c.print_debug(paste(COLUMNS_NAMES, collapse=" | "))
   print(tuning_and_holdout)
 }
 
 #----------------------#
-save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_str, measure, weight_space){
+c.save_tuning = function(measure_list){
   
   #compilando a lista de metricas em um unico dataframe
   out_df = NULL
@@ -285,63 +340,50 @@ save_tuning = function(measure_list, dataset_path, dataset_imba_rate, learner_st
   colnames(out_df) = COLUMNS_NAMES
   
   #Criando caso nao exista a pasta para salvar os arquivos com os resultados
-  dirname = paste(SUMMARY_FOLDER_NAME, as.character(dataset_imba_rate), sep="")
-  dir.create(file.path(dirname(dataset_path), dirname), showWarnings = DEBUG)
+  dirname = paste(SUMMARY_FOLDER_NAME, as.character(c.dataset_imba_rate), sep="")
+  dir.create(file.path(dirname(c.dataset_path), dirname), showWarnings = DEBUG)
   
   #Salvando dados
-  out_filename = paste(learner_str, measure$name, as.character(weight_space), sep ="_")
-  out_path = str_replace_all(paste(dirname(dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
+  out_filename = paste(c.learner_str, measure$name, as.character(c.weight_space), sep ="_")
+  out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
-  print_debug(paste("Tuning salvo em: ", out_path, sep=""))
+  c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
 }
 
 #**************************************************************#
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
-print_debug(getwd())
-
 #Lendo os parametros o script
-opt = get_args()
+opt = c.get_args()
 
 #Lendo lista dos datasets
 dataset_list = read.csv(DATASET_LIST_PATH, header=F)
 
 #Selecionando dataset pela posicao na lista
 dataset_id = as.numeric(opt$dataset_id) + 1
-dataset_path = as.character(dataset_list[dataset_id,])
-dataset_dir = dirname(dataset_path)
-dataset_imba_rate = str_extract(dataset_path, "0.[0-9]{2,3}")
+c.dataset_path = as.character(dataset_list[dataset_id,])
+dataset_dir = dirname(c.dataset_path)
+c.dataset_imba_rate = str_extract(c.dataset_path, "0.[0-9]{2,3}")
 
 #Selecionando os parametros para o tuning
-measure = select_measure(opt$measure)
-learner_str = select_learner(opt$model)
-weight_space = select_weight_space(opt$weight_space)
+c.measure = c.select_measure(opt$measure)
+c.learner_str = c.select_learner(opt$model)
+c.weight_space = c.select_weight_space(opt$weight_space)
 
 #Carregando dataset
-dataset = read.csv(dataset_path, header = T)
-table(dataset_path)
-table(dataset[,'y_data'])
-
+c.dataset = read.csv(c.dataset_path, header = T)
 
 #Executando e armazenando os valores obtidos com o tuning
-print_debug("Executando o tuning com os seguintes parametros:")
-print_debug(paste("Dataset: ", dataset_path))
-print_debug(paste("Algoritmo: ", learner_str))
-print_debug(paste("Metrica: ", measure$name))
-print_debug(paste("Weitgh space: ", weight_space))
+c.print_debug("Executando o tuning com os seguintes parametros:")
+c.print_debug(paste("Dataset: ", c.dataset_path))
+c.print_debug(paste("Algoritmo: ", c.learner_str))
+c.print_debug(paste("Metrica: ", c.measure$name))
+c.print_debug(paste("Weitgh space: ", c.weight_space))
 
-measure_list = exec_tuning(dataset = dataset, 
-                           learner_str = learner_str, 
-                           measure = measure, 
-                           weight_space = weight_space)
+measure_list = c.exec_tuning()
 
 print("Warnings:")
 print(warnings())
 
-save_tuning(measure_list = measure_list, 
-            dataset_path = dataset_path, 
-            dataset_imba_rate, 
-            learner_str=learner_str, 
-            measure = measure, 
-            weight_space = weight_space)
+c.save_tuning(measure_list = measure_list)
