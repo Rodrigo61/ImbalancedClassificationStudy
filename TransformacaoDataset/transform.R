@@ -23,7 +23,7 @@ imba_sample = function(x_data, y_data, minority_percent, warning=F){
   
   if(length(which(y_data == 1)) < 10){
     if(warning == T){
-      warning("A classe minoritária nao tem observacoes suficientes.")
+      warning("A classe minoritária nao tem observacoes suficientes. [Menos de 10 observacoes]")
     }
     return()
   }
@@ -66,6 +66,7 @@ imba_sample = function(x_data, y_data, minority_percent, warning=F){
       minority_indexes = minority_indexes[-1]
     }
   }
+  
   if(warning == T){
     warning("A classe minoritária nao tem observacoes suficientes.")
   }
