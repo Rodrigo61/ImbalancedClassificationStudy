@@ -135,7 +135,8 @@ dataset_to_binary_form = function(y_data){
 #####################################
 
 #Lendo lista de datasets
-dataset_list = read.csv("original_dataset_list", header=F)
+#dataset_list = read.csv("original_dataset_list", header=F)
+dataset_list = read.csv("original_dataset_list_RECOD", header=F)
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
