@@ -189,46 +189,78 @@ residual_0.001 = imba_0.01$residual_dataset
 
 #Salvando datasets
 if(length(ds_0.05) != 0){
-  print("porcentagem 0.05")
-  print(length(which(ds_0.05 == 1))/dim(ds_0.05)[1])
+  print(paste("Gerado dataset da classe de 0.05 de desbalanceamento com exatamente", 
+              print(length(which(ds_0.05 == 1))/dim(ds_0.05)[1]), 
+              "de desbalanceamento", 
+              sep = " "))
+  
   #Escrevendo dataset
-  write.table(ds_0.05, file=paste(dataset_dir, "/ds_0.05.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/ds_0.05.csv", sep="")
+  write.table(ds_0.05, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Dataset:", file, sep=" "))
   #Escrevendo residuo
-  write.table(residual_0.05, file=paste(dataset_dir, "/residual_0.05.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/residual_0.05.csv", sep="")
+  write.table(residual_0.05, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Residuo:", file, sep=" "))
   
 }else{
+  print("Nao foi possivel criar para esse dataset um desbalanceamento de 0.05")
   write.table(ds_0.05, file=paste(dataset_dir, "/ds_0.05FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
 
 if(length(ds_0.03) != 0){
-  print("porcentagem 0.03")
-  print(length(which(ds_0.03 == 1))/dim(ds_0.03)[1])
+  print(paste("Gerado dataset da classe de 0.03 de desbalanceamento com exatamente", 
+              print(length(which(ds_0.03 == 1))/dim(ds_0.03)[1]), 
+              "de desbalanceamento", 
+              sep = " "))
+
   #Escrevendo dataset
-  write.table(ds_0.03, file=paste(dataset_dir, "/ds_0.03.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/ds_0.03.csv", sep="")
+  write.table(ds_0.03, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Dataset:", file, sep=" "))
   #Escrevendo residuo
-  write.table(residual_0.03, file=paste(dataset_dir, "/residual_0.03.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/residual_0.03.csv", sep="")
+  write.table(residual_0.03, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Residuo:", file, sep=" "))
 }else{
+  print("Nao foi possivel criar para esse dataset um desbalanceamento de 0.03")
   write.table(ds_0.03, file=paste(dataset_dir, "/ds_0.03FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
 
 if(length(ds_0.01) != 0){
-  print("porcentagem 0.01")
-  print(length(which(ds_0.01 == 1))/dim(ds_0.01)[1])
+  print(paste("Gerado dataset da classe de 0.01 de desbalanceamento com exatamente", 
+              print(length(which(ds_0.01 == 1))/dim(ds_0.01)[1]), 
+              "de desbalanceamento", 
+              sep = " "))
+  
   #Escrevendo dataset
-  write.table(ds_0.01, file=paste(dataset_dir, "/ds_0.01.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/ds_0.01.csv", sep="")
+  write.table(ds_0.01, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Dataset:", file, sep=" "))
   #Escrevendo residuo
-  write.table(residual_0.01, file=paste(dataset_dir, "/residual_0.01.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/residual_0.01.csv", sep="")
+  write.table(residual_0.01, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Residuo:", file, sep=" "))
 }else{
+  print("Nao foi possivel criar para esse dataset um desbalanceamento de 0.01")
   write.table(ds_0.01, file=paste(dataset_dir, "/ds_0.01FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
 
 if(length(ds_0.001) != 0){
-  print("porcentagem 0.001")
-  print(length(which(ds_0.001 == 1))/dim(ds_0.001)[1])
+  print(paste("Gerado dataset da classe de 0.001 de desbalanceamento com exatamente", 
+              print(length(which(ds_0.001 == 1))/dim(ds_0.001)[1]), 
+              "de desbalanceamento", 
+              sep = " "))
+  
   #Escrevendo dataset
-  write.table(ds_0.001, file=paste(dataset_dir, "/ds_0.001.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/ds_0.001.csv", sep="")
+  write.table(ds_0.001, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Dataset:", file, sep=" "))
   #Escrevendo residuo
-  write.table(residual_0.001, file=paste(dataset_dir, "/residual_0.001.csv", sep=""), col.names = T, row.names = F, sep=",")
+  file = paste(dataset_dir, "/residual_0.001.csv", sep="")
+  write.table(residual_0.001, file = file, col.names = T, row.names = F, sep=",")
+  print(paste("Residuo:", file, sep=" "))
 }else{
+  print("Nao foi possivel criar para esse dataset um desbalanceamento de 0.001")
   write.table(ds_0.001, file=paste(dataset_dir, "/ds_0.001FALHOU.csv", sep=""), col.names = T, row.names = F, sep=",")
 }
