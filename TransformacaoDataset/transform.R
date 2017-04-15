@@ -56,6 +56,9 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
       #Criando dataset de residuos de retorno da funcao
       print("Verificando residual_indexes")
       print(residual_indexes)
+      print("Verificando majority_indexes")
+      print(majority_indexes)
+      
       residual_dataset = cbind(x_data[residual_indexes,], y_data[residual_indexes])
       names(residual_dataset)[ncol(residual_dataset)] = 'y_data'
       ret$residual_dataset = residual_dataset
@@ -66,6 +69,8 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
       # e tentamos novamente.
       
       #removendo um indice da minoritaria, mas antes armazenando na lista de residuos
+      print("Verificando minority_indexes[1]")
+      print(minority_indexes[1])
       residual_indexes = c(residual_indexes, minority_indexes[1])
       minority_indexes = minority_indexes[-1]
     }
