@@ -43,8 +43,10 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
       #Indices do novo dataset desbalanceado
       new_indexes = c(minority_indexes, majority_indexes[1:needed_majority_abs_count])
       
-      #Guardando todos as obs. da classe majoritaria que seriam eliminadas na lista de residuos
-      residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)])
+      #Guardando todos as obs. da classe majoritaria que seriam eliminadas na lista de residuos. Caso existam
+      if(needed_majority_abs_count + 1 <= length(majority_indexes)){
+        residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)])
+      }
       
       #Criando dataset desbalanceado de retorno da funcao
       imba_dataset = cbind(x_data[new_indexes,], y_data[new_indexes])
