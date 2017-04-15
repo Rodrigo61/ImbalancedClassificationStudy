@@ -131,18 +131,11 @@ find_minority_class = function(y_data){
 #obs: Todas as outras classes são compiladas em uma só majoritária
 dataset_to_binary_form = function(y_data, minority_class){
   
-  print("Minority class: ")
-  print(minority_class)
-  print("Testando y_data dentro de to_binary")
-  print(y_data)
   y_data_bin = replace(y_data, y_data == minority_class, -1)
   y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
   y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
   y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
   
-  print("Testando y_data_bin")
-  print(y_data_bin)
-  stop()
   return(y_data_bin)
 }
 
