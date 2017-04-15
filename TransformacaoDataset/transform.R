@@ -54,6 +54,8 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
       ret$imba_dataset = imba_dataset
       
       #Criando dataset de residuos de retorno da funcao
+      print("Verificando residual_indexes")
+      print(residual_indexes)
       residual_dataset = cbind(x_data[residual_indexes,], y_data[residual_indexes])
       names(residual_dataset)[ncol(residual_dataset)] = 'y_data'
       ret$residual_dataset = residual_dataset
