@@ -149,11 +149,13 @@ dataset_list = read.csv(DATASET_LIST_NAME, header=F)
 
 #Selecionando dataset pela posicao na lista
 args = commandArgs(trailingOnly=TRUE)
-dataset_id = as.numeric(args[1]) + 1
 
-print(dataset_id)
+dataset_id = as.numeric(args[1]) + 1
+print(paste("Dataset ID", dataset_id, sep = " "))
+
 dataset_path = as.character(dataset_list[dataset_id,])
-print(dataset_path)
+print(paste("Dataset path", dataset_path, sep = " "))
+
 dataset_dir = dirname(dataset_path)
 
 #Carregando dataset
@@ -194,7 +196,7 @@ residual_0.001 = imba_0.01$residual_dataset
 #Salvando datasets
 if(length(ds_0.05) != 0){
   print(paste("Gerado dataset da classe de 0.05 de desbalanceamento com exatamente", 
-              print(length(which(ds_0.05 == 1))/dim(ds_0.05)[1]), 
+              length(which(ds_0.05 == 1)/dim(ds_0.05)[1]), 
               "de desbalanceamento", 
               sep = " "))
   
@@ -214,7 +216,7 @@ if(length(ds_0.05) != 0){
 
 if(length(ds_0.03) != 0){
   print(paste("Gerado dataset da classe de 0.03 de desbalanceamento com exatamente", 
-              print(length(which(ds_0.03 == 1))/dim(ds_0.03)[1]), 
+              length(which(ds_0.03 == 1)/dim(ds_0.03)[1]), 
               "de desbalanceamento", 
               sep = " "))
 
@@ -233,7 +235,7 @@ if(length(ds_0.03) != 0){
 
 if(length(ds_0.01) != 0){
   print(paste("Gerado dataset da classe de 0.01 de desbalanceamento com exatamente", 
-              print(length(which(ds_0.01 == 1))/dim(ds_0.01)[1]), 
+              length(which(ds_0.01 == 1)/dim(ds_0.01)[1]), 
               "de desbalanceamento", 
               sep = " "))
   
@@ -252,7 +254,7 @@ if(length(ds_0.01) != 0){
 
 if(length(ds_0.001) != 0){
   print(paste("Gerado dataset da classe de 0.001 de desbalanceamento com exatamente", 
-              print(length(which(ds_0.001 == 1))/dim(ds_0.001)[1]), 
+              length(which(ds_0.001 == 1)/dim(ds_0.001)[1]), 
               "de desbalanceamento", 
               sep = " "))
   
