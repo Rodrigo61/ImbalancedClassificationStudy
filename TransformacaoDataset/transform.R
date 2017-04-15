@@ -123,6 +123,8 @@ find_minority_class = function(y_data){
       max_ds_gen_class_size = length(which(y_data_bin == minority_class))
     }
   }
+  
+  return(max_ds_gen_class)
 }
 
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
