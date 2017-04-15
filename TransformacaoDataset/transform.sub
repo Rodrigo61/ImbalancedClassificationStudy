@@ -1,4 +1,4 @@
-N=121
+N=1
 universe                = vanilla
 executable            = transform.sh
 arguments               = $(Process)
