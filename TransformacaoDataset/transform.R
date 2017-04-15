@@ -45,13 +45,7 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
       
       #Guardando todos as obs. da classe majoritaria que seriam eliminadas na lista de residuos. Caso existam
       if(needed_majority_abs_count + 1 <= length(majority_indexes)){
-        print("length(majority_indexes)")
-        print(length(majority_indexes))
-        print("needed_majority_abs_count")
-        print(needed_majority_abs_count)
-        print("Verificando majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)]")
-        print(majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)])
-        residual_indexes = c(residual_indexes, majority_indexes[needed_majority_abs_count+1 : length(majority_indexes)])
+        residual_indexes = c(residual_indexes, majority_indexes[(needed_majority_abs_count+1) : length(majority_indexes)])
       }
       
       #Criando dataset desbalanceado de retorno da funcao
