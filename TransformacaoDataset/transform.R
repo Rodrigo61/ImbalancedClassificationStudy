@@ -13,7 +13,7 @@ DATASET_LIST_NAME = "original_dataset_list_RECOD"
 #É feito apenas undersampling, nenhum dado é replicado. O undersampling sempre favorece a retirada da classe 
 #majoritária, assim preservando o maximo possível a classe minoritária. 
 #As observacoes que serão descartadas para possibilitar o desbalanceamento artificial também sao dadas como retorno.
-imba_sample = function(x_data, y_data, minority_percent, warning=F){
+imba_sample = function(x_data, y_data, minority_percent, warning=T){
   
   #Variavel de retorno
   ret = NULL
@@ -126,7 +126,7 @@ find_minority_class = function(y_data){
 
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
 #obs: Todas as outras classes são compiladas em uma só majoritária
-dataset_to_binary_form = function(y_data){
+dataset_to_binary_form = function(y_data, minority_class){
 
   y_data_bin = replace(y_data, y_data == minority_class, -1)
   y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
@@ -166,7 +166,7 @@ minority_class = find_minority_class(y_data)
 
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
 #obs: Todas as outras classes são compiladas em uma só majoritária
-y_data_bin = dataset_to_binary_form(y_data)
+y_data_bin = dataset_to_binary_form(y_data, minority_class)
 
 
 #Gerando Datasets e seus residuos
