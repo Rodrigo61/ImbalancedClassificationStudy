@@ -94,11 +94,11 @@ find_minority_class = function(y_data){
     y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
     
     
-    #Gerando Datasets e seus residuos
-    ds_0.05 = imba_sample(x_data, y_data_bin, 0.05)
-    ds_0.03 = imba_sample(x_data, y_data_bin, 0.03)
-    ds_0.01 = imba_sample(x_data, y_data_bin, 0.01)
-    ds_0.001 = imba_sample(x_data, y_data_bin, 0.001)
+    #Gerando todos os possiveis datasets. Nesse momento nao nos preocupamos com os warnings
+    ds_0.05 = imba_sample(x_data, y_data_bin, 0.05, warning = F)
+    ds_0.03 = imba_sample(x_data, y_data_bin, 0.03, warning = F)
+    ds_0.01 = imba_sample(x_data, y_data_bin, 0.01, warning = F)
+    ds_0.001 = imba_sample(x_data, y_data_bin, 0.001, warning = F)
     
     
     #Calculando quantos Datasets foram possiveis de serem gerados
@@ -116,6 +116,7 @@ find_minority_class = function(y_data){
       gen_ds_count = gen_ds_count + 1
     }
     
+    # Armazenando se essa escolha de classe minoritária foi a melhor até entao
     if(gen_ds_count >= max_ds_gen){
       max_ds_gen = gen_ds_count
       max_ds_gen_class = minority_class
