@@ -13,6 +13,7 @@ library(stringr)
 library(xgboost)
 library(caret)
 library(optparse)
+library(smotefamily)
 set.seed(3)
 
 #**************************************************************#
@@ -28,11 +29,11 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-#DATASET_LIST_PATH = "../dataset_list"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure",
-                  "tuning_measure", "holdout_measure",
-                  "iteration_count")
+                  "tuning_measure", "holdout_measure", 
+                  "holdout_measure_residual", "iteration_count")
 
 NEGATIVE_CLASS = "0"
 POSITIVE_CLASS = "1"
@@ -47,6 +48,8 @@ ADASYN_STR = "ADASYN"
 #**************************************************************#
 c.dataset = NULL
 c.dataset_path = NULL
+c.residual_dataset = NULL
+c.residual_dataset_path = NULL
 c.learner_str = NULL
 c.measure = NULL
 c.weight_space = FALSE
@@ -66,13 +69,17 @@ c.get_args = function(){
   option_list = list(
     make_option(c("--dataset_id"), type="integer", default=NULL, 
                 help="ID do dataset a ser utilizado"),
+    
     make_option(c("--measure"), type="character", default=NULL, 
                 help="nome da métrica utilizada para otimizacao"),
+    
     make_option(c("--model"), type="character", default=NULL, 
                 help="nome do algoritmo que será realizado o tuning"),
+    
     make_option(c("--weight_space"), action= "store_true", default=NULL, 
                 help="se presente a flag o treinamento será feito com weight_space"),
-    make_option(c("--oversampling"), action= "character", default=NULL, 
+    
+    make_option(c("--oversampling"), type= "character", default=NULL, 
                 help="nome do algoritmo de oversampling que será utilizado no dataset corrente")
     
   )
@@ -86,8 +93,8 @@ c.get_args = function(){
 c.create_holdout_train_test = function(){
   
   folds = createFolds(c.dataset[, 'y_data'], 5);
-  train = c.dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4),]
-  test = c.dataset[folds$Fold5,]
+  train = c.dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4), ]
+  test = c.dataset[folds$Fold5, ]
   
   holdout_sets = NULL
   holdout_sets$train = train
@@ -109,16 +116,25 @@ c.get_majority_weight = function(){
 
 #----------------------#
 #Funcao que criar um learner e já empacota opcoes de parametro e class_weight 
-c.makeLearnerWrapped = function(par.vals, hiper.par.vals){
+c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
   
-  #Defidindo peso da classe majoritaria. Se o weight_space for False esse peso nao vai interferir em nada
+  #Devidindo peso da classe majoritaria. Se o weight_space for False esse peso nao vai interferir em nada
   majority_weight = c.get_majority_weight()
   
-  learner = makeLearner(c.learner_str, par.vals = par.vals)
-  learner = makeWeightedClassesWrapper(learner, wcw.param = NEGATIVE_CLASS, wcw.weight = majority_weight)
-  learner = setHyperPars(learner, par.vals = hiper.par.vals)  
+  if(is.null(par.vals)){
+    learner = makeLearner(c.learner_str, par.vals = par.vals)  
+  }else{
+    learner = makeLearner(c.learner_str)
+  }
   
-  if(identical(measure, auc)){
+  # Fazendo um wrapper para Weighted classes. Lembrar que 0 nos ds estudados a classe majoritaria vem antes
+  learner = makeWeightedClassesWrapper(learner, wcw.weight = majority_weight) 
+  
+  if(!is.null(hiper.par.vals)){
+    learner = setHyperPars(learner, par.vals = hiper.par.vals)    
+  }
+  
+  if(identical(c.measure, auc)){
     #to calculate AUC we need some continuous output, so we set 
     #predictType to probabilities
     learner = setPredictType(learner, "prob")
@@ -128,7 +144,7 @@ c.makeLearnerWrapped = function(par.vals, hiper.par.vals){
 }
 
 #----------------------#
-c.get_measures_from_tuneParams = function(){
+c.get_measures_from_tuneParams = function(search_space){
   #AUX do xgboost
   best_nrounds = 20
   best_measure = 0
@@ -143,11 +159,9 @@ c.get_measures_from_tuneParams = function(){
 
   #Seperando treino e teste (Holdout estratificado). 80%(4/5) dos dados para treino e 
   #o restante para teste.
-  holdout_aux = c.create_holdout_train_test(c.dataset = c.dataset[, 'y_data']);
+  holdout_aux = c.create_holdout_train_test();
   train = holdout_aux$train
   test = holdout_aux$test
-  
-  
   
   #Realizando o tuning com a métrica escolhida
   if(c.learner_str == XGBOOST_STR){
@@ -162,7 +176,7 @@ c.get_measures_from_tuneParams = function(){
                                     resampling = rdesc, 
                                     par.set = search_space, 
                                     control = ctrl, 
-                                    measure=measure, 
+                                    measure= c.measure, 
                                     show.info = DEBUG)    
 
         if(res_tuneParams$y > best_measure){
@@ -197,9 +211,16 @@ c.get_measures_from_tuneParams = function(){
   }
   
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
+  
+  #Holdout normal
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS))
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout = performance(p, measures = c.measure)
+  
+  #Holdout com conjunto de teste extendido com os residuos do dataset
+  test = rbind(test, c.residual_dataset)
+  p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
+  result$performance_holdout_with_residual = performance(p, measures = c.measure)
 
   return(result)
 }
@@ -215,21 +236,16 @@ c.print_debug = function(str){
 }
 
 #----------------------#
-c.gen_all_measures_inline = function(){
+c.gen_all_measures_inline = function(search_space){
   
   measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
-    
     #Realizando Tuning com métrica acurácia
-    measures = c.get_measures_from_tuneParams(search_space = search_space, 
-                                            dataset = c.dataset, 
-                                            learner_str = c.learner_str, 
-                                            measure = c.measure, 
-                                            weight_space = c.weight_space)
+    measures = c.get_measures_from_tuneParams(search_space)
  
     new_row = c(c.learner_str, c.weight_space, c.measure$name, measures$performance_tuned, 
-                measures$performance_holdout, i)
+                measures$performance_holdout, measures$performance_holdout_with_residual, i)
     
     measures_compilation[[i]] = new_row
     
@@ -262,7 +278,7 @@ c.select_measure = function(arg){
 
 #----------------------#
 c.select_learner = function(arg){
-  if(is.na(arg) | is.null(arg)){
+  if(is.null(arg) || is.na(arg)){
     warning("Nao foi informado o algoritmo desejado")
     stop()
   }
@@ -290,6 +306,12 @@ c.select_weight_space = function(arg){
 
 #----------------------#
 c.select_oversampling = function(arg){
+  
+  #Caso a flag nao tenha sido passada retorna NULL
+  if(is.null(arg) || is.na(arg)){
+    return(NULL)
+  }
+  
   if(arg == "smote"){
     return(SMOTE_STR) 
   }else if(arg == "adasyn"){
@@ -297,7 +319,7 @@ c.select_oversampling = function(arg){
   }else if(arg == "borderline"){
     return(SMOTE_BORDERLINE_STR)
   }else{
-    warning("Selecione um dos seguintes algoritmos: smote, adasyn ou borderline")
+    warning("Selecione um algoritmo de oversampling válido: smote, adasyn ou borderline")
     stop()
   }
 }
@@ -336,11 +358,7 @@ c.exec_tuning = function(){
   
   search_space = c.select_search_space()
   
-  tuning_and_holdout = c.gen_all_measures_inline(search_space = search_space, 
-                                               dataset = c.dataset,
-                                               learner_str = c.learner_str,
-                                               weight_space = c.weight_space,
-                                               measure = c.measure)
+  tuning_and_holdout = c.gen_all_measures_inline(search_space)
   
   c.print_debug("Resultados do tuning:")
   c.print_debug(paste(COLUMNS_NAMES, collapse=" | "))
@@ -364,21 +382,47 @@ c.save_tuning = function(measure_list){
   dir.create(file.path(dirname(c.dataset_path), dirname), showWarnings = DEBUG)
   
   #Salvando dados
-  out_filename = paste(c.learner_str, measure$name, as.character(c.weight_space), sep ="_")
+  out_filename = paste(c.learner_str, c.measure$name, as.character(c.weight_space), sep ="_")
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
   c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
 }
 
+#----------------------#
+#Funcao que executa em c.dataset o algoritmo de sampling escolhido pelo usuario
 c.exec_data_preprocessing = function(){
+  
+  sampled_dataset = NULL
+  print("c.oversampling_method ")
+  print(c.oversampling_method)
+  
   if(c.oversampling_method == ADASYN_STR){
-    print("Verificando ADAS(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data")
-    print(ADAS(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data)
-    return(ADAS(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data)
+    
+    sampled_dataset = ADAS(c.dataset[,-(ncol(c.dataset))], c.dataset[,'y_data'])$data
+    
+  }else if(c.oversampling_method == SMOTE_STR){
+    
+    sampled_dataset = SMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data
+     
+  }else if(c.oversampling_method == SMOTE_BORDERLIN_STR){
+    return()
   }else{
     c.print_debug("Houve um erro interno! a variavel oversampling_method nao está com um valor correto!")
+    return()
   }
+  
+  # Seta a coluna das classes com o nome anterior: 'y_data'
+  colnames(sampled_dataset) = c(colnames(sampled_dataset)[-(length(colnames(sampled_dataset)))], 'y_data')
+  
+  # Log para o usuario
+  c.print_debug(paste("Executado ", c.oversampling_method, sep=""))
+  c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 0)), sep=""))
+  c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 1)), sep=""))
+  c.print_debug(paste("Sampled dataset majority number = ", length(which(sampled_dataset[, 'y_data'] == 0)), sep=""))
+  c.print_debug(paste("Sampled dataset minority number =", length(which(sampled_dataset[, 'y_data'] == 1)), sep=""))
+  
+  return(sampled_dataset)
   
 }
 #**************************************************************#
@@ -406,8 +450,14 @@ c.oversampling_method = c.select_oversampling(opt$oversampling)
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
 
+#Carregando o resíduo do dataset
+c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
+c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
+
 #Aplicando data pre-processing, se pedida pelo usuario
-c.dataset = c.exec_data_preprocessing()
+if(!is.null(c.oversampling_method)){
+  c.dataset = c.exec_data_preprocessing()  
+}
 
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Executando o tuning com os seguintes parametros:")
