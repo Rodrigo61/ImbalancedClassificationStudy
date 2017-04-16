@@ -393,6 +393,9 @@ c.save_tuning = function(measure_list){
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
   c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
+  
+  print("DF obtido")
+  print(out_df)
 }
 
 #----------------------#
