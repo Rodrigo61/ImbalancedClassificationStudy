@@ -217,11 +217,17 @@ c.get_measures_from_tuneParams = function(search_space){
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout = performance(p, measures = c.measure)
   
+  print("Especificacoes do teste sem extensao")
+  print(paste(length(which(test[, 'y_data'] == 0)), " obs. majoritarias", sep=""))
+  print(paste(length(which(test[, 'y_data'] == 1)), " obs. minoritárias", sep=""))
+  
   #Holdout com conjunto de teste extendido com os residuos do dataset
   test = rbind(test, c.residual_dataset)
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout_with_residual = performance(p, measures = c.measure)
-
+  print("Especificacoes do teste com extensao")
+  print(paste(length(which(test[, 'y_data'] == 0)), " obs. majoritarias", sep=""))
+  print(paste(length(which(test[, 'y_data'] == 1)), " obs. minoritárias", sep=""))
   return(result)
 }
 
@@ -387,8 +393,6 @@ c.save_tuning = function(measure_list){
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
   c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
-  print("Conteudo salvo:")
-  print(out_df)
 }
 
 #----------------------#
