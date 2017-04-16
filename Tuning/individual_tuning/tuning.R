@@ -388,7 +388,7 @@ c.save_tuning = function(measure_list){
   
   c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
   print("Conteudo salvo:")
-  print(out_path)
+  print(out_df)
 }
 
 #----------------------#
