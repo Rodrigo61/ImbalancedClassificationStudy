@@ -399,22 +399,24 @@ c.save_tuning = function(measure_list){
 c.exec_data_preprocessing = function(){
   
   sampled_dataset = NULL
-  
+  dataset_features = c.dataset[ ,-ncol(c.dataset)]
+  dataset_classes = c.dataset[ ,ncol(c.dataset)]
+   
   if(c.oversampling_method == ADASYN_STR){
     
-    sampled_dataset = ADAS(c.dataset[,-(ncol(c.dataset))], c.dataset[,'y_data'])$data
+    sampled_dataset = ADAS(dataset_features, dataset_classes)$data
     
   }else if(c.oversampling_method == SMOTE_STR){
     
-    sampled_dataset = SMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data
+    sampled_dataset = SMOTE(dataset_features, dataset_classes)$data
      
   }else if(c.oversampling_method == SMOTE_BORDERLINE_ONE_STR){
     
-    sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type1")$data
+    sampled_dataset = BLSMOTE(dataset_features, dataset_classes, method="type1")$data
     
   }else if(c.oversampling_method == SMOTE_BORDERLINE_TWO_STR){
     
-    sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type2")$data
+    sampled_dataset = BLSMOTE(dataset_features, dataset_classes, method="type2")$data
     
   }else{
     c.print_debug("Houve um erro interno! a variavel oversampling_method nao está com um valor correto!")
