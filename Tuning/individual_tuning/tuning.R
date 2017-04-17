@@ -408,11 +408,11 @@ c.exec_data_preprocessing = function(){
     
     sampled_dataset = SMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data
      
-  }else if(c.oversampling_method == SMOTE_BORDERLIN_ONE_STR){
+  }else if(c.oversampling_method == SMOTE_BORDERLINE_ONE_STR){
     
     sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type1")$data
     
-  }else if(c.oversampling_method == SMOTE_BORDERLIN_TWO_STR){
+  }else if(c.oversampling_method == SMOTE_BORDERLINE_TWO_STR){
     
     sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type2")$data
     
