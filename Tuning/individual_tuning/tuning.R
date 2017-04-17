@@ -123,9 +123,9 @@ c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
   majority_weight = c.get_majority_weight()
   
   if(is.null(par.vals)){
-    learner = makeLearner(c.learner_str, par.vals = par.vals)  
+    learner = makeLearner(c.learner_str)  
   }else{
-    learner = makeLearner(c.learner_str)
+    learner = makeLearner(c.learner_str, par.vals = par.vals)
   }
   
   # Fazendo um wrapper para Weighted classes. Lembrar que 0 nos ds estudados a classe majoritaria vem antes
