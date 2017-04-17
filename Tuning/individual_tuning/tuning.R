@@ -39,7 +39,8 @@ NEGATIVE_CLASS = "0"
 POSITIVE_CLASS = "1"
 
 SMOTE_STR = "SMOTE"
-SMOTE_BORDERLIN_STR = "SMOTE_BORDERLINE"
+SMOTE_BORDERLIN_ONE_STR = "SMOTE_BORDERLINE_ONE"
+SMOTE_BORDERLIN_TWO_STR = "SMOTE_BORDERLINE_TWO"
 ADASYN_STR = "ADASYN"
 
 
@@ -217,17 +218,10 @@ c.get_measures_from_tuneParams = function(search_space){
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout = performance(p, measures = c.measure)
   
-  print("Especificacoes do teste sem extensao")
-  print(paste(length(which(test[, 'y_data'] == 0)), " obs. majoritarias", sep=""))
-  print(paste(length(which(test[, 'y_data'] == 1)), " obs. minoritárias", sep=""))
-  
   #Holdout com conjunto de teste extendido com os residuos do dataset
   test = rbind(test, c.residual_dataset)
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout_with_residual = performance(p, measures = c.measure)
-  print("Especificacoes do teste com extensao")
-  print(paste(length(which(test[, 'y_data'] == 0)), " obs. majoritarias", sep=""))
-  print(paste(length(which(test[, 'y_data'] == 1)), " obs. minoritárias", sep=""))
   return(result)
 }
 
@@ -322,8 +316,10 @@ c.select_oversampling = function(arg){
     return(SMOTE_STR) 
   }else if(arg == "adasyn"){
     return(ADASYN_STR)
-  }else if(arg == "borderline"){
-    return(SMOTE_BORDERLINE_STR)
+  }else if(arg == "borderline_1"){
+    return(SMOTE_BORDERLINE_ONE_STR)
+  }else if(arg == "borderline_2"){
+    return(SMOTE_BORDERLINE_TWO_STR)
   }else{
     warning("Selecione um algoritmo de oversampling válido: smote, adasyn ou borderline")
     stop()
@@ -403,8 +399,6 @@ c.save_tuning = function(measure_list){
 c.exec_data_preprocessing = function(){
   
   sampled_dataset = NULL
-  print("c.oversampling_method ")
-  print(c.oversampling_method)
   
   if(c.oversampling_method == ADASYN_STR){
     
@@ -414,8 +408,14 @@ c.exec_data_preprocessing = function(){
     
     sampled_dataset = SMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'])$data
      
-  }else if(c.oversampling_method == SMOTE_BORDERLIN_STR){
-    return()
+  }else if(c.oversampling_method == SMOTE_BORDERLIN_ONE_STR){
+    
+    sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type1")$data
+    
+  }else if(c.oversampling_method == SMOTE_BORDERLIN_TWO_STR){
+    
+    sampled_dataset = BLSMOTE(c.dataset[,-'y_data'], c.dataset[,'y_data'], method="type2")$data
+    
   }else{
     c.print_debug("Houve um erro interno! a variavel oversampling_method nao está com um valor correto!")
     return()
