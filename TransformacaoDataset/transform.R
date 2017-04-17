@@ -2,6 +2,7 @@
 ############ CONSTANTES #############
 #####################################
 
+MIN_MINORITY_CLASS = 20
 DATASET_LIST_NAME = "original_dataset_list"
 #DATASET_LIST_NAME = "original_dataset_list_RECOD"
 #####################################
@@ -21,9 +22,9 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
   #Variavel de armazenamento de obs. que serão descartadas para o desbalanceamento artificial.
   residual_indexes = NULL
   
-  if(length(which(y_data == 1)) < 10){
+  if(length(which(y_data == 1)) < MIN_MINORITY_CLASS){
     if(warning == T){
-      warning("A classe minoritária nao tem observacoes suficientes. [Menos de 10 observacoes]")
+      warning(paste("A classe minoritária nao tem observacoes suficientes. [Menos de ",MIN_MINORITY_CLASS, "observacoes]", sep =""))
     }
     return()
   }
@@ -32,7 +33,7 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
   majority_indexes = which(y_data == 0)
   
   #Devemos ter no mínimo 10 observacoes da classe minoritária(regra do estudo)
-  while(length(minority_indexes) >= 10){
+  while(length(minority_indexes) >= MIN_MINORITY_CLASS){
     
     #Calculamos o necessário de obs. da classe majoritária para que a classe minoritária represente
     # o valor de 'minority_percent' no conjunto total
