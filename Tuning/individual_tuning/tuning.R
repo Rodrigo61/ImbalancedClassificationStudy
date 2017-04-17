@@ -321,7 +321,7 @@ c.select_oversampling = function(arg){
   }else if(arg == "borderline_2"){
     return(SMOTE_BORDERLINE_TWO_STR)
   }else{
-    warning("Selecione um algoritmo de oversampling válido: smote, adasyn ou borderline")
+    warning("Selecione um algoritmo de oversampling válido: smote, adasyn ,borderline_1 ou borderline_2")
     stop()
   }
 }
