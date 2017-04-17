@@ -6,6 +6,9 @@ declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 ## vetor de algoritmos
 declare -a learners=("svm" "rf" "xgboost")
 
+## vetor de algoritmos oversampling
+declare -a oversamplings=("smote" "adsyn" "smote_1" "smote_2")
+
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
 mkdir -p $submission_files_dir
@@ -72,6 +75,32 @@ error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ws_file_sub
 		echo "sleep 20 | condor_submit $ws_file_sub" >> ../$run_all_path # append no run_all.sh
+
+		#gerando arquivo  com algoritmos de oversampling
+		for oversampling in "${oversamplings[@]}"
+		do
+			#Gerando o (.sh)
+			oversampling_file="${measure}_${learner}_${oversampling}.sh"
+			content_oversampling='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --oversampling='$oversampling''
+			echo "#!/bin/bash
+export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+$content_oversampling" > $oversampling_file
+			chmod 755 $oversampling_file			
+			
+			#Gerando o (.sub)
+			oversampling_file_sub="${measure}_${learner}_${oversampling}.sub"
+			echo 'N=196
+universe                = vanilla
+executable            = '$oversampling_file'
+arguments               = $(Process) 
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) ' > $oversampling_file_sub
+		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
+		done
+
 	done
 done
 
