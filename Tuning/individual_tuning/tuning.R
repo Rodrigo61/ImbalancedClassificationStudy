@@ -465,11 +465,6 @@ c.dataset = read.csv(c.dataset_path, header = T)
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 
-#Aplicando data pre-processing, se pedida pelo usuario
-if(!is.null(c.oversampling_method)){
-  c.dataset = c.exec_data_preprocessing()  
-}
-
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Executando o tuning com os seguintes parametros:")
 c.print_debug(paste("Dataset: ", c.dataset_path))
@@ -477,6 +472,11 @@ c.print_debug(paste("Algoritmo: ", c.learner_str))
 c.print_debug(paste("Metrica: ", c.measure$name))
 c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
+
+#Aplicando data pre-processing, se pedida pelo usuario
+if(!is.null(c.oversampling_method)){
+  c.dataset = c.exec_data_preprocessing()  
+}
 
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()
