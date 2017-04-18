@@ -191,7 +191,9 @@ c.get_measures_from_tuneParams = function(search_space){
     
   }else{
     # Todos os outros algoritmos tem seus hiperparametros corretamente listado no seach_space.
-    res_tuneParams = tuneParams(c.learner_str, 
+    
+    learner = c.makeLearnerWrapped() # Temos que usar essa funcao ao inves de makeLearner nativo do mlr para setar pred.type como prob caso usemos AUC
+    res_tuneParams = tuneParams(learner, 
                                 task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                                 resampling = rdesc,
                                 par.set = search_space, 
@@ -431,7 +433,7 @@ c.exec_data_preprocessing = function(){
   c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 0)), sep=""))
   c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 1)), sep=""))
   c.print_debug(paste("Sampled dataset majority number = ", length(which(sampled_dataset[, 'y_data'] == 0)), sep=""))
-  c.print_debug(paste("Sampled dataset minority number =", length(which(sampled_dataset[, 'y_data'] == 1)), sep=""))
+  c.print_debug(paste("Sampled dataset minority number = ", length(which(sampled_dataset[, 'y_data'] == 1)), sep=""))
   
   return(sampled_dataset)
   
