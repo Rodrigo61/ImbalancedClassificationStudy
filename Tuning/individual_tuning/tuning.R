@@ -164,6 +164,16 @@ c.get_measures_from_tuneParams = function(search_space){
   train = holdout_aux$train
   test = holdout_aux$test
   
+  
+  print("Testando sumarios")
+  print("summary(c.dataset)")
+  print(summary(c.dataset))
+  print("summary(test)")
+  print(summary(test))
+  print("summary(train)")
+  print(summary(train))
+  
+  
   #Realizando o tuning com a métrica escolhida
   if(c.learner_str == XGBOOST_STR){
 
