@@ -164,6 +164,10 @@ c.get_measures_from_tuneParams = function(search_space){
   train = holdout_aux$train
   test = holdout_aux$test
   
+  if(!is.null(c.oversampling_method)){
+    train = c.exec_data_preprocessing(train)  
+  }
+  
   
   print("Testando sumarios")
   print("summary(c.dataset)")
@@ -408,11 +412,11 @@ c.save_tuning = function(measure_list){
 
 #----------------------#
 #Funcao que executa em c.dataset o algoritmo de sampling escolhido pelo usuario
-c.exec_data_preprocessing = function(){
+c.exec_data_preprocessing = function(ds){
   
   sampled_dataset = NULL
-  dataset_features = c.dataset[ ,-ncol(c.dataset)]
-  dataset_classes = c.dataset[ ,ncol(c.dataset)]
+  dataset_features = ds[ ,-ncol(ds)]
+  dataset_classes = ds[ ,ncol(ds)]
    
   if(c.oversampling_method == ADASYN_STR){
     
@@ -440,8 +444,8 @@ c.exec_data_preprocessing = function(){
   
   # Log para o usuario
   c.print_debug(paste("Executado ", c.oversampling_method, sep=""))
-  c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 0)), sep=""))
-  c.print_debug(paste("Original dataset majority number = ", length(which(c.dataset[, 'y_data'] == 1)), sep=""))
+  c.print_debug(paste("Original dataset majority number = ", length(which(ds[, 'y_data'] == 0)), sep=""))
+  c.print_debug(paste("Original dataset majority number = ", length(which(ds[, 'y_data'] == 1)), sep=""))
   c.print_debug(paste("Sampled dataset majority number = ", length(which(sampled_dataset[, 'y_data'] == 0)), sep=""))
   c.print_debug(paste("Sampled dataset minority number = ", length(which(sampled_dataset[, 'y_data'] == 1)), sep=""))
   
@@ -472,6 +476,8 @@ c.oversampling_method = c.select_oversampling(opt$oversampling)
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
+print("summary(c.dataset), acabei de ler")
+summary(c.dataset)
 
 #Carregando o resíduo do dataset
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
@@ -484,11 +490,6 @@ c.print_debug(paste("Algoritmo: ", c.learner_str))
 c.print_debug(paste("Metrica: ", c.measure$name))
 c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
-
-#Aplicando data pre-processing, se pedida pelo usuario
-if(!is.null(c.oversampling_method)){
-  c.dataset = c.exec_data_preprocessing()  
-}
 
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()
