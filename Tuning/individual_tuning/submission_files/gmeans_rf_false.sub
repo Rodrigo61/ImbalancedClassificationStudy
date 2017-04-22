@@ -1,4 +1,4 @@
-N=196
+N=228
 universe                = vanilla
 executable            = gmeans_rf_false.sh
 arguments               = $(Process)

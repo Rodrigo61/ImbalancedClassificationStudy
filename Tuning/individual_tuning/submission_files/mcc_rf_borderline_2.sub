@@ -1,0 +1,9 @@
+N=228
+universe                = vanilla
+executable            = mcc_rf_borderline_2.sh
+arguments               = $(Process) 
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) 

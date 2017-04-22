@@ -1,9 +1,0 @@
-N=196
-universe                = vanilla
-executable            = auc_svm_smote_2.sh
-arguments               = $(Process) 
-output                = condor.out.$(CLUSTER).$(Process)
-log                     = condor.log.$(CLUSTER).($Process)
-error                   = condor.err.$(CLUSTER).$(Process)
-
-queue $(N) 

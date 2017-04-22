@@ -1,4 +1,4 @@
-N=196
+N=228
 universe                = vanilla
 executable            = auc_rf_true.sh
 arguments               = $(Process) 

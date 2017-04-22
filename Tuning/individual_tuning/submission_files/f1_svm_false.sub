@@ -1,4 +1,4 @@
-N=196
+N=228
 universe                = vanilla
 executable            = f1_svm_false.sh
 arguments               = $(Process)
