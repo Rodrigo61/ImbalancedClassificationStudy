@@ -13,7 +13,7 @@ library(stringr)
 library(xgboost)
 library(caret)
 library(optparse)
-library(smotefamily)
+#library(smotefamily)
 set.seed(3)
 
 #**************************************************************#
@@ -21,7 +21,7 @@ set.seed(3)
 #**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 20L
+MAX_IT = 1L
 #parametro K do K-folds
 ITERS = 3L
 DEBUG = T
