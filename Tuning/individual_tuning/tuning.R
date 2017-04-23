@@ -467,8 +467,8 @@ c.invert_labels = function(){
   print("Qtos valem 0")
   print(length(negative_indexes))
   
-  c.dataset[, positive_indexes] = 0
-  c.dataset[, negative_indexes] = 1
+  c.dataset[positive_indexes, 'y_data'] = 0
+  c.dataset[negative_indexes, 'y_data'] = 1
   
 
   positive_indexes = which(c.dataset[, 'y_data'] == 1)
