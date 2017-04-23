@@ -7,7 +7,7 @@ declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 declare -a learners=("svm" "rf" "xgboost")
 
 ## vetor de algoritmos oversampling
-declare -a oversamplings=("smote" "adasyn" "borderline_1" "borderline_2")
+declare -a oversamplings=("smote" "adasyn")
 
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
