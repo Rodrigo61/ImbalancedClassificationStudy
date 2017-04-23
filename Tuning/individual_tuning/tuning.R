@@ -39,8 +39,6 @@ POSITIVE_CLASS = "1"
 
 
 SMOTE_STR = "SMOTE"
-SMOTE_BORDERLINE_ONE_STR = "SMOTE_BORDERLINE_ONE"
-SMOTE_BORDERLINE_TWO_STR = "SMOTE_BORDERLINE_TWO"
 ADASYN_STR = "ADASYN"
 
 
@@ -346,12 +344,8 @@ c.select_oversampling = function(arg){
     return(SMOTE_STR) 
   }else if(arg == "adasyn"){
     return(ADASYN_STR)
-  }else if(arg == "borderline_1"){
-    return(SMOTE_BORDERLINE_ONE_STR)
-  }else if(arg == "borderline_2"){
-    return(SMOTE_BORDERLINE_TWO_STR)
   }else{
-    warning("Selecione um algoritmo de oversampling válido: smote, adasyn ,borderline_1 ou borderline_2")
+    warning("Selecione um algoritmo de oversampling válido: smote, adasyn")
     stop()
   }
 }
@@ -440,14 +434,6 @@ c.exec_data_preprocessing = function(ds){
     
     sampled_dataset = SMOTE(dataset_features, dataset_classes)$data
      
-  }else if(c.oversampling_method == SMOTE_BORDERLINE_ONE_STR){
-    
-    sampled_dataset = BLSMOTE(dataset_features, dataset_classes, method="type1")$data
-    
-  }else if(c.oversampling_method == SMOTE_BORDERLINE_TWO_STR){
-    
-    sampled_dataset = BLSMOTE(dataset_features, dataset_classes, method="type2")$data
-    
   }else{
     c.print_debug("Houve um erro interno! a variavel oversampling_method nao está com um valor correto!")
     return()
