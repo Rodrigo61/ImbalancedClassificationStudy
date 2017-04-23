@@ -418,7 +418,7 @@ c.save_tuning = function(measure_list){
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
-  print_debug("Resultados obtidos")
+  c.print_debug("Resultados obtidos")
   print(out_df)
   
   c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
