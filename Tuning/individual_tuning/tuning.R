@@ -35,8 +35,8 @@ COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
-NEGATIVE_CLASS = "0"
-POSITIVE_CLASS = "1"
+#POSITIVE_CLASS = "1"
+POSITIVE_CLASS = "0"
 
 SMOTE_STR = "SMOTE"
 SMOTE_BORDERLINE_ONE_STR = "SMOTE_BORDERLINE_ONE"
