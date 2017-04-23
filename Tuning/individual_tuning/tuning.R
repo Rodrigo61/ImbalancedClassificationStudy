@@ -13,7 +13,7 @@ library(stringr)
 library(xgboost)
 library(caret)
 library(optparse)
-#library(smotefamily)
+library(smotefamily)
 set.seed(3)
 
 #**************************************************************#
@@ -455,6 +455,15 @@ c.exec_data_preprocessing = function(ds){
   return(sampled_dataset)
   
 }
+
+c.invert_labels = function(){
+  
+  positive_indexes = which(c.dataset[, 'y_data'] == 1)
+  negative_indexes = which(c.dataset[, 'y_data'] == 0)
+  
+  c.dataset[, positive_indexes] = 0
+  c.dataset[, negative_indexes] = 1
+}
 #**************************************************************#
 #*******************  MAIN   **********************************#
 #**************************************************************#
@@ -481,6 +490,9 @@ c.oversampling_method = c.select_oversampling(opt$oversampling)
 c.dataset = read.csv(c.dataset_path, header = T)
 print("summary(c.dataset), acabei de ler")
 summary(c.dataset)
+
+#Inverte labels
+c.invert_labels()
 
 #Carregando o resíduo do dataset
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
