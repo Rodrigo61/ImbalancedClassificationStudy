@@ -21,7 +21,7 @@ set.seed(3)
 #**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 1L
+MAX_IT = 20L
 #parametro K do K-folds
 ITERS = 3L
 DEBUG = T
@@ -35,8 +35,8 @@ COLUMNS_NAMES = c("learner", "weight_space", "measure",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
-#POSITIVE_CLASS = "1"
-POSITIVE_CLASS = "0"
+POSITIVE_CLASS = "1"
+
 
 SMOTE_STR = "SMOTE"
 SMOTE_BORDERLINE_ONE_STR = "SMOTE_BORDERLINE_ONE"
@@ -93,13 +93,26 @@ c.get_args = function(){
 #Funcao que centraliza o calculo para separacao de 4/5 treino 1/5 test do holdout
 c.create_holdout_train_test = function(){
   
-  folds = createFolds(c.dataset[, 'y_data'], 5);
-  train = c.dataset[c(folds$Fold1, folds$Fold2, folds$Fold3, folds$Fold4), ]
-  test = c.dataset[folds$Fold5, ]
+  # Embaralhando dataset de forma aleatoria
+  c.dataset = c.dataset[sample(nrow(c.dataset)), ]
+  
+  # Definindo os indices que serao destinados para o test. Isso é feito com uma simples divisao 
+  # de quantas observacoes deveriam ir para cada um dos 5 folds. Lembrando que o teste corresponde
+  # a 1 dos 5 folds. Nao era possivel usar o createFolds do caret, pois o mesmo nao garantia estratificacao
+  # com datasets com raridade absoluta.
+  positive_indexes = which(c.dataset[, 'y_data'] == 1)
+  positive_count = length(positive_indexes)
+  positive_count_for_test = floor(positive_count/5)
+  positive_indexes_for_test = positive_indexes[1:positive_count_for_test]
+    
+  negative_indexes = which(c.dataset[, 'y_data'] == 0)
+  negative_count = length(negative_indexes)
+  negative_count_for_test = floor(negative_count/5)
+  negative_indexes_for_test = negative_indexes[1:negative_count_for_test]
   
   holdout_sets = NULL
-  holdout_sets$train = train
-  holdout_sets$test = test
+  holdout_sets$train = c.dataset[-c(positive_indexes_for_test, negative_indexes_for_test), ]
+  holdout_sets$test = c.dataset[c(positive_indexes_for_test, negative_indexes_for_test), ]
   
   return(holdout_sets)
 }
@@ -153,7 +166,7 @@ c.get_measures_from_tuneParams = function(search_space){
   
   #Definindo configuracoes pro CV(k_fold)
   ctrl = makeTuneControlRandom(maxit = MAX_IT)
-  rdesc = makeResampleDesc("CV", iters = ITERS)
+  rdesc = makeResampleDesc("CV", iters = ITERS, stratify = TRUE)
   
   #Definindo variavel de retorno da funcao
   result = NULL
@@ -169,13 +182,14 @@ c.get_measures_from_tuneParams = function(search_space){
   }
   
   
-  print("Testando sumarios")
-  print("summary(c.dataset)")
-  print(summary(c.dataset))
-  print("summary(test)")
-  print(summary(test))
-  print("summary(train)")
-  print(summary(train))
+  print("Tamanho treino: ")
+  print(dim(train))
+  print("Tamanho test: ")
+  print(dim(test))
+  print("Qtos positivos no treino: ")
+  print(length(which(train[, 'y_data'] == 1)))
+  print("Qtos positivos no test: ")
+  print(length(which(test[, 'y_data'] == 1)))
   
   
   #Realizando o tuning com a métrica escolhida
@@ -404,10 +418,10 @@ c.save_tuning = function(measure_list){
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
-  c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
-  
-  print("DF obtido")
+  print_debug("Resultados obtidos")
   print(out_df)
+  
+  c.print_debug(paste("Tuning salvo em: ", out_path, sep=""))
 }
 
 #----------------------#
@@ -438,10 +452,7 @@ c.exec_data_preprocessing = function(ds){
     c.print_debug("Houve um erro interno! a variavel oversampling_method nao está com um valor correto!")
     return()
   }
-  
-  print("Sampled_dataset")
-  print(sampled_dataset)
-  
+
   # Seta a coluna das classes com o nome anterior: 'y_data'
   colnames(sampled_dataset) = c(colnames(sampled_dataset)[-(length(colnames(sampled_dataset)))], 'y_data')
   
@@ -456,29 +467,6 @@ c.exec_data_preprocessing = function(ds){
   
 }
 
-c.invert_labels = function(){
-  
-  positive_indexes = which(c.dataset[, 'y_data'] == 1)
-  negative_indexes = which(c.dataset[, 'y_data'] == 0)
-  
-  print("Antes de inverter")
-  print("Qtos valem 1")
-  print(length(positive_indexes))
-  print("Qtos valem 0")
-  print(length(negative_indexes))
-  
-  c.dataset[positive_indexes, 'y_data'] = 0
-  c.dataset[negative_indexes, 'y_data'] = 1
-  
-
-  positive_indexes = which(c.dataset[, 'y_data'] == 1)
-  negative_indexes = which(c.dataset[, 'y_data'] == 0)
-  print("Depois de inverter")
-  print("Qtos valem 1")
-  print(length(positive_indexes))
-  print("Qtos valem 0")
-  print(length(negative_indexes))
-}
 #**************************************************************#
 #*******************  MAIN   **********************************#
 #**************************************************************#
@@ -503,11 +491,6 @@ c.oversampling_method = c.select_oversampling(opt$oversampling)
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
-print("summary(c.dataset), acabei de ler")
-summary(c.dataset)
-
-#Inverte labels
-c.invert_labels()
 
 #Carregando o resíduo do dataset
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
