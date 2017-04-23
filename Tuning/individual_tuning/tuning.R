@@ -470,6 +470,9 @@ c.invert_labels = function(){
   c.dataset[, positive_indexes] = 0
   c.dataset[, negative_indexes] = 1
   
+
+  positive_indexes = which(c.dataset[, 'y_data'] == 1)
+  negative_indexes = which(c.dataset[, 'y_data'] == 0)
   print("Depois de inverter")
   print("Qtos valem 1")
   print(length(positive_indexes))
