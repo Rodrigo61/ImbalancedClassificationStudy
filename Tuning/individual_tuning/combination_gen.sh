@@ -42,7 +42,7 @@ $content_normal" > $normal_file
 		#gerando arquivo com aprendizado normal(false) (.sub)
 		normal_file_sub="${measure}_${learner}_false.sub"
 #INSERT_REQUIREMENTS_CONTENT é preenchido antes da submissao para sempre mante-lo atualizado
-		echo 'N=227
+		echo 'N=225
 universe                = vanilla
 executable            = '$normal_file'
 arguments               = $(Process)
@@ -65,7 +65,7 @@ $content_ws" > $ws_file
 		chmod 755 $ws_file
 		#gerando arquivo com aprendizado weight space(true) (.sub)
 		ws_file_sub="${measure}_${learner}_true.sub"
-		echo 'N=227
+		echo 'N=225
 universe                = vanilla
 executable            = '$ws_file'
 arguments               = $(Process) 
@@ -89,7 +89,7 @@ $content_oversampling" > $oversampling_file
 			
 			#Gerando o (.sub)
 			oversampling_file_sub="${measure}_${learner}_${oversampling}.sub"
-			echo 'N=227
+			echo 'N=225
 universe                = vanilla
 executable            = '$oversampling_file'
 arguments               = $(Process) 
