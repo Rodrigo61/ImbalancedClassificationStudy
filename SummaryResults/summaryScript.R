@@ -1,3 +1,8 @@
+# Script responsável pela compilacao do tuning feito em cada cenário a ser estudado
+# em cada dataset. Leia o README para maiores informacoes.
+#
+
+
 library(ggplot2)
 ################################################################
 ###############   DEBUG FUNCTIONS   ############################
