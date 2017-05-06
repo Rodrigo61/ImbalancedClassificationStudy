@@ -1,0 +1,6 @@
+Resumo:
+Scripts responsável por compilar os dados obtidos pelo tuning dos modelos em cada um dos dataset
+ gerados. A compilacao é feita em um único arquivo .cs
+
+v .trucoes de uso:
+
