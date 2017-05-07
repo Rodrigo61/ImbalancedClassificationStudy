@@ -5,6 +5,13 @@
 ##
 
 library(stringr)
+
+# Lista de colunas da compilacao final, nem todos os arquivos individuais devem respeitar
+# essa lista
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", 
+                  "tuning_measure", "holdout_measure", 
+                  "holdout_measure_residual", "iteration_count")
+
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
 #**************************************************************#
@@ -55,8 +62,21 @@ for(file_path in summary_file_list){
   print_debug(paste("File path: ", file_path))
   df = read.csv(file_path, header = T)
 
-  print("df")
+  print_debug("Dataset corrent:")
   print(df)
+  
+  # Vamos adicionar ao arquivo de summary individual as colunas
+  # que ele não era responsável por informar, mas que precisamos
+  # formalizar no arquivo compilado final
+  for(column in COLUMNS_NAMES){
+    if(column %in% colnames(df) == FALSE){
+      df = cbind(df, FALSE)
+      names(summary)[ncol(summary)] = column
+    }
+  }
+  
+  # Ordenamos as colunas para manter um padrao
+  df = df[, order(colnames(df))]
   
   #acumulando no dataframe final
   df_final = rbind(df_final, df)
