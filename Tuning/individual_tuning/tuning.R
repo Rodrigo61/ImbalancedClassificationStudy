@@ -264,6 +264,11 @@ c.gen_all_measures_inline = function(search_space){
     #Realizando Tuning com o search_space correspondente
     measures = c.get_measures_from_tuneParams(search_space)
  
+    # Convertendo tudo que é NULL para FALSE, pois NULL nao é escrito em DF
+    if(is.null(c.oversampling_method)){
+      c.oversampling_method = FALSE
+    }
+    
     #Adicionando todas as colunas do df final
     new_row = c(c.learner_str, c.weight_space, c.measure$name,c.oversampling_method, measures$performance_tuned, 
                 measures$performance_holdout, measures$performance_holdout_with_residual, i)
@@ -330,7 +335,7 @@ c.select_oversampling = function(arg){
   
   #Caso a flag nao tenha sido passada retorna NULL
   if(is.null(arg) || is.na(arg)){
-    return(FALSE)
+    return(NULL)
   }
   
   if(arg == "smote"){
@@ -395,9 +400,6 @@ c.save_tuning = function(measure_list){
   for(i in 1:ITERS){
     out_df = rbind(out_df, measure_list[[i]])
   }
-  
-  print("out_df")
-  print(out_df)
   
   colnames(out_df) = COLUMNS_NAMES
   
