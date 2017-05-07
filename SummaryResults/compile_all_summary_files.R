@@ -17,12 +17,8 @@ for(summary_file_name in summary_list[,1]){
   summary_dir_path = dirname(summary_file_name)
   dataset_imba_rate = str_extract(summary_file_name, "0.[0-9]{2,3}")
   dataset_name = basename(summary_dir_path)
-  
 
-print("dataset_imba_rate")
-print(dataset_imba_rate)
-
-  #Adicionando coluna 'dataset' e 'imba. rate'  
+  #Adicionando coluna de metadados 'dataset' e 'imba. rate'  
   summary = cbind(summary, dataset_name)
   names(summary)[ncol(summary)] = "dataset"
   summary = cbind(summary, dataset_imba_rate)

@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Este script é responsável pela criacao de forma automática de jobs para serem executados pelo Condor.
+# É um script de execucao manual.
+# Ele cria em uma pasta de submissao todos os pares de arquivo .sh e .sub para todas as combinacoes pos-
+# síveis de execucao do script tuning.R
+# São responsabilidades deste script:
+#	* Listar todas as métricas a serem utilizadas
+#	* Listar todos os Learners a serem utilizados
+#	* Listar todos os algoritmos de sampling a serem utilizados
+#	* Adicionar novas lógicas e listagem para novas categorias de combinacao
+
+
 ## vetor de metricas
 declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 
