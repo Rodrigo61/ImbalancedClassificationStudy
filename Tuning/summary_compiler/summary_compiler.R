@@ -71,7 +71,7 @@ for(file_path in summary_file_list){
   for(column in COLUMNS_NAMES){
     if(column %in% colnames(df) == FALSE){
       df = cbind(df, FALSE)
-      names(summary)[ncol(summary)] = column
+      colnames(df)[ncol(df)] = column
     }
   }
   

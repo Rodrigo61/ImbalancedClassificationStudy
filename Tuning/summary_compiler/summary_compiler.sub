@@ -1,4 +1,5 @@
-N=196 
+#N=227
+N = 1
 universe                = vanilla
 executable            = summary_compiler.sh
 arguments               = $(Process)
