@@ -330,7 +330,7 @@ c.select_oversampling = function(arg){
   
   #Caso a flag nao tenha sido passada retorna NULL
   if(is.null(arg) || is.na(arg)){
-    return(NULL)
+    return(FALSE)
   }
   
   if(arg == "smote"){
