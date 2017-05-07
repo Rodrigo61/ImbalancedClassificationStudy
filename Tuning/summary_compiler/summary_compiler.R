@@ -34,6 +34,12 @@ print_debug = function(str){
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
+#Gerando a lista com os arquivos de summary individuais existentes
+# Local
+#system("./generate_summary_list.sh  /home/rodrigo/Desktop/datasets_UCI/")
+# RECOD
+system("./generate_summary_list.sh  /home/rodrigoaf/estudo_cost_learning/UCI/")
+
 #Lendo os parametros do script
 args = commandArgs(trailingOnly=TRUE)
 
@@ -71,12 +77,12 @@ for(file_path in summary_file_list){
   for(column in COLUMNS_NAMES){
     if(column %in% colnames(df) == FALSE){
       df = cbind(df, FALSE)
-      names(summary)[ncol(summary)] = column
+      colnames(df)[ncol(df)] = column
     }
   }
   
-  # Ordenamos as colunas para manter um padrao
-  df = df[, order(colnames(df))]
+  # Rearranjando as colunas para a ordem correta
+  df = df[, COLUMNS_NAMES]
   
   #acumulando no dataframe final
   df_final = rbind(df_final, df)
