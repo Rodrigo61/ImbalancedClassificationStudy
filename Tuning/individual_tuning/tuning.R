@@ -5,6 +5,8 @@
 # script. O script deve ser extensivel e totalmente independente, de modo que o tuning
 # eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez.
 #
+#
+# Veja o README para informacoes de como adicionar novas combinacoes de tuning.
 ##
 
 
