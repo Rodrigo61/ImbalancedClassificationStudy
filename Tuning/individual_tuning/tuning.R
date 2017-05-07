@@ -180,16 +180,6 @@ c.get_measures_from_tuneParams = function(search_space){
   }
   
   
-  print("Tamanho treino: ")
-  print(dim(train))
-  print("Tamanho test: ")
-  print(dim(test))
-  print("Qtos positivos no treino: ")
-  print(length(which(train[, 'y_data'] == 1)))
-  print("Qtos positivos no test: ")
-  print(length(which(test[, 'y_data'] == 1)))
-  
-  
   #Realizando o tuning com a métrica escolhida
   if(c.learner_str == XGBOOST_STR){
 
@@ -269,10 +259,11 @@ c.gen_all_measures_inline = function(search_space){
   measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
-    #Realizando Tuning com métrica acurácia
+    #Realizando Tuning com o search_space correspondente
     measures = c.get_measures_from_tuneParams(search_space)
  
-    new_row = c(c.learner_str, c.weight_space, c.measure$name, measures$performance_tuned, 
+    #Adicionando todas as colunas do df final
+    new_row = c(c.learner_str, c.weight_space, c.measure$name,c.oversampling_method, measures$performance_tuned, 
                 measures$performance_holdout, measures$performance_holdout_with_residual, i)
     
     measures_compilation[[i]] = new_row
@@ -389,6 +380,8 @@ c.exec_tuning = function(){
   c.print_debug("Resultados do tuning:")
   c.print_debug(paste(COLUMNS_NAMES, collapse=" | "))
   print(tuning_and_holdout)
+  
+  return(tuning_and_holdout)
 }
 
 #----------------------#
