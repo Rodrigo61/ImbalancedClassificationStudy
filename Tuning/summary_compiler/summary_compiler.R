@@ -36,9 +36,9 @@ print_debug = function(str){
 
 #Gerando a lista com os arquivos de summary individuais existentes
 # Local
-#system("./generate_summary_list.sh  /home/rodrigo/Desktop/datasets_UCI/")
+#system("./generate_summary_list_dir.sh  /home/rodrigo/Desktop/datasets_UCI/")
 # RECOD
-system("./generate_summary_list.sh  /home/rodrigoaf/estudo_cost_learning/UCI/")
+system("./generate_summary_list_dir.sh  /home/rodrigoaf/estudo_cost_learning/UCI/")
 
 #Lendo os parametros do script
 args = commandArgs(trailingOnly=TRUE)
