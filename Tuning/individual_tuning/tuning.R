@@ -396,6 +396,9 @@ c.save_tuning = function(measure_list){
     out_df = rbind(out_df, measure_list[[i]])
   }
   
+  print("out_df")
+  print(out_df)
+  
   colnames(out_df) = COLUMNS_NAMES
   
   #Criando caso nao exista a pasta para salvar os arquivos com os resultados
