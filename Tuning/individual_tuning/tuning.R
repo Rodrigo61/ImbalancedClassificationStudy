@@ -408,7 +408,11 @@ c.save_tuning = function(measure_list){
   dir.create(file.path(dirname(c.dataset_path), dirname), showWarnings = DEBUG)
   
   #Salvando dados
-  out_filename = paste0(colnames(out_df), sep = "_", collapse = '')
+  out_filename = paste(c.learner_str, 
+                        c.measure$name, 
+                        as.character(c.weight_space), 
+                        as.character(c.oversampling_method), 
+                        sep ="_")
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
