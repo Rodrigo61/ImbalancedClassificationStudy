@@ -177,7 +177,7 @@ c.get_measures_from_tuneParams = function(search_space){
   train = holdout_aux$train
   test = holdout_aux$test
   
-  if(!is.null(c.oversampling_method)){
+  if(c.oversampling_method != FALSE){
     train = c.exec_data_preprocessing(train)  
   }
   
@@ -263,11 +263,6 @@ c.gen_all_measures_inline = function(search_space){
   for (i in 1:ITERS){
     #Realizando Tuning com o search_space correspondente
     measures = c.get_measures_from_tuneParams(search_space)
- 
-    # Convertendo tudo que é NULL para FALSE, pois NULL nao é escrito em DF
-    if(is.null(c.oversampling_method)){
-      c.oversampling_method = FALSE
-    }
     
     #Adicionando todas as colunas do df final
     new_row = c(c.learner_str, c.weight_space, c.measure$name,c.oversampling_method, measures$performance_tuned, 
@@ -335,7 +330,7 @@ c.select_oversampling = function(arg){
   
   #Caso a flag nao tenha sido passada retorna NULL
   if(is.null(arg) || is.na(arg)){
-    return(NULL)
+    return(FALSE)
   }
   
   if(arg == "smote"){
