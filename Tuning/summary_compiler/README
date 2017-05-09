@@ -15,4 +15,4 @@ Lista gerada pelo script generate_summary_dir_list.sh
 Instrucoes de uso:
 Esse módulo depende de execucao dos jobs do módulo "individual_tuning", pois presupoem a existencia de dos dados obtidos pelo tuning dos datasets. 
 O job "summary_compilar" executa para cada um dos datasets uma busca pelos seus arquivos de summary e os compila em um único csv, que é salvo  na pasta do dataset.
-Observacao: Como os arquivos individuais de summary só tem como responsábilidade calcular e armazenar aquilo que calcularam, este módulo tem como responsábilidade fazer a compilacao respeitando a formatacao final de colunas esperada.
+Observacao: Como os arquivos individuais de summary só tem como responsábilidade calcular e armazenar aquilo que calcularam, este módulo tem como responsábilidade fazer a compilacao respeitando a formatacao final de colunas esperada. Além disso, esse módulo é responsável por eliminar informacao repetida, i.e, detectar se existem 2 arquivos que correspondem a mesma combinacao de execucao do módulo "individual_tuning" (essa logica é implementado pelo arquivo summary_compiler.R)

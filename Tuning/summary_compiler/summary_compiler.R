@@ -52,7 +52,6 @@ summary_dir_id = as.numeric(args[1]) + 1
 summary_dir_path = as.character(summary_dir_list[summary_dir_id,])
 dataset_imba_rate = str_extract(summary_dir_path, "0.[0-9]{2,3}")
 
-
 print_debug(summary_dir_path)
 
 #Obtendo a lista de todos os arquivos da pasta summary selecionada
@@ -63,30 +62,42 @@ df_final = NULL
 
 #Iterando sobre todos os arquivos de summary e acumulando suas informacoes
 for(file_path in summary_file_list){
-  
-  #lendo o df presente no arquivo atual
-  print_debug(paste("File path: ", file_path))
-  df = read.csv(file_path, header = T)
 
-  print_debug("Dataset corrent:")
-  print(df)
-  
-  # Vamos adicionar ao arquivo de summary individual as colunas
-  # que ele não era responsável por informar, mas que precisamos
-  # formalizar no arquivo compilado final
-  for(column in COLUMNS_NAMES){
-    if(column %in% colnames(df) == FALSE){
-      df = cbind(df, FALSE)
-      colnames(df)[ncol(df)] = column
+  # Verificando se existe informacao repetida. Se o nome de um arquivo
+  # for substring de outro, isso significa que ele está desatualizado
+  # e imcompleto, ficamos apenas com o mais atualizado.
+  deleted_file = FALSE
+  for(other_file in summary_file_list){
+    if(greapl(file_path, other_file, fixed=T)){
+      system(paste("rm ", file_path, sep=''))
+      deleted_file = TRUE
     }
   }
   
-  # Rearranjando as colunas para a ordem correta
-  df = df[, COLUMNS_NAMES]
+  if(!deleted_file){
+    #lendo o df presente no arquivo atual
+    print_debug(paste("File path: ", file_path))
+    df = read.csv(file_path, header = T)
   
-  #acumulando no dataframe final
-  df_final = rbind(df_final, df)
-  
+    print_debug("Dataset corrent:")
+    print(df)
+    
+    # Vamos adicionar ao arquivo de summary individual as colunas
+    # que ele não era responsável por informar, mas que precisamos
+    # formalizar no arquivo compilado final
+    for(column in COLUMNS_NAMES){
+      if(column %in% colnames(df) == FALSE){
+        df = cbind(df, FALSE)
+        colnames(df)[ncol(df)] = column
+      }
+    }
+    
+    # Rearranjando as colunas para a ordem correta
+    df = df[, COLUMNS_NAMES]
+    
+    #acumulando no dataframe final
+    df_final = rbind(df_final, df)
+  }
 }
 
 #Salvando dados do dataframe final

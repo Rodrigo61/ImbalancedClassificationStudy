@@ -3,8 +3,8 @@
 #####################################
 
 MIN_MINORITY_CLASS = 10
-DATASET_LIST_NAME = "original_dataset_list"
-#DATASET_LIST_NAME = "original_dataset_list_RECOD"
+#DATASET_LIST_NAME = "original_dataset_list"
+DATASET_LIST_NAME = "original_dataset_list_RECOD"
 #####################################
 ############ FUNCOES ################
 #####################################
