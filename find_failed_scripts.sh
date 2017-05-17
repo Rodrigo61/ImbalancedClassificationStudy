@@ -8,7 +8,6 @@ PATH_2_ANALYZE=$1
 
 grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error'
 
-#grep -rwl $PATH_2_ANALYZE  -e 'mcc'
 
 
 
