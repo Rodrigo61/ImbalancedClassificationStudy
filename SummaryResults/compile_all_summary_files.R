@@ -3,9 +3,6 @@ library(Jmisc)
 
 SUMMARY_LIST_FILENAME = "summary_list"
 
-system("./generate_summary_list.sh")
-
-
 summary_list = as.vector(read.csv(SUMMARY_LIST_FILENAME, header = F))
 
 df_final = NULL
