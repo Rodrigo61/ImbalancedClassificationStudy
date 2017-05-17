@@ -27,8 +27,6 @@ for(summary_file_name in summary_list[,1]){
   df_final = rbind(df_final, summary)
 }
 
-#print("Summary final:")
-#print(summary)
 
 #Salvando dados do dataframe final
 out_filename = "summary_compilation.csv"
