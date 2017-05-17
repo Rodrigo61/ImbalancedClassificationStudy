@@ -1,8 +1,12 @@
 Resumo:
 Scripts responsável por compilar os dados obtidos pelo tuning dos modelos em cada um dos dataset
- gerados. A compilacao é feita em um único arquivo .cs
+ gerados. A compilacao é feita em um único arquivo .csv
 
 Arquivos:
+
+*generate_summary_list.sh:
+Script de execucao manual obrigatória. Nao tem nenhum parametro e sua saida é um arquivo que lista todos
+os arquivos de summary.
 
 Instrucoes de uso:
 Para rodar esse script voce deve ter resultado da execucao do módulo summary_compiler. Uma vez
