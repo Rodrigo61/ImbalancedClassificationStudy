@@ -34,12 +34,6 @@ print_debug = function(str){
 #*******************  MAIN   **********************************#
 #**************************************************************#
 
-#Gerando a lista com os arquivos de summary individuais existentes
-# Local
-#system("./generate_summary_list_dir.sh  /home/rodrigo/Desktop/datasets_UCI/")
-# RECOD
-system("./generate_summary_list_dir.sh  /home/rodrigoaf/estudo_cost_learning/UCI/")
-
 #Lendo os parametros do script
 args = commandArgs(trailingOnly=TRUE)
 
@@ -64,13 +58,17 @@ df_final = NULL
 for(file_path in summary_file_list){
 
   # Verificando se existe informacao repetida. Se o nome de um arquivo
-  # for substring de outro, isso significa que ele está desatualizado
-  # e imcompleto, ficamos apenas com o mais atualizado.
+  # for substring de outro (file_path for substring de other_file_path), 
+  # isso significa que ele está desatualizadoe imcompleto, ficamos 
+  # apenas com o mais atualizado.
   deleted_file = FALSE
-  for(other_file in summary_file_list){
-    if(greapl(file_path, other_file, fixed=T)){
+  for(other_file_path in summary_file_list){
+    if(other_file_path != file_path){
+    if(grepl(file_path, other_file_path, fixed=T)){
       system(paste("rm ", file_path, sep=''))
       deleted_file = TRUE
+      break
+    }
     }
   }
   
