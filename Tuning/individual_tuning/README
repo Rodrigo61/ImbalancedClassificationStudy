@@ -1,0 +1,39 @@
+Resumo:
+Módulo responsável pela a execucao do tuning e teste de todos os algoritmos que tratam o problema do
+desbalanceamento presente nos datasets gerados.
+
+Arquivos:
+->generate_ds_list.sh 
+É um script de execucao manual para facilitar a busca dos datasets gerados. Em geral redirecionamos a saida padrao de seu resultado para o arquivo dataset_list
+
+->dataset_list_RECOD
+Lista do caminho absoluto dos datasets desbalanceados gerados.
+
+->Combination_gen.sh
+Scrip responsável por gerar todas as combinacoes de Learner X Measure X preprocessing no formato de Condor's job. A principal saida desse script é o script run_all.sh
+
+->run_all.sh
+Script que submete para o condor todas as combinacoes geradas pelo scrip combination_gen.sh
+
+Instrucoes de uso:
+Esse módulo depende de execucao do módulo "TransformacaoDataset", pois presupoem a existencia de datasets desbalanceados gerados. 
+O job "tuning" executa por vez apenas 1 Learner + 1 Measure + 1 pre-processing method, de modo a ter grande poder de paralelismo.
+
+
+Adicionando novas combinacoes:
+Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job prévio, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um dataset com as ferramentas atuais, ele não precisa prever quais novas ferramentas serão anexadas no 
+futuro. Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas:
+
+--> tuning.R (Obrigatório)
+Claramente toda a nova logica da nova combinacao deve ser inserida nesse arquivo. Mas nao se esqueca: 
+	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria.
+	* Adicionar ao arguments, tanto em sua descricao quanto no codigo propriamento dito
+	* Criar uma funcao "Select" para selecionar de forma organizada o seu argumento e tratar os 		possiveis erros
+	* Criar uma variavel global com o valor selecionado do argumento
+	* Adicionar o valor da variavel global criada como coluna na funcao "c.gen_all_measures_inline"
+	  (Nao se esqueca de converter NULL -> FALSE caso seja o caso)
+	* Alterar o nome dos arquivo de saída, caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE_ e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posterioremente
+
+--> Combination_gen.sh (Facultativo)
+Siga a lista de obrigacoes presentes no cabecalho do arquivo para adicionar corretamente sua nova combinacao
+

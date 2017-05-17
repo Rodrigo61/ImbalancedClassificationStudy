@@ -286,7 +286,7 @@ c.select_measure = function(arg){
   }else if(arg == "f1"){
     return(f1)
   }else if(arg == "gmeans"){
-    return(gmean)
+    return(gmean)   # Ref [1]
   }else if(arg == "auc"){
     return(auc)
   }else if(arg == "mcc"){
@@ -494,3 +494,11 @@ measure_list = c.exec_tuning()
 
 #Salvando os dados obtidos dos tuning
 c.save_tuning(measure_list = measure_list)
+
+
+
+##
+## REFERENCIAS
+##
+
+# [1] R. Barandela, J.S. Sánchez, V. García, E. Rangel, Strategies for learning in class imbalance problems, Pattern Recognition 36 (3) (2003) 849–851
