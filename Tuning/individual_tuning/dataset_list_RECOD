@@ -2,7 +2,6 @@
 /home/rodrigoaf/estudo_cost_learning/UCI/abalone/ds_0.03.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/abalone/ds_0.01.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/abalone/ds_0.001.csv
-/home/rodrigoaf/estudo_cost_learning/UCI/abalone/ds_0.05.csv.save
 /home/rodrigoaf/estudo_cost_learning/UCI/adult/ds_0.05.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/adult/ds_0.03.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/adult/ds_0.01.csv
@@ -84,10 +83,10 @@
 /home/rodrigoaf/estudo_cost_learning/UCI/libras/ds_0.03.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/low-res-spect/ds_0.05.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/low-res-spect/ds_0.03.csv
-/home/rodrigoaf/estudo_cost_learning/UCI/magic/ds_0.05.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/magic/ds_0.03.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/magic/ds_0.01.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/magic/ds_0.001.csv
+/home/rodrigoaf/estudo_cost_learning/UCI/magic/ds_0.05.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/mammographic/ds_0.05.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/mammographic/ds_0.03.csv
 /home/rodrigoaf/estudo_cost_learning/UCI/miniboone/ds_0.05.csv
