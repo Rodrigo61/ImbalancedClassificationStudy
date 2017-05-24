@@ -11,7 +11,7 @@ os arquivos de summary.
 Instrucoes de uso:
 Para rodar esse script voce deve ter resultado da execucao do módulo summary_compiler. Uma vez
 que se tenha esses arquivos basta executar o job compile_all_summary_files.
-O script generate_summary_list.sh é apenas um auxiliar não precisa ser executado manualmente.
+Antes de executar O job(� apenas um) é necessária a execucao do script generate_summary_list.
 
 
 
