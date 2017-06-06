@@ -20,6 +20,9 @@ declare -a learners=("svm" "rf" "xgboost")
 ## vetor de algoritmos oversampling
 declare -a oversamplings=("smote" "adasyn")
 
+## vetor de ensembles
+declare -a emsembles=("rusboost")
+
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
 mkdir -p $submission_files_dir
