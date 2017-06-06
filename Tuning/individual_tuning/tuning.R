@@ -36,7 +36,7 @@ XGBOOST_STR = "classif.xgboost"
 SUMMARY_FOLDER_NAME = "summary_files"
 #DATASET_LIST_PATH = "../dataset_list_RECOD"
 DATASET_LIST_PATH = "../dataset_list"
-COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling","ensemble",
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
@@ -60,7 +60,6 @@ c.learner_str = NULL
 c.measure = NULL
 c.weight_space = FALSE
 c.oversampling_method = FALSE
-c.ensemble_method = FALSE
 
 #**************************************************************#
 #*******************  FUNCOES     ******************************
@@ -87,10 +86,7 @@ c.get_args = function(){
                 help="se presente a flag o treinamento será feito com weight_space"),
     
     make_option(c("--oversampling"), type= "character", default=NULL, 
-                help="nome do algoritmo de oversampling que será utilizado no dataset corrente"),
-    
-    make_option(c("--ensemble"), type= "character", default=NULL, 
-                help="nome do algoritmo de ensemble que será utilizado no dataset corrente")
+                help="nome do algoritmo de oversampling que será utilizado no dataset corrente")
     
   )
   
@@ -417,7 +413,7 @@ c.get_measures_from_rusboost = function(train, test){
   
 }
 #----------------------#
-c.gen_all_measures_inline = function(search_space){
+c.gen_all_measures_inline = function(){
   
   measures_compilation = vector("list", ITERS)
   #Repetimos 3x a busca pelas performances
@@ -429,12 +425,12 @@ c.gen_all_measures_inline = function(search_space){
     train = holdout_aux$train
     test = holdout_aux$test
     
-    if(c.ensemble_method == UNDERBAGGING_STR){
-      measures = c.get_measures_from_underbagging()
-    }else if(c.ensemble_method == RUSBOOST_STR){
+    
+    if(c.learner_str == RUSBOOST_STR){
       measures = c.get_measures_from_rusboost(train, test)
     }else{
       #Realizando Tuning com o search_space correspondente
+      search_space = c.select_search_space()
       measures = c.get_measures_from_tuneParams(search_space, train, test)  
     }
     
@@ -442,8 +438,7 @@ c.gen_all_measures_inline = function(search_space){
     new_row = c(c.learner_str, 
                 c.weight_space, 
                 c.measure$name,
-                c.oversampling_method, 
-                c.ensemble_method, 
+                c.oversampling_method,
                 measures$performance_tuned, 
                 measures$performance_holdout, 
                 measures$performance_holdout_with_residual, 
@@ -491,8 +486,10 @@ c.select_learner = function(arg){
     return(RF_STR)
   }else if(arg == "xgboost"){
     return(XGBOOST_STR)
+  }else if(arg == "rusboost"){
+    return(RUSBOOST_STR)
   }else{
-    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost")
+    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rusboost")
     stop()
   }
 }
@@ -524,21 +521,6 @@ c.select_oversampling = function(arg){
   }
 }
 
-#----------------------#
-c.select_ensemble = function(arg){
-  
-  #Caso a flag nao tenha sido passada retorna NULL
-  if(is.null(arg) || is.na(arg)){
-    return(FALSE)
-  }
-  
-  if(arg == "rusboost"){
-    return(RUSBOOST_STR) 
-  }else{
-    warning("Selecione um algoritmo de ensemble válido: rusboost")
-    stop()
-  }
-}
 
 #----------------------#
 c.select_search_space = function(){
@@ -572,9 +554,7 @@ c.select_search_space = function(){
 #----------------------#
 c.exec_tuning = function(){
   
-  search_space = c.select_search_space()
-  
-  tuning_and_holdout = c.gen_all_measures_inline(search_space)
+  tuning_and_holdout = c.gen_all_measures_inline()
   
   # Prints de debug
   c.print_debug("Resultados do tuning:")
@@ -605,7 +585,6 @@ c.save_tuning = function(measure_list){
                        c.measure$name, 
                        as.character(c.weight_space), 
                        as.character(c.oversampling_method), 
-                       as.character(c.ensemble_method),
                        sep ="_")
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
@@ -672,7 +651,6 @@ c.measure = c.select_measure(opt$measure)
 c.learner_str = c.select_learner(opt$model)
 c.weight_space = c.select_weight_space(opt$weight_space)
 c.oversampling_method = c.select_oversampling(opt$oversampling)
-c.ensemble_method = c.select_ensemble(opt$ensemble)
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
@@ -691,7 +669,6 @@ c.print_debug(paste("Algoritmo: ", c.learner_str))
 c.print_debug(paste("Metrica: ", c.measure$name))
 c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
-c.print_debug(paste("Ensemble method: ", c.ensemble_method))
 
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()
