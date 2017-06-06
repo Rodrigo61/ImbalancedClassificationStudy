@@ -1,7 +1,7 @@
-N=228
+N=225
 universe                = vanilla
 executable            = gmeans_xgboost_true.sh
-arguments               = $(Process) 
+arguments               = $(Process)
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
