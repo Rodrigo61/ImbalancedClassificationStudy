@@ -122,7 +122,7 @@ queue $(N) ' > $oversampling_file_sub
     do
         #Gerando o (.sh)
         ensemble_file="${measure}_${ensemble}.sh"
-        content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --ensemble='$ensemble''
+        content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$ensemble''
         echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ensemble" > $ensemble_file
