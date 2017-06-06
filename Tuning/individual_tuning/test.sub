@@ -1,7 +1,7 @@
-N=225
+N=1
 universe                = vanilla
-executable            = gmeans_rusboost_adasyn.sh
-arguments               = $(Process)
+executable            = test.sh
+arguments               = $(Process) 
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)

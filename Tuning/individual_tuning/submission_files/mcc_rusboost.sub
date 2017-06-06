@@ -1,6 +1,6 @@
 N=225
 universe                = vanilla
-executable            = f1_rusboost_smote.sh
+executable            = mcc_rusboost.sh
 arguments               = $(Process)
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)

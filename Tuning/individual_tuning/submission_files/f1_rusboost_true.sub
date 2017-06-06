@@ -1,9 +1,0 @@
-N=225
-universe                = vanilla
-executable            = f1_rusboost_true.sh
-arguments               = $(Process)
-output                = condor.out.$(CLUSTER).$(Process)
-log                     = condor.log.$(CLUSTER).($Process)
-error                   = condor.err.$(CLUSTER).$(Process)
-
-queue $(N) 

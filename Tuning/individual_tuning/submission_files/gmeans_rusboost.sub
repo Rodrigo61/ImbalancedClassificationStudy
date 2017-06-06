@@ -1,6 +1,6 @@
 N=225
 universe                = vanilla
-executable            = acc_rusboost_false.sh
+executable            = gmeans_rusboost.sh
 arguments               = $(Process)
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)

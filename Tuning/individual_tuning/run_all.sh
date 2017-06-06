@@ -12,6 +12,7 @@ sleep 20 | condor_submit acc_xgboost_false.sub
 sleep 20 | condor_submit acc_xgboost_true.sub
 sleep 20 | condor_submit acc_xgboost_smote.sub
 sleep 20 | condor_submit acc_xgboost_adasyn.sub
+sleep 20 | condor_submit acc_rusboost.sub
 sleep 20 | condor_submit f1_svm_false.sub
 sleep 20 | condor_submit f1_svm_true.sub
 sleep 20 | condor_submit f1_svm_smote.sub
@@ -24,6 +25,7 @@ sleep 20 | condor_submit f1_xgboost_false.sub
 sleep 20 | condor_submit f1_xgboost_true.sub
 sleep 20 | condor_submit f1_xgboost_smote.sub
 sleep 20 | condor_submit f1_xgboost_adasyn.sub
+sleep 20 | condor_submit f1_rusboost.sub
 sleep 20 | condor_submit gmeans_svm_false.sub
 sleep 20 | condor_submit gmeans_svm_true.sub
 sleep 20 | condor_submit gmeans_svm_smote.sub
@@ -36,6 +38,7 @@ sleep 20 | condor_submit gmeans_xgboost_false.sub
 sleep 20 | condor_submit gmeans_xgboost_true.sub
 sleep 20 | condor_submit gmeans_xgboost_smote.sub
 sleep 20 | condor_submit gmeans_xgboost_adasyn.sub
+sleep 20 | condor_submit gmeans_rusboost.sub
 sleep 20 | condor_submit mcc_svm_false.sub
 sleep 20 | condor_submit mcc_svm_true.sub
 sleep 20 | condor_submit mcc_svm_smote.sub
@@ -48,6 +51,7 @@ sleep 20 | condor_submit mcc_xgboost_false.sub
 sleep 20 | condor_submit mcc_xgboost_true.sub
 sleep 20 | condor_submit mcc_xgboost_smote.sub
 sleep 20 | condor_submit mcc_xgboost_adasyn.sub
+sleep 20 | condor_submit mcc_rusboost.sub
 sleep 20 | condor_submit auc_svm_false.sub
 sleep 20 | condor_submit auc_svm_true.sub
 sleep 20 | condor_submit auc_svm_smote.sub
@@ -60,3 +64,4 @@ sleep 20 | condor_submit auc_xgboost_false.sub
 sleep 20 | condor_submit auc_xgboost_true.sub
 sleep 20 | condor_submit auc_xgboost_smote.sub
 sleep 20 | condor_submit auc_xgboost_adasyn.sub
+sleep 20 | condor_submit auc_rusboost.sub
