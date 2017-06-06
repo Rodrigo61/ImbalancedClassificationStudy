@@ -114,22 +114,23 @@ error                   = condor.err.$(CLUSTER).$(Process)
 queue $(N) ' > $oversampling_file_sub
 		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
 		done
+	done
 
 
-		#gerando arquivo  com algoritmos de ensemble
-		for ensemble in "${ensemble[@]}"
-		do
-			#Gerando o (.sh)
-			ensemble_file="${measure}_${learner}_${ensemble}.sh"
-			content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --ensemble='$ensemble''
-			echo "#!/bin/bash
+    #gerando arquivo  com algoritmos de ensemble
+    for ensemble in "${ensemble[@]}"
+    do
+        #Gerando o (.sh)
+        ensemble_file="${measure}_${ensemble}.sh"
+        content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --ensemble='$ensemble''
+        echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ensemble" > $ensemble_file
-			chmod 755 $ensemble_file
+        chmod 755 $ensemble_file
 
-			#Gerando o (.sub)
-			ensemble_file_sub="${measure}_${learner}_${ensemble}.sub"
-			echo 'N=225
+        #Gerando o (.sub)
+        ensemble_file_sub="${measure}_${ensemble}.sub"
+        echo 'N=225
 universe                = vanilla
 executable            = '$ensemble_file'
 arguments               = $(Process)
@@ -138,11 +139,8 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ensemble_file_sub
-		echo "sleep 20 | condor_submit $ensemble_file_sub" >> ../$run_all_path # append no run_all.sh
-		done
-
-
-	done
+    echo "sleep 20 | condor_submit $ensemble_file_sub" >> ../$run_all_path # append no run_all.sh
+    done
 done
 
 
