@@ -8,7 +8,7 @@ library(stringr)
 
 # Lista de colunas da compilacao final, nem todos os arquivos individuais devem respeitar
 # essa lista
-COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", 
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ensamble",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
@@ -63,12 +63,12 @@ for(file_path in summary_file_list){
   # apenas com o mais atualizado.
   deleted_file = FALSE
   for(other_file_path in summary_file_list){
-    if(other_file_path != file_path){
-    if(grepl(file_path, other_file_path, fixed=T)){
-      system(paste("rm ", file_path, sep=''))
-      deleted_file = TRUE
-      break
-    }
+    if(other_file_path != file_path){ 
+      if(grepl(file_path, other_file_path, fixed=T)){
+        system(paste("rm ", file_path, sep=''))
+        deleted_file = TRUE
+        break
+      }
     }
   }
   

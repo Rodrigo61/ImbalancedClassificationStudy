@@ -20,6 +20,9 @@ declare -a learners=("svm" "rf" "xgboost")
 ## vetor de algoritmos oversampling
 declare -a oversamplings=("smote" "adasyn")
 
+## vetor de algoritmos ensamble
+declare -a ensamble=("rusboost")
+
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
 mkdir -p $submission_files_dir
@@ -111,6 +114,33 @@ error                   = condor.err.$(CLUSTER).$(Process)
 queue $(N) ' > $oversampling_file_sub
 		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
 		done
+
+		
+		#gerando arquivo  com algoritmos de ensamble
+		for ensamble in "${ensamble[@]}"
+		do
+			#Gerando o (.sh)
+			ensamble_file="${measure}_${learner}_${ensamble}.sh"
+			content_ensamble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --ensamble='$ensamble''
+			echo "#!/bin/bash
+export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+$content_ensamble" > $ensamble_file
+			chmod 755 $ensamble_file			
+			
+			#Gerando o (.sub)
+			ensamble_file_sub="${measure}_${learner}_${ensamble}.sub"
+			echo 'N=225
+universe                = vanilla
+executable            = '$oversampling_file'
+arguments               = $(Process) 
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) ' > $oversampling_file_sub
+		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
+		done
+
 
 	done
 done

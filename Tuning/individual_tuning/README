@@ -26,13 +26,13 @@ futuro. Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou f
 
 --> tuning.R (Obrigatório)
 Claramente toda a nova logica da nova combinacao deve ser inserida nesse arquivo. Mas nao se esqueca: 
-	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria.
+	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria. OBS: é bom já adiantar que essa nova coluna também deve ser inserida no template do módulo "summary_compiler"
 	* Adicionar ao arguments, tanto em sua descricao quanto no codigo propriamento dito
 	* Criar uma funcao "Select" para selecionar de forma organizada o seu argumento e tratar os 		possiveis erros
 	* Criar uma variavel global com o valor selecionado do argumento
 	* Adicionar o valor da variavel global criada como coluna na funcao "c.gen_all_measures_inline"
 	  (Nao se esqueca de converter NULL -> FALSE caso seja o caso)
-	* Alterar o nome dos arquivo de saída, caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE_ e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posterioremente
+	* Alterar o nome dos arquivo de saída, caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE_ e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posteriormente
 
 --> Combination_gen.sh (Facultativo)
 Siga a lista de obrigacoes presentes no cabecalho do arquivo para adicionar corretamente sua nova combinacao
