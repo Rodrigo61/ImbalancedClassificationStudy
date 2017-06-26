@@ -20,6 +20,7 @@ library(smotefamily)
 library(rpart)
 set.seed(3)
 source("../RUSBoost.R")
+source("../measures.R")
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
@@ -34,8 +35,8 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-#DATASET_LIST_PATH = "../dataset_list"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -264,23 +265,35 @@ c.print_debug = function(str){
 }
 
 #----------------------#
-c.get_measure = function(truth, response){
+c.get_measure = function(truth, response, probabilities){
   # Dados o vetor de classe, o vetor de predicao
   # a funcao calcula o valor da métrica definida em c.measure com a utilizacao
   # das proprias funcoes da biblioteca MLR. 
   
-  pred = NULL
-  pred$data$truth = truth
-  pred$data$response = response
-  pred$task.desc$negative = NEGATIVE_CLASS
-  pred$task.desc$positive = POSITIVE_CLASS
+  print("c.measure$name")
+  print(c.measure$name)
   
-  #TODO: Temos uma gambiarra apenas para poder utilizar as proprias funcoes internas das métricas do MLR
-  # o mais correto seria realmente criar uma classe prediction
-  class(pred) = "Prediction"
+  if(c.measure$name != "Area under the curve"){
   
+    pred = NULL
+    pred$data$truth = truth
+    pred$data$response = response
+    pred$task.desc$negative = NEGATIVE_CLASS
+    pred$task.desc$positive = POSITIVE_CLASS
+    
+    #TODO: Temos uma gambiarra apenas para poder utilizar as proprias funcoes internas das métricas do MLR
+    # o mais correto seria realmente criar uma classe prediction
+    class(pred) = "Prediction"
+    
+    c.measure$fun(pred = pred)
+  }else{
+    
+    measureAUC(probabilities = probabilities,
+               truth = truth,
+               negative = NEGATIVE_CLASS,
+               positive = POSITIVE_CLASS)
+  }
   
-  c.measure$fun(pred = pred)
   
 }
 
@@ -337,6 +350,7 @@ c.get_measures_from_rusboost = function(train, test){
     for(j in 1:3){
       cv_train = train[-folds[[j]],]
       cv_test = train[folds[[j]],]
+    
       
       # Vetor logico dos indices negativos
       negative_index = !(as.numeric(cv_train[, 'y_data'])-1)
@@ -356,7 +370,9 @@ c.get_measures_from_rusboost = function(train, test){
       pred = predict.rusb(ensemble, cv_test)
       
       # Acumulando a métrica obtida
-      measure_value = c.get_measure(pred$class, cv_train[, 'y_data'])
+      measure_value = c.get_measure(response = pred$class, 
+                                    truth = cv_test[, 'y_data'], 
+                                    probabilities = pred$prob[,2])
       print("measure_value")
       print(measure_value)
       measure_value_acumalation = measure_value_acumalation + measure_value
@@ -365,8 +381,8 @@ c.get_measures_from_rusboost = function(train, test){
     # A métrica final é a média das métricas obtidas no 3-folds
     avg_measure = measure_value_acumalation / 3
     
-    print("avg_measure")
-    print(avg_measure)
+    #print("avg_measure")
+    #print(avg_measure)
     
     # Comparando a métrica obtida com a melhor corrente
     if(c.compare_measures(avg_measure, best_measure_value)){
@@ -375,7 +391,10 @@ c.get_measures_from_rusboost = function(train, test){
     }
     
   }
+  
+  # Armazenandso no retorno a métrica obtida pelo tuning
   return$performance_tuned = best_measure_value 
+  
   
   # Utilizando o H.P obtido para o treino e validao holdout
   # Calculando a fracao do sampling negativo
@@ -383,29 +402,33 @@ c.get_measures_from_rusboost = function(train, test){
   majo_count = length(which(train[, 'y_data'] == NEGATIVE_CLASS))
   sampleFraction = mino_count/majo_count
   
-  # Treinando o ensemble com o h.p obtido
+  # Vetor logico dos indices negativos
+  negative_index = !(as.numeric(train[, 'y_data'])-1)
+  
+  # Treinando o ensemble com o h.p obtido do tuning
   ensemble = rusb(formula = y_data ~., 
                   data = train, 
                   iters = best_learner_count_param, 
                   sampleFraction = sampleFraction, 
                   idx = negative_index)
   
-  pred = predict.rusb(ensemble, test)
   
-  # Acumulando a métrica obtida
-  measure_value = c.get_measure(pred$class, train[, 'y_data'])
+  # Avaliando métrica para o holdout
+  pred = predict.rusb(ensemble, test)
+  measure_value = c.get_measure(response = pred$class, 
+                                truth = test[, 'y_data'], 
+                                probabilities = pred$prob[,2])
   return$performance_holdout = measure_value 
   
-  # Realizando Holdout com teste acrescido de conjunto de residuo
-  print("dim(test) antes")
-  print(dim(test))
+  
+  # Acrescendo resíduo no conjunto de testes
   test = rbind(test, c.residual_dataset)
-  print("dim(test) antes")
-  print(dim(test))
   pred = predict.rusb(ensemble, test)
   
-  # Acumulando a métrica obtida
-  measure_value = c.get_measure(pred$class, train[, 'y_data'])
+  # Avaliando métrica para o holdout com residuo
+  measure_value = c.get_measure(response = pred$class, 
+                                truth = test[, 'y_data'], 
+                                probabilities = pred$prob[,2])
   return$performance_holdout_with_residual = measure_value
   
   print("return")
