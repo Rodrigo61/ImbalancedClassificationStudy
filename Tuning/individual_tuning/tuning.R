@@ -20,6 +20,7 @@ library(smotefamily)
 library(rpart)
 set.seed(3)
 source("../RUSBoost.R")
+source("../RUSPool.R")
 source("../measures.R")
 
 #**************************************************************#
@@ -34,9 +35,10 @@ DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
+RUSPOOL_STR = "classif.ruspool"
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-#DATASET_LIST_PATH = "../dataset_list"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -145,9 +147,6 @@ c.get_majority_weight = function(){
 #Funcao que criar um learner e já empacota opcoes de parametro e class_weight 
 c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
   
-  #Devidindo peso da classe majoritaria. Se o weight_space for False esse peso nao vai interferir em nada
-  majority_weight = c.get_majority_weight()
-  
   if(is.null(par.vals)){
     learner = makeLearner(c.learner_str)  
   }else{
@@ -155,7 +154,10 @@ c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
   }
   
   # Fazendo um wrapper para Weighted classes. Lembrar que 0 nos ds estudados a classe majoritaria vem antes
-  learner = makeWeightedClassesWrapper(learner, wcw.weight = majority_weight) 
+  if(c.weight_space == TRUE){
+    majority_weight = c.get_majority_weight()
+    learner = makeWeightedClassesWrapper(learner, wcw.weight = majority_weight) 
+  }
   
   if(!is.null(hiper.par.vals)){
     learner = setHyperPars(learner, par.vals = hiper.par.vals)    
@@ -511,6 +513,8 @@ c.select_learner = function(arg){
     return(XGBOOST_STR)
   }else if(arg == "rusboost"){
     return(RUSBOOST_STR)
+  }else if(arg == "ruspool"){
+    return(RUSPOOL_STR)
   }else{
     warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rusboost")
     stop()
@@ -566,6 +570,13 @@ c.select_search_space = function(){
       makeParamSet(
         makeDiscreteParam("max_depth", c(1:6)),
         makeNumericParam("eta", lower=0.005, upper = 0.5)
+      )
+    )
+  }else if(c.learner_str == RUSPOOL_STR){
+    return(
+      makeParamSet(
+        makeDiscreteParam("learner.count", c(10,20,30,40,50,60))
+        #makeUntypedParam("learner.name", SVM_STR)
       )
     )
   }else{
