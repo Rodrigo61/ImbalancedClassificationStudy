@@ -1,0 +1,9 @@
+N=225
+universe                = vanilla
+executable            = gmeans_ruspool_smote.sh
+arguments               = $(Process)
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) 
