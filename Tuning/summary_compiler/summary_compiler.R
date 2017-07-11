@@ -8,7 +8,7 @@ library(stringr)
 
 # Lista de colunas da compilacao final, nem todos os arquivos individuais devem respeitar
 # essa lista
-COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ensamble",
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ruspool",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 

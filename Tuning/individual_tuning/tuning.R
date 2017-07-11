@@ -40,7 +40,7 @@ RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
 DATASET_LIST_PATH = "../dataset_list_RECOD"
 #DATASET_LIST_PATH = "../dataset_list"
-COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling",
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ruspool",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
@@ -268,6 +268,7 @@ c.gen_all_measures_inline = function(){
                 c.weight_space, 
                 c.measure$name,
                 c.oversampling_method,
+                c.ruspool,
                 measures$performance_tuned, 
                 measures$performance_holdout, 
                 measures$performance_holdout_with_residual, 
@@ -444,11 +445,14 @@ c.save_tuning = function(measure_list){
   dir.create(file.path(dirname(c.dataset_path), dirname), showWarnings = DEBUG)
   
   #Salvando dados
+  #LEIA O README
   out_filename = paste(c.learner_str, 
                        c.measure$name, 
                        as.character(c.weight_space), 
-                       as.character(c.oversampling_method), 
+                       as.character(c.oversampling_method),
+                       as.character(c.ruspool),
                        sep ="_")
+  
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
   write.table(out_df, out_path, col.names = T, row.names = F, sep=",")
   
