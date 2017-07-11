@@ -36,6 +36,7 @@ SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 RUSPOOL_STR = "classif.ruspool"
+RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
 DATASET_LIST_PATH = "../dataset_list_RECOD"
 #DATASET_LIST_PATH = "../dataset_list"
@@ -48,7 +49,6 @@ NEGATIVE_CLASS = "0"
 
 SMOTE_STR = "SMOTE"
 ADASYN_STR = "ADASYN"
-RUSBOOST_STR = "RUSBOOST"
 UNDERBAGGING_STR = "UNDERBAGGING"
 
 
@@ -63,10 +63,22 @@ c.learner_str = NULL
 c.measure = NULL
 c.weight_space = FALSE
 c.oversampling_method = FALSE
+c.ruspool = FALSE
 
 #**************************************************************#
 #*******************  FUNCOES     ******************************
 #**************************************************************#
+
+#----------------------#
+c.print_debug = function(str){
+  if(!is.character(str)){
+    str = paste(str, collapse = "")
+  }
+  if(DEBUG){
+    print(paste("[DEBUG]", str, sep=""))
+  }
+}
+#----------------------#
 
 c.get_args = function(){
   description = " Script responsável por calcular a melhor performance a respeito
@@ -89,7 +101,10 @@ c.get_args = function(){
                 help="se presente a flag o treinamento será feito com weight_space"),
     
     make_option(c("--oversampling"), type= "character", default=NULL, 
-                help="nome do algoritmo de oversampling que será utilizado no dataset corrente")
+                help="nome do algoritmo de oversampling que será utilizado no dataset corrente"),
+    
+    make_option(c("--ruspool"), action= "store_true", default=NULL, 
+                help="se presente a flag o modelo será encapsulado por um ensamble RUSPool")
     
   )
   
@@ -127,10 +142,6 @@ c.create_holdout_train_test = function(k){
   return(holdout_sets)
 }
 
-#----------------------#
-c.k_folds = function(k = 3){
-  # Funcao que 
-}
 
 #----------------------#
 #Funcao que retorna o custo da classe majoritaria para o class_weight learning
@@ -146,7 +157,8 @@ c.get_majority_weight = function(){
 #----------------------#
 #Funcao que criar um learner e já empacota opcoes de parametro e class_weight 
 c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
-  
+
+  #TODO, remover essa diferenciacao quando incorporarmos XGboost totalmente ao MLR
   if(is.null(par.vals)){
     learner = makeLearner(c.learner_str)  
   }else{
@@ -188,62 +200,39 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   
   #Aplica oversampling caso seja passado como parametro do script, ele é realizado apenas no conjunto de treino
-  if(c.oversampling_method != FALSE){
+  if(c.oversampling_method == TRUE){
     train = c.exec_data_preprocessing(train)  
   }
   
-  
-  #Realizando o tuning com a métrica escolhida
-  if(c.learner_str == XGBOOST_STR){
-    
-    #O parametro nrounds não é comtemplado pelo search_space do XGboost no MLR. De modo que devemos realiza-lo
-    # de fora do tuning manualmente.
-    for(nrounds in seq(20, 150, 20)){  
-      
-      learner = c.makeLearnerWrapped(par.vals = list(nrounds = nrounds))
-      res_tuneParams = tuneParams(learner, 
-                                  task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
-                                  resampling = rdesc, 
-                                  par.set = search_space, 
-                                  control = ctrl, 
-                                  measure= c.measure, 
-                                  show.info = DEBUG)    
-      
-      if(res_tuneParams$y > best_measure){
-        best_nrounds = nrounds
-        best_measure = res_tuneParams$y
-      }
-      
-    }
-    c.print_debug("BEST NROUNDS")
-    c.print_debug(best_nrounds)
-    
-  }else{
-    # Todos os outros algoritmos tem seus hiperparametros corretamente listado no seach_space.
-    
-    learner = c.makeLearnerWrapped() # Temos que usar essa funcao ao inves de makeLearner nativo do mlr para setar pred.type como prob caso usemos AUC
-    res_tuneParams = tuneParams(learner, 
-                                task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
-                                resampling = rdesc,
-                                par.set = search_space, 
-                                control = ctrl, 
-                                measure=c.measure, 
-                                show.info = DEBUG)    
+  # Caso tenha a opcao de RUSPool, encapsulamos o learner escolhido 
+  if(c.ruspool == TRUE){
+    ruspool_params = makeParamSet(
+      makeDiscreteParam("learner_count", c(10,20,30,40,50,60)),
+      makeDiscreteParam("learner_name", c.learner_str)
+    )
+    search_space = makeParamSet(params = c(search_space$pars, ruspool_params$pars))
+    learner_aux = c.learner_str
+    c.learner_str <<- RUSPOOL_STR
   }
+  
+  learner = c.makeLearnerWrapped() # Temos que usar essa funcao ao inves de makeLearner nativo do mlr para setar pred.type como prob caso usemos AUC
+  
+  #TODO apagar essa linha
+  res_tuneParams = tuneParams(learner, 
+                              task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
+                              resampling = rdesc,
+                              par.set = search_space, 
+                              control = ctrl, 
+                              measure=c.measure, 
+                              show.info = DEBUG)    
+  
   
   #Armazenando melhor resultado obtido internamente no tuning
   result$performance_tuned = res_tuneParams$y
   
-  #Treinando um modelo com o treino e os hiperparametros obtidos e armazenando a performance
-  if(c.learner_str == XGBOOST_STR){
-    #Novamente temos que escrever codigo adicional para adicionar o hiperparametro nrounds ao xgboost
-    learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x, par.vals = list(nrounds = nrounds))
-  }else{
-    learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x)
-  }
-  
+  learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x)
+
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
-  
   #Holdout normal
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS))
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
@@ -253,194 +242,22 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   test = rbind(test, c.residual_dataset)
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
   result$performance_holdout_with_residual = performance(p, measures = c.measure)
+  
+  
+  # TODO: Melhorar esse fluxo confuso.
+  # Caso tenha a opcao de RUSPool, desencapsulamos o learner escolhido 
+  if(c.ruspool == TRUE){
+    c.learner_str <<- learner_aux
+  }
   return(result)
 }
 
-#----------------------#
-c.print_debug = function(str){
-  if(!is.character(str)){
-    str = paste(str, collapse = "")
-  }
-  if(DEBUG){
-    print(paste("[DEBUG]", str, sep=""))
-  }
-}
 
-#----------------------#
-c.get_measure = function(truth, response, probabilities){
-  # Dados o vetor de classe, o vetor de predicao
-  # a funcao calcula o valor da métrica definida em c.measure com a utilizacao
-  # das proprias funcoes da biblioteca MLR. 
-  
-  print("c.measure$name")
-  print(c.measure$name)
-  
-  if(c.measure$name != "Area under the curve"){
-  
-    pred = NULL
-    pred$data$truth = truth
-    pred$data$response = response
-    pred$task.desc$negative = NEGATIVE_CLASS
-    pred$task.desc$positive = POSITIVE_CLASS
-    
-    #TODO: Temos uma gambiarra apenas para poder utilizar as proprias funcoes internas das métricas do MLR
-    # o mais correto seria realmente criar uma classe prediction
-    class(pred) = "Prediction"
-    
-    c.measure$fun(pred = pred)
-  }else{
-    
-    measureAUC(probabilities = probabilities,
-               truth = truth,
-               negative = NEGATIVE_CLASS,
-               positive = POSITIVE_CLASS)
-  }
-  
-  
-}
-
-#----------------------#
-c.compare_measures = function(value_1, value_2){
-  # Funcao que retorna se a value_1 é melhor que a value_2 A funcao já sabe se
-  # a métrica utilizada deve ser maximizada ou minimizada
-  
-  if(is.null(value_2)){
-    return(T)
-  }
-  
-  if(c.measure$minimize && value_1 < value_2){
-    return(T)
-  }else if(!c.measure$minimize && value_1 > value_2){
-    return(T)
-  }else{
-    return(F)
-  }
-  
-}
-
-#----------------------#
-c.get_measures_from_underbagging = function(){
-  # Funcao que executa o tuning do UNDERBAGGING em cima do parametro de quantidade de iteracoes.
-  # É responsável por devolver o valor da métrica obtida no tuning e com o conjunto de treino e teste
-  # passados como parametros.
-  
-}
-
-#----------------------#
-c.get_measures_from_rusboost = function(train, test){
-  # Funcao que executa o tuning do RUSBOOST em cima do parametro de quantidade de iteracoes.
-  # É responsável por devolver o valor da métrica obtida no tuning e com o conjunto de treino e teste
-  # passados como parametros.
-  
-  # Objeto agregador de solucoes para o retorno
-  return = NULL
-  
-  # O parametro a ser procurado é a quantidade de iteracoes (modelos) a serem feitas
-  grid_search_learner_count = seq(10,100,10)
-  
-  # Definindo os 3 folds da CV interna
-  folds = createFolds(train[, 'y_data'], k = 3)
-  
-  best_measure_value = NULL
-  best_learner_count_param = NULL
-  
-  # For do grid search
-  for (i in grid_search_learner_count){
-    
-    measure_value_acumalation = 0
-    # For interno de variacao do 3-folds
-    for(j in 1:3){
-      cv_train = train[-folds[[j]],]
-      cv_test = train[folds[[j]],]
-    
-      
-      # Vetor logico dos indices negativos
-      negative_index = !(as.numeric(cv_train[, 'y_data'])-1)
-      
-      # Calculando a fracao do sampling negativo
-      mino_count = length(which(cv_train[, 'y_data'] == POSITIVE_CLASS))
-      majo_count = length(which(cv_train[, 'y_data'] == NEGATIVE_CLASS))
-      sampleFraction = mino_count/majo_count
-      
-      # Treinando o ensemble
-      ensemble = rusb(formula = y_data ~., 
-                      data = cv_train, 
-                      iters = i, 
-                      sampleFraction = sampleFraction, 
-                      idx = negative_index)
-      
-      pred = predict.rusb(ensemble, cv_test)
-      
-      # Acumulando a métrica obtida
-      measure_value = c.get_measure(response = pred$class, 
-                                    truth = cv_test[, 'y_data'], 
-                                    probabilities = pred$prob[,2])
-      print("measure_value")
-      print(measure_value)
-      measure_value_acumalation = measure_value_acumalation + measure_value
-    }
-    
-    # A métrica final é a média das métricas obtidas no 3-folds
-    avg_measure = measure_value_acumalation / 3
-    
-    #print("avg_measure")
-    #print(avg_measure)
-    
-    # Comparando a métrica obtida com a melhor corrente
-    if(c.compare_measures(avg_measure, best_measure_value)){
-      best_measure_value = avg_measure
-      best_learner_count_param = i
-    }
-    
-  }
-  
-  # Armazenandso no retorno a métrica obtida pelo tuning
-  return$performance_tuned = best_measure_value 
-  
-  
-  # Utilizando o H.P obtido para o treino e validao holdout
-  # Calculando a fracao do sampling negativo
-  mino_count = length(which(train[, 'y_data'] == POSITIVE_CLASS))
-  majo_count = length(which(train[, 'y_data'] == NEGATIVE_CLASS))
-  sampleFraction = mino_count/majo_count
-  
-  # Vetor logico dos indices negativos
-  negative_index = !(as.numeric(train[, 'y_data'])-1)
-  
-  # Treinando o ensemble com o h.p obtido do tuning
-  ensemble = rusb(formula = y_data ~., 
-                  data = train, 
-                  iters = best_learner_count_param, 
-                  sampleFraction = sampleFraction, 
-                  idx = negative_index)
-  
-  
-  # Avaliando métrica para o holdout
-  pred = predict.rusb(ensemble, test)
-  measure_value = c.get_measure(response = pred$class, 
-                                truth = test[, 'y_data'], 
-                                probabilities = pred$prob[,2])
-  return$performance_holdout = measure_value 
-  
-  
-  # Acrescendo resíduo no conjunto de testes
-  test = rbind(test, c.residual_dataset)
-  pred = predict.rusb(ensemble, test)
-  
-  # Avaliando métrica para o holdout com residuo
-  measure_value = c.get_measure(response = pred$class, 
-                                truth = test[, 'y_data'], 
-                                probabilities = pred$prob[,2])
-  return$performance_holdout_with_residual = measure_value
-  
-  print("return")
-  print(return)
-  
-}
 #----------------------#
 c.gen_all_measures_inline = function(){
   
   measures_compilation = vector("list", ITERS)
+
   #Repetimos 3x a busca pelas performances
   for (i in 1:ITERS){
     
@@ -451,13 +268,10 @@ c.gen_all_measures_inline = function(){
     test = holdout_aux$test
     
     
-    if(c.learner_str == RUSBOOST_STR){
-      measures = c.get_measures_from_rusboost(train, test)
-    }else{
-      #Realizando Tuning com o search_space correspondente
-      search_space = c.select_search_space()
-      measures = c.get_measures_from_tuneParams(search_space, train, test)  
-    }
+    #Realizando Tuning com o search_space correspondente
+    search_space = c.select_search_space()
+    measures = c.get_measures_from_tuneParams(search_space, train, test)  
+    
     
     #Adicionando todas as colunas do df final
     new_row = c(c.learner_str, 
@@ -513,8 +327,6 @@ c.select_learner = function(arg){
     return(XGBOOST_STR)
   }else if(arg == "rusboost"){
     return(RUSBOOST_STR)
-  }else if(arg == "ruspool"){
-    return(RUSPOOL_STR)
   }else{
     warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rusboost")
     stop()
@@ -548,7 +360,34 @@ c.select_oversampling = function(arg){
   }
 }
 
+#----------------------#
+c.select_ruspool = function(arg){
+  if(is.null(arg)){
+    return(F)
+  }else{
+    return(T)
+  }
+}
 
+#----------------------#
+c.validate_params = function(){
+  # Essa funcao apenas interrompe o programa caso uma combinacao indesejada seja feita nos parametros de ajuste
+  
+  if(c.weight_space == T){
+    if(!is.null(c.oversampling_method)){
+      warning("Atualmente o script está impossibilitado de realizar OVERSAMPLING + WEIGHT SPACE")
+      stop()
+    }
+    if(c.ruspool == T){
+      warning("Atualmente o script está impossibilitado de realizar RUSPOOL + WEIGHT SPACE")
+      stop()
+    }
+    if(c.learner_str == RUSBOOST_STR){
+      warning("Atualmente o script está impossibilitado de realizar RUSBoost + WEIGHT SPACE")
+      stop()
+    }
+  }
+}
 #----------------------#
 c.select_search_space = function(){
   if(c.learner_str == SVM_STR){
@@ -569,14 +408,14 @@ c.select_search_space = function(){
     return(
       makeParamSet(
         makeDiscreteParam("max_depth", c(1:6)),
-        makeNumericParam("eta", lower=0.005, upper = 0.5)
+        makeNumericParam("eta", lower=0.005, upper = 0.5),
+        makeDiscreteParam("nrounds", seq(20, 150, 20))
       )
     )
-  }else if(c.learner_str == RUSPOOL_STR){
+  }else if(c.learner_str == RUSBOOST_STR){
     return(
       makeParamSet(
         makeDiscreteParam("learner.count", c(10,20,30,40,50,60))
-        #makeUntypedParam("learner.name", SVM_STR)
       )
     )
   }else{
@@ -685,6 +524,10 @@ c.measure = c.select_measure(opt$measure)
 c.learner_str = c.select_learner(opt$model)
 c.weight_space = c.select_weight_space(opt$weight_space)
 c.oversampling_method = c.select_oversampling(opt$oversampling)
+c.ruspool = c.select_ruspool(opt$ruspool)
+
+# Validando parametros para o tuning
+c.validate_params()
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
@@ -703,6 +546,7 @@ c.print_debug(paste("Algoritmo: ", c.learner_str))
 c.print_debug(paste("Metrica: ", c.measure$name))
 c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
+c.print_debug(paste("RUSPool: ", c.ruspool))
 
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()

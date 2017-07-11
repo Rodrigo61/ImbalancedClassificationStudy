@@ -15,7 +15,7 @@
 declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 
 ## vetor de algoritmos
-declare -a learners=("svm" "rf" "xgboost" "ruspool")
+declare -a learners=("svm" "rf" "xgboost")
 
 ## vetor de algoritmos oversampling
 declare -a oversamplings=("smote" "adasyn")
@@ -45,6 +45,10 @@ for measure in "${measures[@]}"
 do
 	for learner in "${learners[@]}"
 	do
+
+###############
+#Begin Normal
+###############	
 		#gerando arquivo com aprendizado normal (.SH)
 		normal_file="${measure}_${learner}_false.sh"
 		content_normal='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
@@ -55,7 +59,6 @@ $content_normal" > $normal_file
 
 		#gerando arquivo com aprendizado normal(false) (.sub)
 		normal_file_sub="${measure}_${learner}_false.sub"
-#INSERT_REQUIREMENTS_CONTENT é preenchido antes da submissao para sempre mante-lo atualizado
 		echo 'N=225
 universe                = vanilla
 executable            = '$normal_file'
@@ -68,7 +71,9 @@ queue $(N) ' > $normal_file_sub
 		echo "sleep 20 | condor_submit $normal_file_sub" >> ../$run_all_path # append no run_all.sh
 
 
-
+###############
+#Begin Class W
+###############	
 
 		#gerando arquivo com aprendizado weight space
 		ws_file="${measure}_${learner}_true.sh"
@@ -90,6 +95,9 @@ error                   = condor.err.$(CLUSTER).$(Process)
 queue $(N) ' > $ws_file_sub
 		echo "sleep 20 | condor_submit $ws_file_sub" >> ../$run_all_path # append no run_all.sh
 
+###############
+#Begin OVERSAMPLING
+###############	
 		#gerando arquivo  com algoritmos de oversampling
 		for oversampling in "${oversamplings[@]}"
 		do
@@ -114,8 +122,37 @@ error                   = condor.err.$(CLUSTER).$(Process)
 queue $(N) ' > $oversampling_file_sub
 		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
 		done
-	done
 
+###############
+#Begin RUSPool
+###############		
+		
+		#Gerando o (.sh)
+		ruspool_file="${measure}_${learner}_ruspool.sh"
+		content_ruspool='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --ruspool'
+		echo "#!/bin/bash
+export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+$content_ruspool" > $ruspool_file
+		chmod 755 $ruspool_file
+
+		#Gerando o (.sub)
+		ruspool_file_sub="${measure}_${learner}_ruspool.sub"
+		echo 'N=225
+universe                = vanilla
+executable            = '$ruspool_file'
+arguments               = $(Process)
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue $(N) ' > $ruspool_file_sub
+	echo "sleep 20 | condor_submit $ruspool_file_sub" >> ../$run_all_path # append no run_all.sh
+
+	done
+		
+###############
+#Begin Ensemble
+###############		
 
     #gerando arquivo  com algoritmos de ensemble
     for ensemble in "${ensemble[@]}"
@@ -141,6 +178,10 @@ error                   = condor.err.$(CLUSTER).$(Process)
 queue $(N) ' > $ensemble_file_sub
     echo "sleep 20 | condor_submit $ensemble_file_sub" >> ../$run_all_path # append no run_all.sh
     done
+
+###############
+#END FOR
+###############
 done
 
 
