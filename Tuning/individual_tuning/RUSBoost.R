@@ -203,6 +203,7 @@ predict.rusb <- function (object, newdata, newmfinal = length(object$trees),
 {
   if (newmfinal > length(object$trees) | newmfinal < 1) 
     stop("newmfinal must be 1<newmfinal<mfinal")
+  
   formula <- object$formula
   vardep <- newdata[, as.character(object$formula[[2]])]
   n <- nrow(newdata)
@@ -237,3 +238,59 @@ predict.rusb <- function (object, newdata, newmfinal = length(object$trees),
   output <- list(formula = formula, votes = classfinal, prob = votosporc, 
                  class = predclass, confusion = table, error = error)
 }
+
+
+################################################################
+################## MLR S3 CLASS ################################
+################################################################
+trainLearner.classif.rusboost = function(.learner, .task, .subset, .weights = NULL, learner_count, learner_name, ...) {
+  
+  task = subsetTask(.task, .subset)
+  data = getTaskData(task)
+  
+  mino_count = length(which(data[, 'y_data'] == POSITIVE_CLASS))
+  majo_count = length(which(data[, 'y_data'] == NEGATIVE_CLASS))
+  sampleFraction = mino_count/majo_count
+  
+  negative_index = negative_index = !(as.numeric(data[, 'y_data'])-1)
+  
+  
+  rusb(formula = y_data ~., data = data, iters = learner_count, sampleFraction = sampleFraction, idx = negative_index)
+}
+
+
+predictLearner.classif.rusboost = function(.learner, .model, .newdata, threshold, ...) {
+  
+  # A funcao de predicao do rusboost exige que a nova entrada já esteja rotulada
+  # Entao criamos rótulos falsos apenas para poder chama-la
+  .newdata = cbind(.newdata, 1)
+  colnames(.newdata)[ncol(.newdata)] = 'y_data'
+  .newdata[1, 'y_data'] = 0
+  .newdata[, 'y_data'] = as.factor(.newdata[, 'y_data'])
+  
+  p = predict(.model$learner.model, newdata = .newdata)
+  
+  if (.learner$predict.type == "response") 
+    return(as.factor(p$class)) else return(p$prob)
+}
+
+
+makeRLearner.classif.rusboost = function() {
+  makeRLearnerClassif(
+    cl = "classif.rusboost",
+    package = "mlr",
+    par.set = makeParamSet(
+      makeNumericLearnerParam(id = "learner_count", default = 40)
+      #makeCharacterVectorParam(id = "learner_name", default="classif.ksvm")
+    ),
+    properties = c("twoclass", "numerics", "factors", "prob"),
+    name = "Random Undersampling Boosting",
+    short.name = "rusboost",
+    note = "Implementacao de https://github.com/SteveOhh/RUSBoost"
+  )
+}
+
+
+registerS3method("makeRLearner", "classif.rusboost", makeRLearner.classif.rusboost)
+registerS3method("trainLearner", "classif.rusboost", trainLearner.classif.rusboost)
+registerS3method("predictLearner", "classif.rusboost", predictLearner.classif.rusboost)

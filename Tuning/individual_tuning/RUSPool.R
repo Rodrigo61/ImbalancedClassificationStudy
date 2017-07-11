@@ -1,15 +1,17 @@
+SVM_STR = "classif.ksvm"
+RF_STR = "classif.randomForest"
+XGBOOST_STR = "classif.xgboost" 
 
 #' @param x matriz de atributos
 #' @param y factor da variável dependente
-#' @param learner.count, quantos modelos(interacoes) serao feitas
+#' @param learner_count, quantos modelos(interacoes) serao feitas
 
 as.numeric.factor <- function(x) {as.numeric(as.character(x))}
 
-ruspool <- function (task, learner, learner.count = 100, positive = 1, negative = 0, negative.fraction = -1) 
+ruspool <- function (data, learner, learner_count = 100, positive = 1, negative = 0, negative.fraction = -1) 
 {
   
   models_pool = list()
-  data     = getTaskData(task)
   n.negative = length(which(as.numeric.factor(data[,'y_data']) == negative))
   negative_index = !as.numeric.factor(data[,'y_data'])
   n <- nrow(data)
@@ -21,7 +23,7 @@ ruspool <- function (task, learner, learner.count = 100, positive = 1, negative 
     negative.fraction = n.positive/n.negative
   }
   
-  for (i in 1:learner.count) {
+  for (i in 1:learner_count) {
     
     # create a subset index from the 1:n vector, using ALL "Y"s and a SAMPLE of "N"s
     subset.index = c(
@@ -45,9 +47,8 @@ ruspool <- function (task, learner, learner.count = 100, positive = 1, negative 
 }
 
 
-pred.ruspool = function(models_pool, new_data, threshold, positive = 1, negative = 0){
+predict.ruspool = function(models_pool, new_data, threshold, positive = 1, negative = 0){
   
-  # Vetor 
   data_probs = NULL
   
   for (i in 1:nrow(new_data)) {
@@ -87,16 +88,42 @@ pred.ruspool = function(models_pool, new_data, threshold, positive = 1, negative
 }
 
 
-trainLearner.classif.ruspool = function(.learner, .task, .subset, .weights = NULL, learner.count, learner.name, ...) {
-  learner = makeLearner("classif.ksvm")
-  ruspool(task = subsetTask(.task, .subset), learner = learner, learner.count = learner.count)
+################################################################
+################## MLR S3 CLASS ################################
+################################################################
+
+trainLearner.classif.ruspool = function(.learner, .task, .subset, .weights = NULL, 
+                                        learner_count, learner_name, C, sigma, mtry, ntree, max_depth, eta, nrounds, ...) {
+  
+  learner = makeLearner(learner_name)
+  
+  #Selecionando os h.p especificos
+  pars = list()
+  if(learner_name == SVM_STR){
+    pars$C = C
+    pars$sigma = sigma
+  }else if(learner_name == RF_STR){
+    pars$mtry = mtry
+    pars$ntree = ntree
+  }else if(learner_name == XGBOOST_STR){
+    pars$max_depth = max_depth
+    pars$eta = eta
+    pars$nrounds = nrounds
+  }else{
+    warning(paste("Nao conheco os hiperparametros para o learner_name = ", learner_name, sep=""))
+    stop()
+  }
+  
+  learner = setHyperPars(learner, par.vals = pars)    
+  data = getTaskData(subsetTask(.task, .subset))
+  ruspool(data = data, learner = learner, learner_count = learner_count)
 }
 
 
-predictLearner.classif.ruspool = function(.learner, .model, .newdata, threshold, ...) {
+predictLearner.classif.ruspool = function(.learner, .model, .newdata, ...) {
   
   threshold = 0.5
-  p = pred.ruspool(models_pool = .model$learner.model, new_data = .newdata, threshold = threshold)
+  p = predict(models_pool = .model$learner.model, new_data = .newdata, threshold = threshold)
   
   if (.learner$predict.type == "response") 
     return(p$classif) else return(p$prob)
@@ -106,10 +133,21 @@ predictLearner.classif.ruspool = function(.learner, .model, .newdata, threshold,
 makeRLearner.classif.ruspool = function() {
   makeRLearnerClassif(
     cl = "classif.ruspool",
-    package = "kernlab",
+    package = "mlr",
     par.set = makeParamSet(
-      makeNumericLearnerParam(id = "learner.count", default = 40)
-      #makeCharacterVectorParam(id = "learner.name", default="classif.ksvm")
+      makeNumericLearnerParam(id = "learner_count", default = 40),
+      makeDiscreteLearnerParam(id = "learner_name", default = SVM_STR,
+                               values = c(RF_STR, XGBOOST_STR, SVM_STR)),
+      # SVM params
+      makeNumericLearnerParam(id = "C"),
+      makeNumericLearnerParam(id = "sigma"),
+      # RF Params
+      makeIntegerLearnerParam(id = "mtry"),
+      makeIntegerLearnerParam(id = "ntree"),
+      # XGBoost Params
+      makeIntegerLearnerParam(id = "max_depth"),
+      makeNumericLearnerParam(id = "eta"),
+      makeIntegerLearnerParam(id = "nrounds", default = 1L, lower = 1L)
     ),
     properties = c("twoclass", "numerics", "factors", "prob"),
     name = "Random Undersampling Pool",
