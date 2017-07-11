@@ -155,15 +155,10 @@ c.get_majority_weight = function(){
 }
 
 #----------------------#
-#Funcao que criar um learner e já empacota opcoes de parametro e class_weight 
-c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
+#Funcao que criar um learner e já empacota opcoes de h.parametro e class_weight 
+c.makeLearnerWrapped = function(hiper.par.vals = NULL){
 
-  #TODO, remover essa diferenciacao quando incorporarmos XGboost totalmente ao MLR
-  if(is.null(par.vals)){
-    learner = makeLearner(c.learner_str)  
-  }else{
-    learner = makeLearner(c.learner_str, par.vals = par.vals)
-  }
+  learner = makeLearner(c.learner_str)  
   
   # Fazendo um wrapper para Weighted classes. Lembrar que 0 nos ds estudados a classe majoritaria vem antes
   if(c.weight_space == TRUE){
@@ -186,10 +181,6 @@ c.makeLearnerWrapped = function(par.vals = NULL, hiper.par.vals = NULL){
 
 #----------------------#
 c.get_measures_from_tuneParams = function(search_space, train, test){
-  #AUX do xgboost
-  best_nrounds = 20
-  best_measure = 0
-  
   
   #Definindo configuracoes pro CV(k_fold) do tuning
   ctrl = makeTuneControlRandom(maxit = MAX_IT)
@@ -197,7 +188,6 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   #Definindo variavel de retorno da funcao
   result = NULL
-  
   
   #Aplica oversampling caso seja passado como parametro do script, ele é realizado apenas no conjunto de treino
   if(c.oversampling_method == TRUE){
@@ -215,9 +205,8 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
     c.learner_str <<- RUSPOOL_STR
   }
   
-  learner = c.makeLearnerWrapped() # Temos que usar essa funcao ao inves de makeLearner nativo do mlr para setar pred.type como prob caso usemos AUC
+  learner = c.makeLearnerWrapped() 
   
-  #TODO apagar essa linha
   res_tuneParams = tuneParams(learner, 
                               task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                               resampling = rdesc,
@@ -249,6 +238,7 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   if(c.ruspool == TRUE){
     c.learner_str <<- learner_aux
   }
+  
   return(result)
 }
 
