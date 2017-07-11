@@ -50,15 +50,15 @@ do
 #Begin Normal
 ###############	
 		#gerando arquivo com aprendizado normal (.SH)
-		normal_file="${measure}_${learner}_false.sh"
+		normal_file="${measure}_${learner}.sh"
 		content_normal='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_normal" > $normal_file
 		chmod 755 $normal_file
 
-		#gerando arquivo com aprendizado normal(false) (.sub)
-		normal_file_sub="${measure}_${learner}_false.sub"
+		#gerando arquivo com aprendizado normal (.sub)
+		normal_file_sub="${measure}_${learner}.sub"
 		echo 'N=225
 universe                = vanilla
 executable            = '$normal_file'
@@ -76,14 +76,14 @@ queue $(N) ' > $normal_file_sub
 ###############	
 
 		#gerando arquivo com aprendizado weight space
-		ws_file="${measure}_${learner}_true.sh"
+		ws_file="${measure}_${learner}_weight.sh"
 		content_ws='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --weight_space'
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ws" > $ws_file
 		chmod 755 $ws_file
-		#gerando arquivo com aprendizado weight space(true) (.sub)
-		ws_file_sub="${measure}_${learner}_true.sub"
+		#gerando arquivo com aprendizado weight space (.sub)
+		ws_file_sub="${measure}_${learner}_weight.sub"
 		echo 'N=225
 universe                = vanilla
 executable            = '$ws_file'
