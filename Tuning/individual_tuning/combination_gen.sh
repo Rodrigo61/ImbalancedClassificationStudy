@@ -154,15 +154,15 @@ queue $(N) ' > $ruspool_file_sub
 ###############
 #Begin RUSBoost
 ###############	
-    #gerando arquivo do RUSBoost
+    	#gerando arquivo do RUSBoost
 	#Gerando o (.sh)
 	ensemble_file="${measure}_rusboost.sh"
-	content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$ensemble''
-    echo "#!/bin/bash
+	content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model=rusboost'
+    	echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ensemble" > $ensemble_file
 	
-    chmod 755 $ensemble_file
+    	chmod 755 $ensemble_file
 
 	#Gerando o (.sub)
 	ensemble_file_sub="${measure}_rusboost.sub"

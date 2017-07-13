@@ -1,3 +1,18 @@
+#
+# Script responsável por modelar o RUSPool de acordo com os padroes S3 do MLR. 
+# O RUSPool nada mais é do que um ensemble de T classificadores de mesmo tipo 
+# que são treinados em RUS do data set dado. Ou seja, dado um classificador do tipo C e
+# um número T de classificadores desejados, então o RUSPool irá realizar T
+# treinamentos de classificadores do tipo C em cenário de RUS.
+#
+#
+# Implementacao: O Script não está genérico, para adicionar tipos de classificadores deve-se
+# seguir os seguintes passos:
+#   -> Adicione como uma constante seu CL no inicio deste arquivo exemplo: "SVM_STR = "classif.ksvm""
+#   -> Adicione na lista de parametros os parametros do seu novo classificador (funcao 'makeRLearner.classif.ruspool')
+#   -> Adicione como parametros da funcao 'trainLearner.classif.ruspool' os parametros adicionados acima
+#   -> Crie um fluxo adicional para seu classificador na funcao 'trainLearner.classif.ruspool'
+
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
