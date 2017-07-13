@@ -20,8 +20,6 @@ declare -a learners=("svm" "rf" "xgboost")
 ## vetor de algoritmos oversampling
 declare -a oversamplings=("smote" "adasyn")
 
-# vetor de algoritmos ensemble
-declare -a ensemble=("rusboost")
 
 ## criando caso nao exista o diretório submission_files
 submission_files_dir="submission_files"
@@ -120,7 +118,7 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $oversampling_file_sub
-		echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
+			echo "sleep 20 | condor_submit $oversampling_file_sub" >> ../$run_all_path # append no run_all.sh
 		done
 
 ###############
@@ -146,28 +144,29 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ruspool_file_sub
-	echo "sleep 20 | condor_submit $ruspool_file_sub" >> ../$run_all_path # append no run_all.sh
-
-	done
+		echo "sleep 20 | condor_submit $ruspool_file_sub" >> ../$run_all_path # append no run_all.sh
 		
 ###############
-#Begin Ensemble
-###############		
+#END FOR Learners
+###############
+    done
 
-    #gerando arquivo  com algoritmos de ensemble
-    for ensemble in "${ensemble[@]}"
-    do
-        #Gerando o (.sh)
-        ensemble_file="${measure}_${learner}_${ensemble}.sh"
-        content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$ensemble''
-        echo "#!/bin/bash
+###############
+#Begin RUSBoost
+###############	
+    #gerando arquivo do RUSBoost
+	#Gerando o (.sh)
+	ensemble_file="${measure}_rusboost.sh"
+	content_ensemble='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$ensemble''
+    echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ensemble" > $ensemble_file
-        chmod 755 $ensemble_file
+	
+    chmod 755 $ensemble_file
 
-        #Gerando o (.sub)
-        ensemble_file_sub="${measure}_${learner}_${ensemble}.sub"
-        echo 'N=225
+	#Gerando o (.sub)
+	ensemble_file_sub="${measure}_rusboost.sub"
+	echo 'N=225
 universe                = vanilla
 executable            = '$ensemble_file'
 arguments               = $(Process)
@@ -176,11 +175,10 @@ log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
 queue $(N) ' > $ensemble_file_sub
-    echo "sleep 20 | condor_submit $ensemble_file_sub" >> ../$run_all_path # append no run_all.sh
-    done
+	echo "sleep 20 | condor_submit $ensemble_file_sub" >> ../$run_all_path # append no run_all.sh
 
 ###############
-#END FOR
+#END FOR Measures
 ###############
 done
 

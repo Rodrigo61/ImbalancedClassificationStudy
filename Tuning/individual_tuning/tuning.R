@@ -38,8 +38,8 @@ XGBOOST_STR = "classif.xgboost"
 RUSPOOL_STR = "classif.ruspool"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
-#DATASET_LIST_PATH = "../dataset_list_RECOD"
-DATASET_LIST_PATH = "../dataset_list"
+DATASET_LIST_PATH = "../dataset_list_RECOD"
+#DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ruspool",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
