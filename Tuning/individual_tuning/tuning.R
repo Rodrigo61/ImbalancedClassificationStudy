@@ -365,7 +365,7 @@ c.validate_params = function(){
   # Essa funcao apenas interrompe o programa caso uma combinacao indesejada seja feita nos parametros de ajuste
   
   if(c.weight_space == T){
-    if(!is.null(c.oversampling_method)){
+    if(c.oversampling_method == T){
       warning("Atualmente o script está impossibilitado de realizar OVERSAMPLING + WEIGHT SPACE")
       stop()
     }
