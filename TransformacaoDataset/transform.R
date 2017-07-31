@@ -5,11 +5,15 @@
 MIN_MINORITY_CLASS = 10
 #DATASET_LIST_NAME = "original_dataset_list"
 DATASET_LIST_NAME = "original_dataset_list_RECOD"
+
+POSITIVE_CLASS = "1" #mino
+NEGATIVE_CLASS = "0" #majo
+
 #####################################
 ############ FUNCOES ################
 #####################################
 
-#Funcao de criacao dos datasets desbalanceados
+#Funcao de criacao dos data sets desbalanceados
 #Essa funcao recebe como parametros os preditores(x_data) e a classe(y_data) de um dataset. Recebe como parametro a porcentagem exigida de classe minoritária para um novo dataset. 
 #É feito apenas undersampling, nenhum dado é replicado. O undersampling sempre favorece a retirada da classe 
 #majoritária, assim preservando o maximo possível a classe minoritária. 
@@ -22,15 +26,15 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
   #Variavel de armazenamento de obs. que serão descartadas para o desbalanceamento artificial.
   residual_indexes = NULL
   
-  if(length(which(y_data == 1)) < MIN_MINORITY_CLASS){
+  if(length(which(y_data == POSITIVE_CLASS)) < MIN_MINORITY_CLASS){
     if(warning == T){
       warning(paste("A classe minoritária nao tem observacoes suficientes. [Menos de ",MIN_MINORITY_CLASS, "observacoes]", sep =""))
     }
     return()
   }
   
-  minority_indexes = which(y_data == 1)
-  majority_indexes = which(y_data == 0)
+  minority_indexes = which(y_data == POSITIVE_CLASS)
+  majority_indexes = which(y_data == NEGATIVE_CLASS)
   
   #Devemos ter no mínimo 10 observacoes da classe minoritária(regra do estudo)
   while(length(minority_indexes) >= MIN_MINORITY_CLASS){
@@ -70,6 +74,9 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
     }
   }
   
+  
+  # Se chegou até aqui é porque o undersampling nao teve exito em obter a distribuicao desejada 
+  # mantendo um numero mínimo de obs. para a classe minoritária
   if(warning == T){
     warning("A classe minoritária nao tem observacoes suficientes.")
   }
@@ -77,8 +84,8 @@ imba_sample = function(x_data, y_data, minority_percent, warning=T){
   
 }
 
-# Funcao que calcula a melhor escolha de classe minoritaria em um dataset binario/nao binario.
-# Utilizando Brute force para calcular o maior numero possivel de datasets. i.e. Procurando
+# Funcao que calcula a melhor escolha de classe minoritaria em um dataset binario/multiclasse.
+# Utilizando Brute force para calcular o maior numero possivel de data sets. i.e. Procurando
 # qual é a melhor escolha para considerarmos como classe minoritária entre toda as classes
 # presentes no dataset. Isso é feito escolhendo a classe com a qual conseguimos gerar o maior
 # numero de desbalanceamentos artificias
@@ -91,20 +98,17 @@ find_minority_class = function(y_data){
     
     #Binarizando o dataset (1 = minoritária, 0 = majoritária)
     #obs: Todas as outras classes são compiladas em uma só majoritária
-    y_data_bin = replace(y_data, y_data == minority_class, -1)
-    y_data_bin = replace(y_data_bin, y_data_bin != -1, -2)
-    y_data_bin = replace(y_data_bin, y_data_bin == -1, 1)
-    y_data_bin = replace(y_data_bin, y_data_bin == -2, 0)
-    
-    
-    #Gerando todos os possiveis datasets. Nesse momento nao nos preocupamos com os warnings
+    y_data_bin = dataset_to_binary_form(y_data, minority_class)
+
+        
+    #Gerando todos os possiveis data sets. Nesse momento nao nos preocupamos com os warnings
     ds_0.05 = imba_sample(x_data, y_data_bin, 0.05, warning = F)
     ds_0.03 = imba_sample(x_data, y_data_bin, 0.03, warning = F)
     ds_0.01 = imba_sample(x_data, y_data_bin, 0.01, warning = F)
     ds_0.001 = imba_sample(x_data, y_data_bin, 0.001, warning = F)
     
     
-    #Calculando quantos Datasets foram possiveis de serem gerados
+    #Calculando quantos data sets foram possiveis de serem gerados
     gen_ds_count = 0
     if(length(ds_0.05) != 0){
       gen_ds_count = gen_ds_count + 1
@@ -146,7 +150,7 @@ dataset_to_binary_form = function(y_data, minority_class){
 ############ MAIN ###################
 #####################################
 
-#Lendo lista de datasets
+#Lendo lista de data sets
 dataset_list = read.csv(DATASET_LIST_NAME, header=F)
 
 
@@ -171,6 +175,7 @@ y_data = dataset[,ncol(dataset)]
 #Convertendo os labels(classes) para numerico
 y_data = as.numeric(y_data)
 
+#Obtendo a melhor escolha de classe minoritaria
 minority_class = find_minority_class(y_data)
 
 #Binarizando o dataset (1 = minoritária, 0 = majoritária)
@@ -178,13 +183,13 @@ minority_class = find_minority_class(y_data)
 y_data_bin = dataset_to_binary_form(y_data, minority_class)
 
 
-#Gerando Datasets e seus residuos
+#Gerando data sets e seus residuos
 imba_0.05 = imba_sample(x_data, y_data_bin, 0.05, warning = T)
 imba_0.03 = imba_sample(x_data, y_data_bin, 0.03, warning = T)
 imba_0.01 = imba_sample(x_data, y_data_bin, 0.01, warning = T)
 imba_0.001 = imba_sample(x_data, y_data_bin, 0.001, warning = T)
 
-#Apenas os Datasets desbalanceados
+#Apenas os data sets desbalanceados
 ds_0.05 = imba_0.05$imba_dataset
 ds_0.03 = imba_0.03$imba_dataset
 ds_0.01 = imba_0.01$imba_dataset
@@ -196,7 +201,7 @@ residual_0.03 = imba_0.03$residual_dataset
 residual_0.01 = imba_0.01$residual_dataset
 residual_0.001 = imba_0.01$residual_dataset
 
-#Salvando datasets
+#Salvando data sets
 if(length(ds_0.05) != 0){
   print(paste("Gerado dataset da classe de 0.05 de desbalanceamento com exatamente", 
               length(which(ds_0.05 == 1))/dim(ds_0.05)[1], 
