@@ -38,8 +38,8 @@ XGBOOST_STR = "classif.xgboost"
 RUSPOOL_STR = "classif.ruspool"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
-#DATASET_LIST_PATH = "../dataset_list"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ruspool",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -190,7 +190,7 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   result = NULL
   
   #Aplica oversampling caso seja passado como parametro do script, ele é realizado apenas no conjunto de treino
-  if(c.oversampling_method == TRUE){
+  if(c.oversampling_method != FALSE){
     train = c.exec_data_preprocessing(train)  
   }
   
@@ -365,7 +365,7 @@ c.validate_params = function(){
   # Essa funcao apenas interrompe o programa caso uma combinacao indesejada seja feita nos parametros de ajuste
   
   if(c.weight_space == T){
-    if(c.oversampling_method == T){
+    if(c.oversampling_method != F){
       warning("Atualmente o script está impossibilitado de realizar OVERSAMPLING + WEIGHT SPACE")
       stop()
     }
@@ -472,10 +472,12 @@ c.exec_data_preprocessing = function(ds){
   
   if(c.oversampling_method == ADASYN_STR){
     
+    # Default 50:50
     sampled_dataset = ADAS(dataset_features, dataset_classes)$data
     
   }else if(c.oversampling_method == SMOTE_STR){
     
+    # Default 50:50
     sampled_dataset = SMOTE(dataset_features, dataset_classes)$data
     
   }else{
@@ -488,10 +490,10 @@ c.exec_data_preprocessing = function(ds){
   
   # Log para o usuario
   c.print_debug(paste("Executado ", c.oversampling_method, sep=""))
-  c.print_debug(paste("Original dataset majority number = ", length(which(ds[, 'y_data'] == 0)), sep=""))
-  c.print_debug(paste("Original dataset majority number = ", length(which(ds[, 'y_data'] == 1)), sep=""))
-  c.print_debug(paste("Sampled dataset majority number = ", length(which(sampled_dataset[, 'y_data'] == 0)), sep=""))
-  c.print_debug(paste("Sampled dataset minority number = ", length(which(sampled_dataset[, 'y_data'] == 1)), sep=""))
+  c.print_debug(paste("Original dataset majority number = ", length(which(ds[, 'y_data'] == NEGATIVE_CLASS)), sep=""))
+  c.print_debug(paste("Original dataset minority number = ", length(which(ds[, 'y_data'] == POSITIVE_CLASS)), sep=""))
+  c.print_debug(paste("Sampled dataset majority number = ", length(which(sampled_dataset[, 'y_data'] == NEGATIVE_CLASS)), sep=""))
+  c.print_debug(paste("Sampled dataset minority number = ", length(which(sampled_dataset[, 'y_data'] == POSITIVE_CLASS)), sep=""))
   
   return(sampled_dataset)
   
@@ -541,7 +543,6 @@ c.dataset[, "y_data"] = as.factor(c.dataset[, "y_data"])
 #Carregando o resíduo do dataset
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
-
 
 
 #Executando e obtendo os resultados para o tuning com os parametros dados
