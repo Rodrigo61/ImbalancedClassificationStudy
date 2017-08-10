@@ -57,7 +57,7 @@ $content_normal" > $normal_file
 
 		#gerando arquivo com aprendizado normal (.sub)
 		normal_file_sub="${measure}_${learner}.sub"
-		echo 'N=225
+		echo 'N=228
 universe                = vanilla
 executable            = '$normal_file'
 arguments               = $(Process)
@@ -82,7 +82,7 @@ $content_ws" > $ws_file
 		chmod 755 $ws_file
 		#gerando arquivo com aprendizado weight space (.sub)
 		ws_file_sub="${measure}_${learner}_weight.sub"
-		echo 'N=225
+		echo 'N=228
 universe                = vanilla
 executable            = '$ws_file'
 arguments               = $(Process)
@@ -109,7 +109,7 @@ $content_oversampling" > $oversampling_file
 
 			#Gerando o (.sub)
 			oversampling_file_sub="${measure}_${learner}_${oversampling}.sub"
-			echo 'N=225
+			echo 'N=228
 universe                = vanilla
 executable            = '$oversampling_file'
 arguments               = $(Process)
@@ -135,7 +135,7 @@ $content_ruspool" > $ruspool_file
 
 		#Gerando o (.sub)
 		ruspool_file_sub="${measure}_${learner}_ruspool.sub"
-		echo 'N=225
+		echo 'N=228
 universe                = vanilla
 executable            = '$ruspool_file'
 arguments               = $(Process)
@@ -166,7 +166,7 @@ $content_ensemble" > $ensemble_file
 
 	#Gerando o (.sub)
 	ensemble_file_sub="${measure}_rusboost.sub"
-	echo 'N=225
+	echo 'N=228
 universe                = vanilla
 executable            = '$ensemble_file'
 arguments               = $(Process)
