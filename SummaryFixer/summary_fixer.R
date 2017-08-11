@@ -11,28 +11,6 @@
 library(stringr)
 library(Jmisc)
 
-SUMMARY_LIST_FILENAME = "summary_list"
-
-summary_list = as.vector(read.csv(SUMMARY_LIST_FILENAME, header = F))
-
-for(summary_file_name in summary_list[,1]){
-  
-  print(paste("Lendo o arquivo: ", summary_file_name, sep=''))
-  summary_file_name = as.character(summary_file_name)
-  summary = read.csv(summary_file_name, header = T)
-  
-  # Verifica todas as combinacoes que deveriam ter medicoes, mas nao tem e as completa com NA's
-  summary = fix_missing_combination(summary)
-  
-  #Ordenando pelas colunas o summary
-  summary = summary[do.call(order, lapply(1:NCOL(summary), function(i) summary[, i])), ]
-  
-  #Salvando summary atualizado
-  write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
-  
-}
-
-
 #**************************************************************#
 #*******************  FUNCOES   *******************************#
 #**************************************************************#
@@ -56,8 +34,8 @@ fix_missing_combination = function(summary){
         for(measure in measures){
           
           combination_count = lenght(which(summary[, 'learner'] == learner 
-                                         & summary[, 'measure'] == measure 
-                                         & summary[, technique] == option))
+                                           & summary[, 'measure'] == measure 
+                                           & summary[, technique] == option))
           
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
           if(combination_count == 0){
@@ -76,7 +54,35 @@ fix_missing_combination = function(summary){
     }
     
   }
-
+  
   return(summary)
 }
+
+
+#**************************************************************#
+#*******************  MAIN      *******************************#
+#**************************************************************#
+
+SUMMARY_LIST_FILENAME = "summary_list"
+
+summary_list = as.vector(read.csv(SUMMARY_LIST_FILENAME, header = F))
+
+for(summary_file_name in summary_list[,1]){
+  
+  print(paste("Lendo o arquivo: ", summary_file_name, sep=''))
+  summary_file_name = as.character(summary_file_name)
+  summary = read.csv(summary_file_name, header = T)
+  
+  # Verifica todas as combinacoes que deveriam ter medicoes, mas nao tem e as completa com NA's
+  summary = fix_missing_combination(summary)
+  
+  #Ordenando pelas colunas o summary
+  summary = summary[do.call(order, lapply(1:NCOL(summary), function(i) summary[, i])), ]
+  
+  #Salvando summary atualizado
+  write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
+  
+}
+
+
 
