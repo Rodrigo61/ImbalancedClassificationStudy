@@ -33,7 +33,7 @@ fix_missing_combination = function(summary){
       for(learner in learners){
         for(measure in measures){
           
-          combination_count = lenght(which(summary[, 'learner'] == learner 
+          combination_count = length(which(summary[, 'learner'] == learner 
                                            & summary[, 'measure'] == measure 
                                            & summary[, technique] == option))
           
