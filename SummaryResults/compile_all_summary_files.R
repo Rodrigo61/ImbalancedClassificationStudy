@@ -20,7 +20,7 @@ for(summary_file_name in summary_list[,1]){
   summary = cbind(summary, dataset_name)
   names(summary)[ncol(summary)] = "dataset"
   summary = cbind(summary, dataset_imba_rate)
-  names(summary)[ncol(summary)] = "imba. rate"
+  names(summary)[ncol(summary)] = "imba.rate"
 
   df_final = rbind(df_final, summary)
 }
