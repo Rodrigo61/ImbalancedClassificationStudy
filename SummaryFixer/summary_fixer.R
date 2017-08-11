@@ -28,7 +28,7 @@ fix_missing_combination = function(summary){
   #Vamos fazer a busca para todas as combinacoes nesse summary
   for (technique in names(techniques)) {
     
-    technique_options = techniques[[techinique]]
+    technique_options = techniques[[technique]]
     for (option in technique_options){
       for(learner in learners){
         for(measure in measures){
