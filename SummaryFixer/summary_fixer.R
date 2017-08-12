@@ -99,11 +99,13 @@ for(summary_file_name in summary_list[,1]){
   summary_file_name = as.character(summary_file_name)
   summary = read.csv(summary_file_name, header = T)
   
+  print("1")
   # Verifica todas as combinacoes que deveriam ter medicoes, mas nao tem e as completa com NA's
   summary = fix_missing_combination(summary)
-  
+  print("2")
   #Ordenando pelas colunas o summary
   summary = summary[do.call(order, lapply(1:NCOL(summary), function(i) summary[, i])), ]
+  print("3")
   
   #Salvando summary atualizado
   write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
