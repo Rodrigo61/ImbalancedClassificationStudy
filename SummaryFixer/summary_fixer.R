@@ -42,7 +42,6 @@ fix_missing_combination = function(summary){
           
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
           if(combination_count == 0){
-            result = tryCatch({
               print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
 
               print("a")
@@ -59,12 +58,7 @@ fix_missing_combination = function(summary){
               # isso só é possível pela suposicao de que as técnicas nao se misturam
               summary[(NROW(summary)-3):NROW(summary), technique] = option
               print("d")
-            },
-            error = function(cond){
-              print("err")
-              print(cond)
-              print(warnings())
-            })
+            }
             
           }else if(combination_count != 3){
             warning(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
