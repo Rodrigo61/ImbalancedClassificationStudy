@@ -45,6 +45,13 @@ fix_missing_combination = function(summary){
               print(class(summary))
               empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
               names(empty_line) = names(summary)
+              
+              print("class(empty_line)")
+              print(class(empty_line))
+              
+              print(empty_line)
+              print("empty_line")
+              
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
