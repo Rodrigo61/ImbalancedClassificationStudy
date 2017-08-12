@@ -51,10 +51,10 @@ fix_missing_combination = function(summary){
               summary[(NROW(summary)-3):NROW(summary), technique] = option
             },
             warning = function(cond){
-              warnings()
+              print(warnings())
             },
             error = function(cond){
-              warnings()
+              print(warnings())
             })
             
           }else if(combination_count != 3){
