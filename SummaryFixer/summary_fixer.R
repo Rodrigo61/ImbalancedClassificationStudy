@@ -67,7 +67,7 @@ fix_missing_combination = function(summary){
       
       # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
       if(combination_count == 0){
-        print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
+        print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)", sep =""))
         
         empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
         names(empty_line) = names(summary)
