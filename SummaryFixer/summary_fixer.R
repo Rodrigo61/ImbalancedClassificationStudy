@@ -56,6 +56,9 @@ fix_missing_combination = function(summary){
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
               
+              print("tail(summary)")
+              print(tail(summary))
+              
               # Inserimos todas as tecnicas como falsa e só atualizamos a tecnica da combinacao atual
               # isso só é possível pela suposicao de que as técnicas nao se misturam
               summary[(NROW(summary)-3):NROW(summary), technique] = option
