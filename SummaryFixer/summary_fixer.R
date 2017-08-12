@@ -51,7 +51,7 @@ fix_missing_combination = function(summary){
             summary[(NROW(summary)-3):NROW(summary), technique] = option
             
           }else if(combination_count != 3){
-            warning(paste("A combinacao a seguir tem um número inesperado de medicoes (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
+            warning(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
             stop()
           }
           
