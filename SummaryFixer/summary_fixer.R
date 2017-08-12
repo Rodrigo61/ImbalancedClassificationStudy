@@ -65,6 +65,11 @@ fix_missing_combination = function(summary){
                                        & summary[, 'measure'] == measure 
                                        & summary[, names(techniques)] == F))
       
+      print("summary")
+      print(summary[which(summary[, 'learner'] == learner 
+                          & summary[, 'measure'] == measure 
+                          & summary[, names(techniques)] == F),])
+      
       # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
       if(combination_count == 0){
         print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)", sep =""))
@@ -77,7 +82,7 @@ fix_missing_combination = function(summary){
         summary = rbind(summary, empty_line)
         
       }else if(combination_count != 3){
-        print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
+        print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)]", sep =""))
         stop()
       }
     }
