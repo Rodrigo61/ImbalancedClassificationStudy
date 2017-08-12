@@ -32,6 +32,8 @@ fix_missing_combination = function(summary){
     print("aaa")
     technique_options = techniques[[technique]]
     print("BBB")
+    print("technique_options")
+    print(technique_options)
     for (option in technique_options){
       for(learner in learners){
         for(measure in measures){
