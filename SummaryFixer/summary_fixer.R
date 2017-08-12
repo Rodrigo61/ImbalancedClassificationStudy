@@ -26,6 +26,7 @@ fix_missing_combination = function(summary){
   techniques$weight_space = c('TRUE')
   
   #Vamos fazer a busca para todas as combinacoes nesse summary
+  print("comeco das buscas")
   for (technique in names(techniques)) {
     
     technique_options = techniques[[technique]]
@@ -41,24 +42,13 @@ fix_missing_combination = function(summary){
           if(combination_count == 0){
             result = tryCatch({
               print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
-              print("class(summary)")
-              print(class(summary))
+
               empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
               names(empty_line) = names(summary)
               
-              print("class(empty_line)")
-              print(class(empty_line))
-              
-              print("empty_line")
-              print(empty_line)
-              
-              
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
-              
-              print("tail(summary)")
-              print(tail(summary))
               
               # Inserimos todas as tecnicas como falsa e só atualizamos a tecnica da combinacao atual
               # isso só é possível pela suposicao de que as técnicas nao se misturam
@@ -80,7 +70,7 @@ fix_missing_combination = function(summary){
     }
     
   }
-  
+  print("fim das buscas")
   return(summary)
 }
 
