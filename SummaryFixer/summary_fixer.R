@@ -39,7 +39,6 @@ fix_missing_combination = function(summary){
           
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
           if(combination_count == 0){
-            print(paste("combination_count = ", combination_count, sep =""))
             print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
             empty_line = c(learner, F, measure, F, F, NA, NA, NA, NA)
             summary = rbind(summary, empty_line)
@@ -87,6 +86,7 @@ for(summary_file_name in summary_list[,1]){
   
   #Salvando summary atualizado
   write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
+  print(paste("Summary atualizado e salvo em: ", summary_file_name), sep="")
   
 }
 
