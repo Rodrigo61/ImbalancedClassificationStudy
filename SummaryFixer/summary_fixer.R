@@ -24,17 +24,19 @@ fix_missing_combination = function(summary){
   techniques$ruspool = c('TRUE')
   techniques$weight_space = c('TRUE')
   
-  #Vamos fazer a busca para todas as combinacoes nesse summary
-  for (technique in names(techniques)) {
-    
-    technique_options = techniques[[technique]]
-    for (option in technique_options){
-      for(learner in learners){
-        for(measure in measures){
+  # Vamos fazer a busca para todas as combinacoes nesse summary
+  for(learner in learners){
+    for(measure in measures){
+      
+      # Buscando pelas tecnicas
+      for (technique in names(techniques)) {
+        technique_options = techniques[[technique]]
+        for (option in technique_options){
           
           combination_count = length(which(summary[, 'learner'] == learner 
                                            & summary[, 'measure'] == measure 
                                            & summary[, technique] == option))
+          
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
           if(combination_count == 0){
               print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
@@ -56,6 +58,27 @@ fix_missing_combination = function(summary){
           }
           
         }
+      }
+      
+      # Buscando por cenário normal
+      combination_count = length(which(summary[, 'learner'] == learner 
+                                       & summary[, 'measure'] == measure 
+                                       & summary[, names(techniques)] == F))
+      
+      # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
+      if(combination_count == 0){
+        print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
+        
+        empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
+        names(empty_line) = names(summary)
+        
+        summary = rbind(summary, empty_line)
+        summary = rbind(summary, empty_line)
+        summary = rbind(summary, empty_line)
+        
+      }else if(combination_count != 3){
+        print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
+        stop()
       }
     }
     
