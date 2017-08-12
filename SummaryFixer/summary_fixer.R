@@ -29,7 +29,9 @@ fix_missing_combination = function(summary){
   print("comeco das buscas")
   for (technique in names(techniques)) {
     
+    print("aaa")
     technique_options = techniques[[technique]]
+    print("BBB")
     for (option in technique_options){
       for(learner in learners){
         for(measure in measures){
