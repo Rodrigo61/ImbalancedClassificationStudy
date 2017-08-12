@@ -1,0 +1,8 @@
+universe                = vanilla
+executable            = summary_fixer.sh
+arguments               = $(Process)
+output                = condor.out.$(CLUSTER).$(Process)
+log                     = condor.log.$(CLUSTER).($Process)
+error                   = condor.err.$(CLUSTER).$(Process)
+
+queue 1
