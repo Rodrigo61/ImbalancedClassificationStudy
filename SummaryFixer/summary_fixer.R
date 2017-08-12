@@ -41,6 +41,8 @@ fix_missing_combination = function(summary){
           if(combination_count == 0){
             result = tryCatch({
               print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
+              print("class(summary)")
+              print(class(summary))
               empty_line = c(learner, F, measure, F, F, NA, NA, NA, NA)
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
