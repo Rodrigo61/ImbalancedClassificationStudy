@@ -43,16 +43,20 @@ fix_missing_combination = function(summary){
             result = tryCatch({
               print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
 
+              print("a")
               empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
               names(empty_line) = names(summary)
+              print("b")
               
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
               summary = rbind(summary, empty_line)
+              print("c")
               
               # Inserimos todas as tecnicas como falsa e só atualizamos a tecnica da combinacao atual
               # isso só é possível pela suposicao de que as técnicas nao se misturam
               summary[(NROW(summary)-3):NROW(summary), technique] = option
+              print("d")
             },
             error = function(cond){
               print("err")
