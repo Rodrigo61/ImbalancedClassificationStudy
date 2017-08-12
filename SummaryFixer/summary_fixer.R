@@ -38,7 +38,9 @@ fix_missing_combination = function(summary){
                                            & summary[, technique] == option))
           
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
-          if(combination_count == 0){
+          if(combination_count != 3){
+            print(paste("combination_count = ", combination_count, sep =""))
+            print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
             empty_line = c(learner, F, measure, F, F, NA, NA, NA, NA)
             summary = rbind(summary, empty_line)
             summary = rbind(summary, empty_line)
