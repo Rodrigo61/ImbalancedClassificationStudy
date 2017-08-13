@@ -1,4 +1,4 @@
-# Este módulo é responsável por preencher com linhas vazias as informacoes faltantes em cada summary_file 
+# Este módulo é responsável por preencher com linhas vazias as informacoes faltantes em cada summary_file
 # dos data sets artificialmente desbalanceados. Ou seja, se um data set desbalanceado não teve alguma informacao 
 # computada que deveria ter sido, entre todas as combinacoes de cenários esperadas, esse módulo deve preencher 
 # esse cenarios com NA's de modo que todos os summary_files contenham a mesma quantidade de linhas. Por fim essas 
@@ -39,7 +39,7 @@ fix_missing_combination = function(summary){
           
           # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
           if(combination_count == 0){
-              print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
+              print(paste("Combinacao faltante: learner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, sep =""))
 
               empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
               names(empty_line) = names(summary)
@@ -60,19 +60,16 @@ fix_missing_combination = function(summary){
         }
       }
       
-      # Buscando por cenário normal
-      combination_count = length(which(summary[, 'learner'] == learner 
-                                       & summary[, 'measure'] == measure 
-                                       & summary[, names(techniques)] == F))
-      
-      print("summary")
-      print(summary[which(summary[, 'learner'] == learner 
-                          & summary[, 'measure'] == measure 
-                          & summary[, names(techniques)] == F),])
+      # Buscando por cenário normal (i.e. todas as técnicas como FALSE)
+      combination_count = length(which(summary[,'learner'] == learner 
+                                & summary[, 'measure'] == measure 
+                                & apply(summary, 1, function(row){
+                                  any(as.logical(row[c('weight_space', 'ruspool', 'sampling')]))
+                                }) == F))
       
       # Nao existe medicao para essa combinacao, devemos gerar 3 linhas vazias entao
       if(combination_count == 0){
-        print(paste("Combinacao faltante: leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)", sep =""))
+        print(paste("Combinacao faltante: learner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)", sep =""))
         
         empty_line = data.frame(learner, F, measure, F, F, NA, NA, NA, NA)
         names(empty_line) = names(summary)
@@ -106,7 +103,13 @@ for(summary_file_name in summary_list[,1]){
   summary_file_name = as.character(summary_file_name)
   summary = read.csv(summary_file_name, header = T)
   
+  #TODO: Apagar essa conversao quanto arrumarmos o fato de que existem summary files com NA's ao inves de FALSE's na coluna 'sampling'  
+  if(!('FALSE' %in% levels(summary[,'sampling']))){
+    levels(summary[,'sampling']) = c(levels(summary[,'sampling']), 'FALSE')  
+  }
+  summary[which(is.na(summary[,'sampling'])),'sampling'] = 'FALSE'
   
+
   # Verifica todas as combinacoes que deveriam ter medicoes, mas nao tem e as completa com NA's
   summary = fix_missing_combination(summary)
 
