@@ -122,29 +122,29 @@ queue $(N) ' > $oversampling_file_sub
 		done
 
 ###############
-#Begin RUSPool
+#Begin underbagging
 ###############		
 		
 		#Gerando o (.sh)
-		ruspool_file="${measure}_${learner}_ruspool.sh"
-		content_ruspool='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --ruspool'
+		underbagging_file="${measure}_${learner}_underbagging.sh"
+		content_underbagging='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --underbagging'
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-$content_ruspool" > $ruspool_file
-		chmod 755 $ruspool_file
+$content_underbagging" > $underbagging_file
+		chmod 755 $underbagging_file
 
 		#Gerando o (.sub)
-		ruspool_file_sub="${measure}_${learner}_ruspool.sub"
+		underbagging_file_sub="${measure}_${learner}_underbagging.sub"
 		echo 'N=228
 universe                = vanilla
-executable            = '$ruspool_file'
+executable            = '$underbagging_file'
 arguments               = $(Process)
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
 
-queue $(N) ' > $ruspool_file_sub
-		echo "sleep 20 | condor_submit $ruspool_file_sub" >> ../$run_all_path # append no run_all.sh
+queue $(N) ' > $underbagging_file_sub
+		echo "sleep 20 | condor_submit $underbagging_file_sub" >> ../$run_all_path # append no run_all.sh
 		
 ###############
 #END FOR Learners

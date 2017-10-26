@@ -1,17 +1,17 @@
 #
-# Script responsável por modelar o RUSPool de acordo com os padroes S3 do MLR. 
-# O RUSPool nada mais é do que um ensemble de T classificadores de mesmo tipo 
+# Script responsável por modelar o underbagging de acordo com os padroes S3 do MLR. 
+# O underbagging nada mais é do que um ensemble de T classificadores de mesmo tipo 
 # que são treinados em RUS do data set dado. Ou seja, dado um classificador do tipo C e
-# um número T de classificadores desejados, então o RUSPool irá realizar T
+# um número T de classificadores desejados, então o underbagging irá realizar T
 # treinamentos de classificadores do tipo C em cenário de RUS.
 #
 #
 # Implementacao: O Script não está genérico, para adicionar tipos de classificadores deve-se
 # seguir os seguintes passos:
 #   -> Adicione como uma constante seu CL no inicio deste arquivo exemplo: "SVM_STR = "classif.ksvm""
-#   -> Adicione na lista de parametros os parametros do seu novo classificador (funcao 'makeRLearner.classif.ruspool')
-#   -> Adicione como parametros da funcao 'trainLearner.classif.ruspool' os parametros adicionados acima
-#   -> Crie um fluxo adicional para seu classificador na funcao 'trainLearner.classif.ruspool'
+#   -> Adicione na lista de parametros os parametros do seu novo classificador (funcao 'makeRLearner.classif.underbagging')
+#   -> Adicione como parametros da funcao 'trainLearner.classif.underbagging' os parametros adicionados acima
+#   -> Crie um fluxo adicional para seu classificador na funcao 'trainLearner.classif.underbagging'
 
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
@@ -23,7 +23,7 @@ XGBOOST_STR = "classif.xgboost"
 
 as.numeric.factor <- function(x) {as.numeric(as.character(x))}
 
-ruspool <- function (data, learner, learner_count = 100, positive = 1, negative = 0, negative.fraction = -1) 
+underbagging <- function (data, learner, learner_count = 100, positive = 1, negative = 0, negative.fraction = -1) 
 {
   
   models_pool = list()
@@ -55,14 +55,14 @@ ruspool <- function (data, learner, learner_count = 100, positive = 1, negative 
     models_pool[[i]] = model
   }
   
-  class(models_pool) <- "ruspool"
+  class(models_pool) <- "underbagging"
   models_pool
   
   
 }
 
 
-predict.ruspool = function(models_pool, new_data, threshold, positive = 1, negative = 0){
+predict.underbagging = function(models_pool, new_data, threshold, positive = 1, negative = 0){
   
   data_probs = NULL
   
@@ -107,7 +107,7 @@ predict.ruspool = function(models_pool, new_data, threshold, positive = 1, negat
 ################## MLR S3 CLASS ################################
 ################################################################
 
-trainLearner.classif.ruspool = function(.learner, .task, .subset, .weights = NULL, 
+trainLearner.classif.underbagging = function(.learner, .task, .subset, .weights = NULL, 
                                         learner_count, learner_name, C, sigma, mtry, ntree, max_depth, eta, nrounds, ...) {
   
   learner = makeLearner(learner_name)
@@ -131,11 +131,11 @@ trainLearner.classif.ruspool = function(.learner, .task, .subset, .weights = NUL
   
   learner = setHyperPars(learner, par.vals = pars)    
   data = getTaskData(subsetTask(.task, .subset))
-  ruspool(data = data, learner = learner, learner_count = learner_count)
+  underbagging(data = data, learner = learner, learner_count = learner_count)
 }
 
 
-predictLearner.classif.ruspool = function(.learner, .model, .newdata, ...) {
+predictLearner.classif.underbagging = function(.learner, .model, .newdata, ...) {
   
   threshold = 0.5
   p = predict(models_pool = .model$learner.model, new_data = .newdata, threshold = threshold)
@@ -145,9 +145,9 @@ predictLearner.classif.ruspool = function(.learner, .model, .newdata, ...) {
 }
 
 
-makeRLearner.classif.ruspool = function() {
+makeRLearner.classif.underbagging = function() {
   makeRLearnerClassif(
-    cl = "classif.ruspool",
+    cl = "classif.underbagging",
     package = "mlr",
     par.set = makeParamSet(
       makeNumericLearnerParam(id = "learner_count", default = 40),
@@ -165,13 +165,13 @@ makeRLearner.classif.ruspool = function() {
       makeIntegerLearnerParam(id = "nrounds", default = 1L, lower = 1L)
     ),
     properties = c("twoclass", "numerics", "factors", "prob"),
-    name = "Random Undersampling Pool",
-    short.name = "ruspool",
+    name = "Random Undersampling Bagging",
+    short.name = "underbagging",
     note = "Sem notas"
   )
 }
 
 
-registerS3method("makeRLearner", "classif.ruspool", makeRLearner.classif.ruspool)
-registerS3method("trainLearner", "classif.ruspool", trainLearner.classif.ruspool)
-registerS3method("predictLearner", "classif.ruspool", predictLearner.classif.ruspool)
+registerS3method("makeRLearner", "classif.underbagging", makeRLearner.classif.underbagging)
+registerS3method("trainLearner", "classif.underbagging", trainLearner.classif.underbagging)
+registerS3method("predictLearner", "classif.underbagging", predictLearner.classif.underbagging)

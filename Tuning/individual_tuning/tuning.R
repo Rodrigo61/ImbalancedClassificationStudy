@@ -20,7 +20,7 @@ library(smotefamily)
 library(rpart)
 set.seed(3)
 source("../RUSBoost.R")
-source("../RUSPool.R")
+source("../UnderBagging.R")
 source("../measures.R")
 
 #**************************************************************#
@@ -35,12 +35,12 @@ DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
-RUSPOOL_STR = "classif.ruspool"
+underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
 #DATASET_LIST_PATH = "../dataset_list_RECOD"
 DATASET_LIST_PATH = "../dataset_list"
-COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "ruspool",
+COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
@@ -63,7 +63,7 @@ c.learner_str = NULL
 c.measure = NULL
 c.weight_space = FALSE
 c.oversampling_method = FALSE
-c.ruspool = FALSE
+c.underbagging = FALSE
 
 #**************************************************************#
 #*******************  FUNCOES     ******************************
@@ -103,8 +103,8 @@ c.get_args = function(){
     make_option(c("--oversampling"), type= "character", default=NULL, 
                 help="nome do algoritmo de oversampling que será utilizado no dataset corrente"),
     
-    make_option(c("--ruspool"), action= "store_true", default=NULL, 
-                help="se presente a flag o modelo será encapsulado por um ensamble RUSPool")
+    make_option(c("--underbagging"), action= "store_true", default=NULL, 
+                help="se presente a flag o modelo será encapsulado por um ensamble underbagging")
     
   )
   
@@ -194,15 +194,15 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
     train = c.exec_data_preprocessing(train)  
   }
   
-  # Caso tenha a opcao de RUSPool, encapsulamos o learner escolhido 
-  if(c.ruspool == TRUE){
-    ruspool_params = makeParamSet(
+  # Caso tenha a opcao de underbagging, encapsulamos o learner escolhido 
+  if(c.underbagging == TRUE){
+    underbagging_params = makeParamSet(
       makeDiscreteParam("learner_count", c(10,20,30,40,50,60)),
       makeDiscreteParam("learner_name", c.learner_str)
     )
-    search_space = makeParamSet(params = c(search_space$pars, ruspool_params$pars))
+    search_space = makeParamSet(params = c(search_space$pars, underbagging_params$pars))
     learner_aux = c.learner_str
-    c.learner_str <<- RUSPOOL_STR
+    c.learner_str <<- underbagging_STR
   }
   
   learner = c.makeLearnerWrapped() 
@@ -234,8 +234,8 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   
   # TODO: Melhorar esse fluxo confuso.
-  # Caso tenha a opcao de RUSPool, desencapsulamos o learner escolhido 
-  if(c.ruspool == TRUE){
+  # Caso tenha a opcao de underbagging, desencapsulamos o learner escolhido 
+  if(c.underbagging == TRUE){
     c.learner_str <<- learner_aux
   }
   
@@ -268,7 +268,7 @@ c.gen_all_measures_inline = function(){
                 c.weight_space, 
                 c.measure$name,
                 c.oversampling_method,
-                c.ruspool,
+                c.underbagging,
                 measures$performance_tuned, 
                 measures$performance_holdout, 
                 measures$performance_holdout_with_residual, 
@@ -352,7 +352,7 @@ c.select_oversampling = function(arg){
 }
 
 #----------------------#
-c.select_ruspool = function(arg){
+c.select_underbagging = function(arg){
   if(is.null(arg)){
     return(F)
   }else{
@@ -369,8 +369,8 @@ c.validate_params = function(){
       warning("Atualmente o script está impossibilitado de realizar OVERSAMPLING + WEIGHT SPACE")
       stop()
     }
-    if(c.ruspool == T){
-      warning("Atualmente o script está impossibilitado de realizar RUSPOOL + WEIGHT SPACE")
+    if(c.underbagging == T){
+      warning("Atualmente o script está impossibilitado de realizar underbagging + WEIGHT SPACE")
       stop()
     }
     if(c.learner_str == RUSBOOST_STR){
@@ -450,7 +450,7 @@ c.save_tuning = function(measure_list){
                        c.measure$name, 
                        as.character(c.weight_space), 
                        as.character(c.oversampling_method),
-                       as.character(c.ruspool),
+                       as.character(c.underbagging),
                        sep ="_")
   
   out_path = str_replace_all(paste(dirname(c.dataset_path), paste(dirname, out_filename, sep="/"), sep="/"), " ", "_")
@@ -520,7 +520,7 @@ c.measure = c.select_measure(opt$measure)
 c.learner_str = c.select_learner(opt$model)
 c.weight_space = c.select_weight_space(opt$weight_space)
 c.oversampling_method = c.select_oversampling(opt$oversampling)
-c.ruspool = c.select_ruspool(opt$ruspool)
+c.underbagging = c.select_underbagging(opt$underbagging)
 
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Parametros escolhidos:")
@@ -529,7 +529,7 @@ c.print_debug(paste("Algoritmo: ", c.learner_str))
 c.print_debug(paste("Metrica: ", c.measure$name))
 c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
-c.print_debug(paste("RUSPool: ", c.ruspool))
+c.print_debug(paste("underbagging: ", c.underbagging))
 
 # Validando parametros para o tuning
 c.validate_params()

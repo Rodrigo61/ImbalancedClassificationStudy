@@ -1,0 +1,138 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_document: default
+  html_notebook: default
+
+params:
+  columns: "NULL"
+  filter_keys: "NULL"
+  filter_values: "NULL"
+  measure: "Area under the curve"
+  performance: "holdout_measure_residual"
+  
+---
+
+# Parametros:
+
+  **Measure = ** `r params$measure`  
+  **Columns = ** `r params$columns`  
+  **Performance = ** `r params$performance`  
+  **Filter keys = ** `r params$filter_keys`  
+  **Filter values = ** `r params$filter_values`  
+  
+
+
+```{r}
+library("scmamp")
+library(dplyr)
+```
+
+```{r echo=F}
+# Constantes
+AUC = "Area under the curve"
+KSVM = "classif.ksvm"
+RF = "classif.randomForest"
+XGB = "classif.xgboost"
+SMOTE = "SMOTE"
+ADASYN = "ADASYN"
+```
+
+
+# Tratamento dos dados
+Carregando data set compilado
+```{r hide=T}
+ds = read.csv("/home/rodrigo/Dropbox/UNICAMP/IC/estudo_cost_learning/SummaryResults/summary_compilation_fixed.csv", header = T)
+summary(ds)
+```
+
+Filtrando pela metrica
+```{r}
+ds = filter(ds, measure == params$measure)
+```
+
+
+Filtrando o data set
+```{r}
+if(params$filter_keys != 'NULL' && !is.null(params$filter_keys)){
+  ds = filter_at(ds, .vars = params$filter_keys, .vars_predicate = any_vars(. == params$filter_values))
+}
+
+summary(ds)
+
+```
+
+
+Computando as médias das iteracoes
+```{r collapse=T}
+ds = group_by(ds, learner , weight_space , measure , sampling , ruspool , dataset , imba.rate)
+ds = summarise(ds, tuning_measure = mean(tuning_measure), holdout_measure = mean(holdout_measure),
+               holdout_measure_residual = mean(holdout_measure_residual))
+
+ds = as.data.frame(ds)
+```
+
+
+Criando dataframe
+```{r}
+
+# Dividindo o ds em n, um para cada técnica
+splited_df = ds %>% group_by_at(.vars = params$columns) %>% do(vals = as.data.frame(.)) %>% select(vals) %>% sapply(function(x){x})
+
+# Juntando cada uma das partes horizontalmente em um data set
+df_tec_wide = do.call("cbind", splited_df)
+
+# Renomeando duplicacao de nomes
+colnames(df_tec_wide) = make.unique(colnames(df_tec_wide))
+
+# Selecionando apenas as medidas da performance escolhida
+df_tec_wide_residual = select(df_tec_wide, matches(paste("^", params$performance, "$|", params$performance, "[^_]", sep="")))
+
+# Renomeando colunas
+new_names = NULL
+for(i in (1:length(splited_df))){
+  id = toString(sapply(splited_df[[i]][1, params$columns], as.character))
+  new_names = c(new_names, id)
+}
+colnames(df_tec_wide_residual) = new_names
+
+# Verificando a dimensao do df
+dim(df_tec_wide_residual)
+
+# Renomeando a variavel
+df = df_tec_wide_residual
+
+summary(df)
+```
+
+
+# Fazendo teste de normalidade
+```{r}
+plotDensities(data = na.omit(df))
+```
+
+
+# Testando as diferencas
+```{r}
+friedmanTest(df)
+```
+
+# Testando as diferencas par a par
+```{r}
+test <- nemenyiTest (df, alpha=0.05)
+abs(test$diff.matrix) > test$statistic
+```
+
+# Plotando grafico de Critical Diference
+
+```{r}
+result = tryCatch({
+    plotCD(df, alpha=0.05, cex = 0.35)
+}, error = function(e) {})
+```
+
+
+
+
+
