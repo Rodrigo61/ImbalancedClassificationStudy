@@ -150,7 +150,8 @@ c.get_majority_weight = function(){
     #Definimos essa razao como o custo de erro da classe majoritária.
     MAJORITY_weight = length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))  
   }else{
-    MAJORITY_weight = 1 #remove a influencia do cost learn
+    #Desabilita o class weight
+    MAJORITY_weight = 1 #remove a influencia do cost learning, uma vez que ambas as classes tem o mesmo custo.
   }
 }
 
