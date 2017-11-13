@@ -6,11 +6,14 @@ Arquivos:
 ->generate_ds_list.sh 
 É um script de execucao manual para facilitar a busca dos datasets gerados. Em geral redirecionamos a saida padrao de seu resultado para o arquivo dataset_list
 
+->dataset_list
+Lista do caminho absoluto dos datasets desbalanceados gerados. Essa lista é gerada pelo generate_ds_list.sh
+
 ->dataset_list_RECOD
-Lista do caminho absoluto dos datasets desbalanceados gerados.
+Análogo ao dataset_list, mas com o sufixo RECOD, apontando que utilizo os caminhos absolutos no RECOD
 
 ->Combination_gen.sh
-Scrip responsável por gerar todas as combinacoes de Learner X Measure X preprocessing no formato de Condor's job. A principal saida desse script é o script run_all.sh
+Script responsável por gerar todas as combinacoes de Learner X Measure X preprocessing no formato de Condor's job. A principal saida desse script é o script run_all.sh
 
 ->run_all.sh
 Script que submete para o condor todas as combinacoes geradas pelo scrip combination_gen.sh
@@ -21,12 +24,12 @@ O job "tuning" executa por vez apenas 1 Learner + 1 Measure + 1 pre-processing m
 
 
 Adicionando novas combinacoes:
-Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job prévio, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um dataset com as ferramentas atuais, ele não precisa prever quais novas ferramentas serão anexadas no 
-futuro. Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas:
+Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job prévio, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um dataset com as ferramentas atuais, ele não precisa prever quais novas ferramentas serão anexadas no futuro. 
+Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas:
 
 --> tuning.R (Obrigatório)
 Claramente toda a nova logica da nova combinacao deve ser inserida nesse arquivo. Mas nao se esqueca: 
-	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria. OBS: é bom já adiantar que essa nova coluna também deve ser inserida no template do módulo "summary_compiler"
+	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria. OBS: é bom já adiantar que essa nova coluna também deve ser inserida no template do módulo "summary_compiler".
 	* Adicionar ao arguments, tanto em sua descricao quanto no codigo propriamento dito
 	* Criar uma funcao "Select" para selecionar de forma organizada o seu argumento e tratar os possiveis erros
 	* Criar uma variavel global com o valor selecionado do argumento

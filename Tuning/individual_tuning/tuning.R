@@ -35,6 +35,7 @@ DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
+C45_STR = "classif.J48"
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
@@ -319,6 +320,8 @@ c.select_learner = function(arg){
     return(XGBOOST_STR)
   }else if(arg == "rusboost"){
     return(RUSBOOST_STR)
+  }else if(arg == "c45"){
+    return(C45_STR)
   }else{
     warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rusboost")
     stop()
