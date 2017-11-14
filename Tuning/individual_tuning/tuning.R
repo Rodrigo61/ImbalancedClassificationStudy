@@ -35,7 +35,7 @@ DEBUG = T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
-C45_STR = "classif.J48"
+C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
@@ -323,7 +323,7 @@ c.select_learner = function(arg){
   }else if(arg == "c45"){
     return(C45_STR)
   }else{
-    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rusboost")
+    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, c45 ou rusboost")
     stop()
   }
 }
@@ -411,6 +411,13 @@ c.select_search_space = function(){
     return(
       makeParamSet(
         makeDiscreteParam("learner_count", c(10,20,30,40,50,60))
+      )
+    )
+  }else if(c.learner_str == C45_STR){
+    return(
+      makeParamSet(
+        makeDiscreteParam("M", c(1:50)), #Ref [3]
+        makeNumericParam("C", lower = 0.001, upper = 0.05)
       )
     )
   }else{
@@ -562,3 +569,4 @@ c.save_tuning(measure_list = measure_list)
 
 # [1] R. Barandela, J.S. Sánchez, V. García, E. Rangel, Strategies for learning in class imbalance problems, Pattern Recognition 36 (3) (2003) 849–851
 # [2] https://github.com/mlr-org/mlr/blob/master/R/RLearner_classif_ksvm.R
+# [3] Hyper-parameter Tuning of a Decision Tree Induction Algorithm paper

@@ -36,6 +36,7 @@ Claramente toda a nova logica da nova combinacao deve ser inserida nesse arquivo
 	* Adicionar o valor da variavel global criada como coluna na funcao "c.gen_all_measures_inline"
 	  (Nao se esqueca de converter NULL -> FALSE caso seja o caso)
 	* Alterar o nome dos arquivo de saída na funcao 'c.save_tuning', caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posteriormente. IMPORTANTE: Mantenha a ordem original dos nomes, i.e, caso adicione um novo nome ele deve ser o último a ser inserido
+	* Se for um novo modelo, adicione um search space para o mesmo, dentro da funcao 'c.select_search_space'
 
 --> Combination_gen.sh (Facultativo)
 Siga a lista de obrigacoes presentes no cabecalho do arquivo para adicionar corretamente sua nova combinacao
