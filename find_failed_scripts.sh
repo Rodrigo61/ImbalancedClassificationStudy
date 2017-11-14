@@ -6,7 +6,13 @@ PATH_2_ANALYZE=$1
 
 #grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
 
-grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error'
+#grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error'
+
+
+#Erros conhecidos
+#grep -rL 'cannot allocate vector of size' $(grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error')
+
+grep -rwl $PATH_2_ANALYZE -e 'error' | grep -rvwl  -e 'cannot'
 
 
 
