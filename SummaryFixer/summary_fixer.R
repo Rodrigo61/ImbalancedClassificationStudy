@@ -72,9 +72,8 @@ fix_missing_combination = function(summary, missing_stats){
               combination_id = paste(learner, measure, technique, option, sep="_")
               update_stats(missing_stats, combination_id)
           }else if(combination_count != 3){
-            print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))
-            stop()
-          }
+            print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = ", technique, " option = ", option, " ]", sep =""))            
+         }
 
         }
       }
@@ -102,7 +101,7 @@ fix_missing_combination = function(summary, missing_stats){
         update_stats(missing_stats, combination_id)
       }else if(combination_count != 3){
         print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)]", sep =""))
-        stop()
+
       }
     }
 
@@ -115,8 +114,7 @@ fix_missing_combination = function(summary, missing_stats){
 #*******************  MAIN      *******************************#
 #**************************************************************#
 
-#SUMMARY_LIST_FILENAME = "summary_list"
-SUMMARY_LIST_FILENAME = "Dropbox/UNICAMP/IC/estudo_cost_learning/SummaryFixer/summary_list"
+SUMMARY_LIST_FILENAME = "summary_list"
 
 summary_list = as.vector(read.csv(SUMMARY_LIST_FILENAME, header = F))
 
