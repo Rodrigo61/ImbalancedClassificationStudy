@@ -1,0 +1,2066 @@
+[1] "[DEBUG]c(2, 4, 3, 1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 16, 15, 19, 20, 25, 23, 24, 21, 22, 28, 27, 29, 26, 33, 31, 32, 30, 37, 35, 36, 34, 38, 39, 40, 41, 45, 43, 44, 42, 46, 47, 48, 49, 50, 51, 52, 54, 56, 55, 53, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 74, 73, 75, 76, 77, 78, 81, 80, 79, 82, 83, 84, 85, 86, 87, 88, 89, 91, 90, 93, 94, 92, 95, 98, 99, 97, 96, 101, 103, 102, 100, 104, 108, 106, 107, 105, 112, 109, 111, 110, 113, 114, 115, 116, 118, 117, 119, 120, 122, 123, \n124, 121, 128, 126, 127, 125, 132, 131, 130, 129, 134, 135, 136, 133, 137, 138, 142, 141, 140, 139, 144, 146, 145, 143, 150, 149, 148, 147, 151, 153, 155, 154, 152, 157, 159, 158, 156, 160, 162, 163, 164, 161, 165, 166, 168, 167, 171, 172, 170, 169, 175, 176, 174, 173, 180, 179, 178, 177, 181, 182, 184, 186, 185, 183, 188, 187, 192, 191, 190, 189, 194, 193, 197, 196, 198, 195, 200, 201, 202, 199, 203, 204, 206, 208, 207, 205, 214, 216, 215, 213, 210, 212, 211, 209, 220, 219, 218, 217, 224, 222, 223, \n221, 228, 227, 226, 225)"
+[1] "[DEBUG]/home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01"
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Accuracy_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space        measure    sampling underbagging   
+ classif.ksvm:3   Mode :logical   Accuracy:3   ADASYN:3   Mode :logical  
+                  FALSE:3                                 FALSE:3        
+                  NA's :0                                 NA's :0        
+                                                                         
+                                                                         
+                                                                         
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9915   Min.   :0.9815   Min.   :0.4165           Min.   :1.0    
+ 1st Qu.:0.9917   1st Qu.:0.9816   1st Qu.:0.4180           1st Qu.:1.5    
+ Median :0.9920   Median :0.9817   Median :0.4195           Median :2.0    
+ Mean   :0.9920   Mean   :0.9819   Mean   :0.4187           Mean   :2.0    
+ 3rd Qu.:0.9923   3rd Qu.:0.9821   3rd Qu.:0.4198           3rd Qu.:2.5    
+ Max.   :0.9926   Max.   :0.9825   Max.   :0.4202           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space  measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE Accuracy   ADASYN        FALSE      0.9920000
+2 classif.ksvm        FALSE Accuracy   ADASYN        FALSE      0.9926413
+3 classif.ksvm        FALSE Accuracy   ADASYN        FALSE      0.9914857
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9825266                0.4201741               1
+2       0.9815224                0.4194620               2
+3       0.9817232                0.4164557               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Accuracy_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space        measure   sampling       underbagging   
+ classif.ksvm:3   Mode :logical   Accuracy:3   Mode :logical   Mode :logical  
+                  FALSE:3                      FALSE:3         FALSE:3        
+                  NA's :0                      NA's :0         NA's :0        
+                                                                              
+                                                                              
+                                                                              
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9882   Min.   :0.9884   Min.   :0.3985           Min.   :1.0    
+ 1st Qu.:0.9884   1st Qu.:0.9887   1st Qu.:0.3987           1st Qu.:1.5    
+ Median :0.9887   Median :0.9890   Median :0.3988           Median :2.0    
+ Mean   :0.9891   Mean   :0.9893   Mean   :0.4313           Mean   :2.0    
+ 3rd Qu.:0.9896   3rd Qu.:0.9898   3rd Qu.:0.4477           3rd Qu.:2.5    
+ Max.   :0.9905   Max.   :0.9906   Max.   :0.4966           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space  measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE Accuracy    FALSE        FALSE      0.9886552
+2 classif.ksvm        FALSE Accuracy    FALSE        FALSE      0.9905127
+3 classif.ksvm        FALSE Accuracy    FALSE        FALSE      0.9881532
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9883511                0.3984968               1
+2       0.9905604                0.4965981               2
+3       0.9889536                0.3988133               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Accuracy_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space        measure   sampling       underbagging  
+ classif.ksvm:3   Mode :logical   Accuracy:3   Mode :logical   Mode:logical  
+                  FALSE:3                      FALSE:3         TRUE:3        
+                  NA's :0                      NA's :0         NA's:0        
+                                                                             
+                                                                             
+                                                                             
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.8569   Min.   :0.8600   Min.   :0.5547           Min.   :1.0    
+ 1st Qu.:0.8759   1st Qu.:0.8748   1st Qu.:0.5612           1st Qu.:1.5    
+ Median :0.8949   Median :0.8895   Median :0.5677           Median :2.0    
+ Mean   :0.8834   Mean   :0.8815   Mean   :0.5875           Mean   :2.0    
+ 3rd Qu.:0.8966   3rd Qu.:0.8922   3rd Qu.:0.6039           3rd Qu.:2.5    
+ Max.   :0.8983   Max.   :0.8950   Max.   :0.6400           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space  measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE Accuracy    FALSE         TRUE      0.8569346
+2 classif.ksvm        FALSE Accuracy    FALSE         TRUE      0.8948841
+3 classif.ksvm        FALSE Accuracy    FALSE         TRUE      0.8982986
+  holdout_measure holdout_measure_residual iteration_count
+1       0.8600121                0.6400316               1
+2       0.8895361                0.5677215               2
+3       0.8949588                0.5546677               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Accuracy_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space        measure   sampling underbagging   
+ classif.ksvm:3   Mode :logical   Accuracy:3   SMOTE:3   Mode :logical  
+                  FALSE:3                                FALSE:3        
+                  NA's :0                                NA's :0        
+                                                                        
+                                                                        
+                                                                        
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9928   Min.   :0.9807   Min.   :0.4169           Min.   :1.0    
+ 1st Qu.:0.9929   1st Qu.:0.9816   1st Qu.:0.4180           1st Qu.:1.5    
+ Median :0.9930   Median :0.9825   Median :0.4191           Median :2.0    
+ Mean   :0.9930   Mean   :0.9823   Mean   :0.4211           Mean   :2.0    
+ 3rd Qu.:0.9932   3rd Qu.:0.9830   3rd Qu.:0.4233           3rd Qu.:2.5    
+ Max.   :0.9934   Max.   :0.9835   Max.   :0.4275           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space  measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE Accuracy    SMOTE        FALSE      0.9928283
+2 classif.ksvm        FALSE Accuracy    SMOTE        FALSE      0.9933623
+3 classif.ksvm        FALSE Accuracy    SMOTE        FALSE      0.9929554
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9835308                0.4168513               1
+2       0.9807190                0.4274525               2
+3       0.9825266                0.4190665               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Accuracy_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space       measure   sampling       underbagging   
+ classif.ksvm:3   Mode:logical   Accuracy:3   Mode :logical   Mode :logical  
+                  TRUE:3                      FALSE:3         FALSE:3        
+                  NA's:0                      NA's :0         NA's :0        
+                                                                             
+                                                                             
+                                                                             
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9891   Min.   :0.9892   Min.   :0.3955           Min.   :1.0    
+ 1st Qu.:0.9895   1st Qu.:0.9897   1st Qu.:0.3956           1st Qu.:1.5    
+ Median :0.9900   Median :0.9902   Median :0.3956           Median :2.0    
+ Mean   :0.9897   Mean   :0.9898   Mean   :0.3965           Mean   :2.0    
+ 3rd Qu.:0.9900   3rd Qu.:0.9902   3rd Qu.:0.3970           3rd Qu.:2.5    
+ Max.   :0.9900   Max.   :0.9902   Max.   :0.3983           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space  measure sampling underbagging tuning_measure
+1 classif.ksvm         TRUE Accuracy    FALSE        FALSE      0.9890568
+2 classif.ksvm         TRUE Accuracy    FALSE        FALSE      0.9899603
+3 classif.ksvm         TRUE Accuracy    FALSE        FALSE      0.9899604
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9891544                0.3983386               1
+2       0.9901587                0.3954905               2
+3       0.9901587                0.3956487               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Area_under_the_curve_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                    measure   sampling      
+ classif.ksvm:3   Mode :logical   Area under the curve:3   Mode :logical  
+                  FALSE:3                                  FALSE:3        
+                  NA's :0                                  NA's :0        
+                                                                          
+                                                                          
+                                                                          
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.5060   Min.   :0.3963   Min.   :0.3706          
+ FALSE:3         1st Qu.:0.5761   1st Qu.:0.4067   1st Qu.:0.3719          
+ NA's :0         Median :0.6462   Median :0.4171   Median :0.3732          
+                 Mean   :0.6023   Mean   :0.4917   Mean   :0.4549          
+                 3rd Qu.:0.6504   3rd Qu.:0.5394   3rd Qu.:0.4971          
+                 Max.   :0.6546   Max.   :0.6616   Max.   :0.6210          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space              measure sampling underbagging
+1 classif.ksvm        FALSE Area under the curve    FALSE        FALSE
+2 classif.ksvm        FALSE Area under the curve    FALSE        FALSE
+3 classif.ksvm        FALSE Area under the curve    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.5060138       0.4171358                0.3732447               1
+2      0.6545720       0.6615805                0.6209750               2
+3      0.6462426       0.3963137                0.3705532               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Area_under_the_curve_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                    measure   sampling      
+ classif.ksvm:3   Mode :logical   Area under the curve:3   Mode :logical  
+                  FALSE:3                                  FALSE:3        
+                  NA's :0                                  NA's :0        
+                                                                          
+                                                                          
+                                                                          
+ underbagging   tuning_measure   holdout_measure  holdout_measure_residual
+ Mode:logical   Min.   :0.7535   Min.   :0.7286   Min.   :0.7205          
+ TRUE:3         1st Qu.:0.7798   1st Qu.:0.7928   1st Qu.:0.7677          
+ NA's:0         Median :0.8061   Median :0.8571   Median :0.8149          
+                Mean   :0.8042   Mean   :0.8179   Mean   :0.7943          
+                3rd Qu.:0.8295   3rd Qu.:0.8626   3rd Qu.:0.8312          
+                Max.   :0.8528   Max.   :0.8680   Max.   :0.8476          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space              measure sampling underbagging
+1 classif.ksvm        FALSE Area under the curve    FALSE         TRUE
+2 classif.ksvm        FALSE Area under the curve    FALSE         TRUE
+3 classif.ksvm        FALSE Area under the curve    FALSE         TRUE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.7534990       0.7285507                0.7205017               1
+2      0.8061477       0.8571035                0.8149244               2
+3      0.8528278       0.8680196                0.8475557               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Area_under_the_curve_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                    measure   sampling
+ classif.ksvm:3   Mode :logical   Area under the curve:3   SMOTE:3  
+                  FALSE:3                                           
+                  NA's :0                                           
+                                                                    
+                                                                    
+                                                                    
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9968   Min.   :0.5271   Min.   :0.6201          
+ FALSE:3         1st Qu.:0.9972   1st Qu.:0.5723   1st Qu.:0.6223          
+ NA's :0         Median :0.9977   Median :0.6175   Median :0.6244          
+                 Mean   :0.9974   Mean   :0.6075   Mean   :0.6257          
+                 3rd Qu.:0.9978   3rd Qu.:0.6476   3rd Qu.:0.6286          
+                 Max.   :0.9979   Max.   :0.6778   Max.   :0.6327          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space              measure sampling underbagging
+1 classif.ksvm        FALSE Area under the curve    SMOTE        FALSE
+2 classif.ksvm        FALSE Area under the curve    SMOTE        FALSE
+3 classif.ksvm        FALSE Area under the curve    SMOTE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9976556       0.5270729                0.6200767               1
+2      0.9978798       0.6777621                0.6244466               2
+3      0.9967558       0.6175187                0.6326872               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Area_under_the_curve_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                   measure   sampling      
+ classif.ksvm:3   Mode:logical   Area under the curve:3   Mode :logical  
+                  TRUE:3                                  FALSE:3        
+                  NA's:0                                  NA's :0        
+                                                                         
+                                                                         
+                                                                         
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.6156   Min.   :0.3946   Min.   :0.3701          
+ FALSE:3         1st Qu.:0.6299   1st Qu.:0.4886   1st Qu.:0.4919          
+ NA's :0         Median :0.6442   Median :0.5826   Median :0.6138          
+                 Mean   :0.6355   Mean   :0.5548   Mean   :0.5371          
+                 3rd Qu.:0.6455   3rd Qu.:0.6348   3rd Qu.:0.6207          
+                 Max.   :0.6467   Max.   :0.6871   Max.   :0.6275          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space              measure sampling underbagging
+1 classif.ksvm         TRUE Area under the curve    FALSE        FALSE
+2 classif.ksvm         TRUE Area under the curve    FALSE        FALSE
+3 classif.ksvm         TRUE Area under the curve    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.6441909       0.5826158                0.6275364               1
+2      0.6156108       0.6870679                0.6137803               2
+3      0.6467126       0.3946206                0.3700628               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_F1_measure_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space          measure    sampling underbagging   
+ classif.ksvm:3   Mode :logical   F1 measure:3   ADASYN:3   Mode :logical  
+                  FALSE:3                                   FALSE:3        
+                  NA's :0                                   NA's :0        
+                                                                           
+                                                                           
+                                                                           
+ tuning_measure   holdout_measure holdout_measure_residual iteration_count
+ Min.   :0.9915   Min.   :0       Min.   :0.07731          Min.   :1.0    
+ 1st Qu.:0.9918   1st Qu.:0       1st Qu.:0.08197          1st Qu.:1.5    
+ Median :0.9920   Median :0       Median :0.08663          Median :2.0    
+ Mean   :0.9921   Mean   :0       Mean   :0.08378          Mean   :2.0    
+ 3rd Qu.:0.9923   3rd Qu.:0       3rd Qu.:0.08702          3rd Qu.:2.5    
+ Max.   :0.9927   Max.   :0       Max.   :0.08741          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space    measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE F1 measure   ADASYN        FALSE      0.9920284
+2 classif.ksvm        FALSE F1 measure   ADASYN        FALSE      0.9926509
+3 classif.ksvm        FALSE F1 measure   ADASYN        FALSE      0.9914940
+  holdout_measure holdout_measure_residual iteration_count
+1               0               0.08741128               1
+2               0               0.08663181               2
+3               0               0.07730798               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_F1_measure_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space          measure   sampling      
+ classif.ksvm:3   Mode :logical   F1 measure:3   Mode :logical  
+                  FALSE:3                        FALSE:3        
+                  NA's :0                        NA's :0        
+                                                                
+                                                                
+                                                                
+ underbagging    tuning_measure     holdout_measure   holdout_measure_residual
+ Mode :logical   Min.   :0.008333   Min.   :0.00000   Min.   :0.02579         
+ FALSE:3         1st Qu.:0.013205   1st Qu.:0.00000   1st Qu.:0.04080         
+ NA's :0         Median :0.018078   Median :0.00000   Median :0.05581         
+                 Mean   :0.037451   Mean   :0.01887   Mean   :0.07720         
+                 3rd Qu.:0.052010   3rd Qu.:0.02830   3rd Qu.:0.10290         
+                 Max.   :0.085943   Max.   :0.05660   Max.   :0.15000         
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space    measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE F1 measure    FALSE        FALSE    0.018077601
+2 classif.ksvm        FALSE F1 measure    FALSE        FALSE    0.008333333
+3 classif.ksvm        FALSE F1 measure    FALSE        FALSE    0.085943296
+  holdout_measure holdout_measure_residual iteration_count
+1      0.00000000               0.05580923               1
+2      0.00000000               0.02578649               2
+3      0.05660377               0.15000000               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_F1_measure_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space          measure   sampling       underbagging  
+ classif.ksvm:3   Mode :logical   F1 measure:3   Mode :logical   Mode:logical  
+                  FALSE:3                        FALSE:3         TRUE:3        
+                  NA's :0                        NA's :0         NA's:0        
+                                                                               
+                                                                               
+                                                                               
+ tuning_measure    holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.05852   Min.   :0.05365   Min.   :0.5241           Min.   :1.0    
+ 1st Qu.:0.05921   1st Qu.:0.05853   1st Qu.:0.5398           1st Qu.:1.5    
+ Median :0.05990   Median :0.06341   Median :0.5555           Median :2.0    
+ Mean   :0.06038   Mean   :0.06801   Mean   :0.5683           Mean   :2.0    
+ 3rd Qu.:0.06130   3rd Qu.:0.07518   3rd Qu.:0.5904           3rd Qu.:2.5    
+ Max.   :0.06271   Max.   :0.08696   Max.   :0.6252           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space    measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE F1 measure    FALSE         TRUE     0.05990112
+2 classif.ksvm        FALSE F1 measure    FALSE         TRUE     0.05852199
+3 classif.ksvm        FALSE F1 measure    FALSE         TRUE     0.06270520
+  holdout_measure holdout_measure_residual iteration_count
+1      0.06340819                0.6252062               1
+2      0.08695652                0.5240969               2
+3      0.05365127                0.5555264               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_F1_measure_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space          measure   sampling underbagging   
+ classif.ksvm:3   Mode :logical   F1 measure:3   SMOTE:3   Mode :logical  
+                  FALSE:3                                  FALSE:3        
+                  NA's :0                                  NA's :0        
+                                                                          
+                                                                          
+                                                                          
+ tuning_measure   holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.9928   Min.   :0.00000   Min.   :0.07620          Min.   :1.0    
+ 1st Qu.:0.9929   1st Qu.:0.01020   1st Qu.:0.08048          1st Qu.:1.5    
+ Median :0.9929   Median :0.02041   Median :0.08476          Median :2.0    
+ Mean   :0.9930   Mean   :0.02145   Mean   :0.09096          Mean   :2.0    
+ 3rd Qu.:0.9932   3rd Qu.:0.03218   3rd Qu.:0.09834          3rd Qu.:2.5    
+ Max.   :0.9934   Max.   :0.04396   Max.   :0.11192          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space    measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE F1 measure    SMOTE        FALSE      0.9928184
+2 classif.ksvm        FALSE F1 measure    SMOTE        FALSE      0.9933763
+3 classif.ksvm        FALSE F1 measure    SMOTE        FALSE      0.9929482
+  holdout_measure holdout_measure_residual iteration_count
+1      0.00000000               0.07620003               1
+2      0.02040816               0.11191557               2
+3      0.04395604               0.08475633               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_F1_measure_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space         measure   sampling       underbagging   
+ classif.ksvm:3   Mode:logical   F1 measure:3   Mode :logical   Mode :logical  
+                  TRUE:3                        FALSE:3         FALSE:3        
+                  NA's:0                        NA's :0         NA's :0        
+                                                                               
+                                                                               
+                                                                               
+ tuning_measure     holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.007937   Min.   :0.00000   Min.   :0.02934          Min.   :1.0    
+ 1st Qu.:0.019832   1st Qu.:0.00000   1st Qu.:0.04626          1st Qu.:1.5    
+ Median :0.031727   Median :0.00000   Median :0.06318          Median :2.0    
+ Mean   :0.048525   Mean   :0.01626   Mean   :0.08453          Mean   :2.0    
+ 3rd Qu.:0.068820   3rd Qu.:0.02439   3rd Qu.:0.11213          3rd Qu.:2.5    
+ Max.   :0.105912   Max.   :0.04878   Max.   :0.16107          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space    measure sampling underbagging tuning_measure
+1 classif.ksvm         TRUE F1 measure    FALSE        FALSE    0.031726923
+2 classif.ksvm         TRUE F1 measure    FALSE        FALSE    0.007936508
+3 classif.ksvm         TRUE F1 measure    FALSE        FALSE    0.105912288
+  holdout_measure holdout_measure_residual iteration_count
+1      0.00000000               0.06317918               1
+2      0.00000000               0.02933608               2
+3      0.04878049               0.16107383               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_G-mean_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space      measure    sampling underbagging   
+ classif.ksvm:3   Mode :logical   G-mean:3   ADASYN:3   Mode :logical  
+                  FALSE:3                               FALSE:3        
+                  NA's :0                               NA's :0        
+                                                                       
+                                                                       
+                                                                       
+ tuning_measure   holdout_measure holdout_measure_residual iteration_count
+ Min.   :0.9915   Min.   :0       Min.   :0.2002           Min.   :1.0    
+ 1st Qu.:0.9917   1st Qu.:0       1st Qu.:0.2063           1st Qu.:1.5    
+ Median :0.9920   Median :0       Median :0.2124           Median :2.0    
+ Mean   :0.9920   Mean   :0       Mean   :0.2087           Mean   :2.0    
+ 3rd Qu.:0.9923   3rd Qu.:0       3rd Qu.:0.2130           3rd Qu.:2.5    
+ Max.   :0.9926   Max.   :0       Max.   :0.2135           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE  G-mean   ADASYN        FALSE      0.9919936
+2 classif.ksvm        FALSE  G-mean   ADASYN        FALSE      0.9926407
+3 classif.ksvm        FALSE  G-mean   ADASYN        FALSE      0.9914840
+  holdout_measure holdout_measure_residual iteration_count
+1               0                0.2134901               1
+2               0                0.2124472               2
+3               0                0.2002094               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_G-mean_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space      measure   sampling       underbagging   
+ classif.ksvm:3   Mode :logical   G-mean:3   Mode :logical   Mode :logical  
+                  FALSE:3                    FALSE:3         FALSE:3        
+                  NA's :0                    NA's :0         NA's :0        
+                                                                            
+                                                                            
+                                                                            
+ tuning_measure    holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.04069   Min.   :0.00000   Min.   :0.1142           Min.   :1.0    
+ 1st Qu.:0.06956   1st Qu.:0.00000   1st Qu.:0.1418           1st Qu.:1.5    
+ Median :0.09843   Median :0.00000   Median :0.1693           Median :2.0    
+ Mean   :0.14845   Mean   :0.08203   Mean   :0.1892           Mean   :2.0    
+ 3rd Qu.:0.20233   3rd Qu.:0.12304   3rd Qu.:0.2267           3rd Qu.:2.5    
+ Max.   :0.30624   Max.   :0.24608   Max.   :0.2842           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE  G-mean    FALSE        FALSE     0.09843042
+2 classif.ksvm        FALSE  G-mean    FALSE        FALSE     0.04068596
+3 classif.ksvm        FALSE  G-mean    FALSE        FALSE     0.30623718
+  holdout_measure holdout_measure_residual iteration_count
+1        0.000000                0.1692914               1
+2        0.000000                0.1142279               2
+3        0.246077                0.2841940               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_G-mean_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space      measure   sampling       underbagging  
+ classif.ksvm:3   Mode :logical   G-mean:3   Mode :logical   Mode:logical  
+                  FALSE:3                    FALSE:3         TRUE:3        
+                  NA's :0                    NA's :0         NA's:0        
+                                                                           
+                                                                           
+                                                                           
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.5707   Min.   :0.6495   Min.   :0.5820           Min.   :1.0    
+ 1st Qu.:0.5981   1st Qu.:0.6748   1st Qu.:0.6178           1st Qu.:1.5    
+ Median :0.6255   Median :0.7001   Median :0.6536           Median :2.0    
+ Mean   :0.6354   Mean   :0.6876   Mean   :0.6578           Mean   :2.0    
+ 3rd Qu.:0.6678   3rd Qu.:0.7066   3rd Qu.:0.6957           3rd Qu.:2.5    
+ Max.   :0.7100   Max.   :0.7131   Max.   :0.7377           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE  G-mean    FALSE         TRUE      0.6255206
+2 classif.ksvm        FALSE  G-mean    FALSE         TRUE      0.5707240
+3 classif.ksvm        FALSE  G-mean    FALSE         TRUE      0.7099998
+  holdout_measure holdout_measure_residual iteration_count
+1       0.6494925                0.6536420               1
+2       0.7000760                0.5820196               2
+3       0.7131199                0.7377454               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_G-mean_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space      measure   sampling underbagging   
+ classif.ksvm:3   Mode :logical   G-mean:3   SMOTE:3   Mode :logical  
+                  FALSE:3                              FALSE:3        
+                  NA's :0                              NA's :0        
+                                                                      
+                                                                      
+                                                                      
+ tuning_measure   holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.9928   Min.   :0.00000   Min.   :0.1988           Min.   :1.0    
+ 1st Qu.:0.9929   1st Qu.:0.07108   1st Qu.:0.2044           1st Qu.:1.5    
+ Median :0.9930   Median :0.14216   Median :0.2101           Median :2.0    
+ Mean   :0.9931   Mean   :0.11446   Mean   :0.2173           Mean   :2.0    
+ 3rd Qu.:0.9932   3rd Qu.:0.17168   3rd Qu.:0.2265           3rd Qu.:2.5    
+ Max.   :0.9934   Max.   :0.20121   Max.   :0.2430           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space measure sampling underbagging tuning_measure
+1 classif.ksvm        FALSE  G-mean    SMOTE        FALSE      0.9928320
+2 classif.ksvm        FALSE  G-mean    SMOTE        FALSE      0.9933647
+3 classif.ksvm        FALSE  G-mean    SMOTE        FALSE      0.9929596
+  holdout_measure holdout_measure_residual iteration_count
+1       0.0000000                0.1987832               1
+2       0.1421600                0.2430170               2
+3       0.2012092                0.2100546               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_G-mean_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space     measure   sampling       underbagging   
+ classif.ksvm:3   Mode:logical   G-mean:3   Mode :logical   Mode :logical  
+                  TRUE:3                    FALSE:3         FALSE:3        
+                  NA's:0                    NA's :0         NA's :0        
+                                                                           
+                                                                           
+                                                                           
+ tuning_measure    holdout_measure   holdout_measure_residual iteration_count
+ Min.   :0.04067   Min.   :0.00000   Min.   :0.1219           Min.   :1.0    
+ 1st Qu.:0.09639   1st Qu.:0.00000   1st Qu.:0.1512           1st Qu.:1.5    
+ Median :0.15210   Median :0.00000   Median :0.1805           Median :2.0    
+ Mean   :0.16615   Mean   :0.06713   Mean   :0.1993           Mean   :2.0    
+ 3rd Qu.:0.22888   3rd Qu.:0.10070   3rd Qu.:0.2381           3rd Qu.:2.5    
+ Max.   :0.30566   Max.   :0.20139   Max.   :0.2956           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space measure sampling underbagging tuning_measure
+1 classif.ksvm         TRUE  G-mean    FALSE        FALSE     0.15210208
+2 classif.ksvm         TRUE  G-mean    FALSE        FALSE     0.04067355
+3 classif.ksvm         TRUE  G-mean    FALSE        FALSE     0.30565971
+  holdout_measure holdout_measure_residual iteration_count
+1       0.0000000                0.1804652               1
+2       0.0000000                0.1219376               2
+3       0.2013943                0.2956370               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Matthews_correlation_coefficient_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                                measure 
+ classif.ksvm:3   Mode :logical   Matthews correlation coefficient:3  
+                  FALSE:3                                             
+                  NA's :0                                             
+                                                                      
+                                                                      
+                                                                      
+   sampling underbagging    tuning_measure   holdout_measure    
+ ADASYN:3   Mode :logical   Min.   :0.9830   Min.   :-0.009305  
+            FALSE:3         1st Qu.:0.9835   1st Qu.:-0.009250  
+            NA's :0         Median :0.9840   Median :-0.009195  
+                            Mean   :0.9841   Mean   :-0.009081  
+                            3rd Qu.:0.9847   3rd Qu.:-0.008969  
+                            Max.   :0.9853   Max.   :-0.008743  
+ holdout_measure_residual iteration_count
+ Min.   :0.09389          Min.   :1.0    
+ 1st Qu.:0.09842          1st Qu.:1.5    
+ Median :0.10294          Median :2.0    
+ Mean   :0.10155          Mean   :2.0    
+ 3rd Qu.:0.10539          3rd Qu.:2.5    
+ Max.   :0.10783          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space                          measure sampling
+1 classif.ksvm        FALSE Matthews correlation coefficient   ADASYN
+2 classif.ksvm        FALSE Matthews correlation coefficient   ADASYN
+3 classif.ksvm        FALSE Matthews correlation coefficient   ADASYN
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9840119    -0.008742969               0.10782965
+2        FALSE      0.9852923    -0.009305104               0.10294318
+3        FALSE      0.9829771    -0.009195337               0.09388907
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Matthews_correlation_coefficient_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                                measure 
+ classif.ksvm:3   Mode :logical   Matthews correlation coefficient:3  
+                  FALSE:3                                             
+                  NA's :0                                             
+                                                                      
+                                                                      
+                                                                      
+  sampling       underbagging    tuning_measure     holdout_measure    
+ Mode :logical   Mode :logical   Min.   :0.007022   Min.   :-0.006792  
+ FALSE:3         FALSE:3         1st Qu.:0.008855   1st Qu.:-0.006043  
+ NA's :0         NA's :0         Median :0.010688   Median :-0.005294  
+                                 Mean   :0.031306   Mean   : 0.011521  
+                                 3rd Qu.:0.043448   3rd Qu.: 0.020677  
+                                 Max.   :0.076208   Max.   : 0.046648  
+ holdout_measure_residual iteration_count
+ Min.   :0.05194          Min.   :1.0    
+ 1st Qu.:0.06904          1st Qu.:1.5    
+ Median :0.08614          Median :2.0    
+ Mean   :0.09711          Mean   :2.0    
+ 3rd Qu.:0.11969          3rd Qu.:2.5    
+ Max.   :0.15325          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space                          measure sampling
+1 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+2 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+3 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE    0.010687550    -0.006791612               0.08614127
+2        FALSE    0.007021705    -0.005293939               0.05194307
+3        FALSE    0.076207507     0.046647892               0.15324526
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Matthews_correlation_coefficient_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                                measure 
+ classif.ksvm:3   Mode :logical   Matthews correlation coefficient:3  
+                  FALSE:3                                             
+                  NA's :0                                             
+                                                                      
+                                                                      
+                                                                      
+  sampling       underbagging   tuning_measure    holdout_measure  
+ Mode :logical   Mode:logical   Min.   :0.07939   Min.   :0.09922  
+ FALSE:3         TRUE:3         1st Qu.:0.08471   1st Qu.:0.10060  
+ NA's :0         NA's:0         Median :0.09004   Median :0.10198  
+                                Mean   :0.09124   Mean   :0.11252  
+                                3rd Qu.:0.09717   3rd Qu.:0.11917  
+                                Max.   :0.10430   Max.   :0.13635  
+ holdout_measure_residual iteration_count
+ Min.   :0.2966           Min.   :1.0    
+ 1st Qu.:0.3309           1st Qu.:1.5    
+ Median :0.3653           Median :2.0    
+ Mean   :0.3763           Mean   :2.0    
+ 3rd Qu.:0.4162           3rd Qu.:2.5    
+ Max.   :0.4672           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space                          measure sampling
+1 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+2 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+3 classif.ksvm        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1         TRUE     0.09003554      0.09922324                0.3652566
+2         TRUE     0.07939290      0.13635498                0.2966225
+3         TRUE     0.10430098      0.10197849                0.4671604
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Matthews_correlation_coefficient_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                                measure 
+ classif.ksvm:3   Mode :logical   Matthews correlation coefficient:3  
+                  FALSE:3                                             
+                  NA's :0                                             
+                                                                      
+                                                                      
+                                                                      
+  sampling underbagging    tuning_measure   holdout_measure    
+ SMOTE:3   Mode :logical   Min.   :0.9857   Min.   :-0.008143  
+           FALSE:3         1st Qu.:0.9858   1st Qu.: 0.001264  
+           NA's :0         Median :0.9859   Median : 0.010672  
+                           Mean   :0.9861   Mean   : 0.012609  
+                           3rd Qu.:0.9863   3rd Qu.: 0.022985  
+                           Max.   :0.9868   Max.   : 0.035298  
+ holdout_measure_residual iteration_count
+ Min.   :0.09997          Min.   :1.0    
+ 1st Qu.:0.10153          1st Qu.:1.5    
+ Median :0.10309          Median :2.0    
+ Mean   :0.10858          Mean   :2.0    
+ 3rd Qu.:0.11288          3rd Qu.:2.5    
+ Max.   :0.12267          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space                          measure sampling
+1 classif.ksvm        FALSE Matthews correlation coefficient    SMOTE
+2 classif.ksvm        FALSE Matthews correlation coefficient    SMOTE
+3 classif.ksvm        FALSE Matthews correlation coefficient    SMOTE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9856623    -0.008143376               0.09997097
+2        FALSE      0.9867778     0.010671855               0.12267436
+3        FALSE      0.9859192     0.035297942               0.10309167
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.ksvm_Matthews_correlation_coefficient_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+         learner  weight_space                               measure 
+ classif.ksvm:3   Mode:logical   Matthews correlation coefficient:3  
+                  TRUE:3                                             
+                  NA's:0                                             
+                                                                     
+                                                                     
+                                                                     
+  sampling       underbagging    tuning_measure     holdout_measure    
+ Mode :logical   Mode :logical   Min.   :0.005099   Min.   :-0.006792  
+ FALSE:3         FALSE:3         1st Qu.:0.015547   1st Qu.:-0.006226  
+ NA's :0         NA's :0         Median :0.025996   Median :-0.005661  
+                                 Mean   :0.043298   Mean   : 0.009851  
+                                 3rd Qu.:0.062397   3rd Qu.: 0.018173  
+                                 Max.   :0.098799   Max.   : 0.042006  
+ holdout_measure_residual iteration_count
+ Min.   :0.05561          Min.   :1.0    
+ 1st Qu.:0.07509          1st Qu.:1.5    
+ Median :0.09458          Median :2.0    
+ Mean   :0.10820          Mean   :2.0    
+ 3rd Qu.:0.13449          3rd Qu.:2.5    
+ Max.   :0.17440          Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+       learner weight_space                          measure sampling
+1 classif.ksvm         TRUE Matthews correlation coefficient    FALSE
+2 classif.ksvm         TRUE Matthews correlation coefficient    FALSE
+3 classif.ksvm         TRUE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE     0.02599564    -0.006791612               0.09457513
+2        FALSE     0.00509879    -0.005660600               0.05561324
+3        FALSE     0.09879921     0.042006123               0.17440324
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Accuracy_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space        measure    sampling
+ classif.randomForest:3   Mode :logical   Accuracy:3   ADASYN:3  
+                          FALSE:3                                
+                          NA's :0                                
+                                                                 
+                                                                 
+                                                                 
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9913   Min.   :0.9831   Min.   :0.4535          
+ FALSE:3         1st Qu.:0.9917   1st Qu.:0.9838   1st Qu.:0.4583          
+ NA's :0         Median :0.9922   Median :0.9845   Median :0.4631          
+                 Mean   :0.9922   Mean   :0.9841   Mean   :0.4627          
+                 3rd Qu.:0.9926   3rd Qu.:0.9846   3rd Qu.:0.4673          
+                 Max.   :0.9930   Max.   :0.9847   Max.   :0.4715          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space  measure sampling underbagging
+1 classif.randomForest        FALSE Accuracy   ADASYN        FALSE
+2 classif.randomForest        FALSE Accuracy   ADASYN        FALSE
+3 classif.randomForest        FALSE Accuracy   ADASYN        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9921519       0.9847359                0.4534810               1
+2      0.9930118       0.9845350                0.4715190               2
+3      0.9912931       0.9831291                0.4631329               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Accuracy_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space        measure   sampling      
+ classif.randomForest:3   Mode :logical   Accuracy:3   Mode :logical  
+                          FALSE:3                      FALSE:3        
+                          NA's :0                      NA's :0        
+                                                                      
+                                                                      
+                                                                      
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9912   Min.   :0.9910   Min.   :0.5184          
+ FALSE:3         1st Qu.:0.9912   1st Qu.:0.9910   1st Qu.:0.5231          
+ NA's :0         Median :0.9912   Median :0.9910   Median :0.5278          
+                 Mean   :0.9913   Mean   :0.9913   Mean   :0.5261          
+                 3rd Qu.:0.9914   3rd Qu.:0.9915   3rd Qu.:0.5299          
+                 Max.   :0.9916   Max.   :0.9920   Max.   :0.5320          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space  measure sampling underbagging
+1 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+2 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+3 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9911652       0.9919663                0.5320411               1
+2      0.9912153       0.9909620                0.5277690               2
+3      0.9915667       0.9909620                0.5184335               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Accuracy_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space        measure   sampling      
+ classif.randomForest:3   Mode :logical   Accuracy:3   Mode :logical  
+                          FALSE:3                      FALSE:3        
+                          NA's :0                      NA's :0        
+                                                                      
+                                                                      
+                                                                      
+ ruspool        tuning_measure   holdout_measure  holdout_measure_residual
+ Mode:logical   Min.   :0.7730   Min.   :0.7734   Min.   :0.8187          
+ TRUE:3         1st Qu.:0.7816   1st Qu.:0.7792   1st Qu.:0.8201          
+ NA's:0         Median :0.7902   Median :0.7849   Median :0.8214          
+                Mean   :0.7849   Mean   :0.7864   Mean   :0.8212          
+                3rd Qu.:0.7908   3rd Qu.:0.7929   3rd Qu.:0.8224          
+                Max.   :0.7914   Max.   :0.8010   Max.   :0.8234          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space  measure sampling underbagging
+1 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+2 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+3 classif.randomForest        FALSE Accuracy    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.7914261       0.7848966                0.8187500               1
+2      0.7902210       0.8009640                0.8214399               2
+3      0.7730037       0.7734485                0.8234177               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Accuracy_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space       measure   sampling      
+ classif.randomForest:3   Mode:logical   Accuracy:3   Mode :logical  
+                          TRUE:3                      FALSE:3        
+                          NA's:0                      NA's :0        
+                                                                     
+                                                                     
+                                                                     
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9911   Min.   :0.9912   Min.   :0.5108          
+ FALSE:3         1st Qu.:0.9912   1st Qu.:0.9914   1st Qu.:0.5189          
+ NA's :0         Median :0.9913   Median :0.9916   Median :0.5270          
+                 Mean   :0.9914   Mean   :0.9914   Mean   :0.5251          
+                 3rd Qu.:0.9915   3rd Qu.:0.9916   3rd Qu.:0.5323          
+                 Max.   :0.9917   Max.   :0.9916   Max.   :0.5377          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space  measure sampling underbagging
+1 classif.randomForest         TRUE Accuracy    FALSE        FALSE
+2 classif.randomForest         TRUE Accuracy    FALSE        FALSE
+3 classif.randomForest         TRUE Accuracy    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9911150       0.9915646                0.5376582               1
+2      0.9912655       0.9915646                0.5107595               2
+3      0.9917173       0.9911629                0.5269778               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Area_under_the_curve_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                    measure    sampling
+ classif.randomForest:3   Mode :logical   Area under the curve:3   ADASYN:3  
+                          FALSE:3                                            
+                          NA's :0                                            
+                                                                             
+                                                                             
+                                                                             
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9995   Min.   :0.8537   Min.   :0.8627          
+ FALSE:3         1st Qu.:0.9996   1st Qu.:0.8693   1st Qu.:0.8641          
+ NA's :0         Median :0.9996   Median :0.8850   Median :0.8655          
+                 Mean   :0.9996   Mean   :0.8761   Mean   :0.8662          
+                 3rd Qu.:0.9996   3rd Qu.:0.8873   3rd Qu.:0.8679          
+                 Max.   :0.9996   Max.   :0.8895   Max.   :0.8703          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space              measure sampling underbagging
+1 classif.randomForest        FALSE Area under the curve   ADASYN        FALSE
+2 classif.randomForest        FALSE Area under the curve   ADASYN        FALSE
+3 classif.randomForest        FALSE Area under the curve   ADASYN        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9996362       0.8536594                0.8627136               1
+2      0.9996202       0.8850023                0.8655181               2
+3      0.9995029       0.8895041                0.8702945               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Area_under_the_curve_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                    measure 
+ classif.randomForest:3   Mode :logical   Area under the curve:3  
+                          FALSE:3                                 
+                          NA's :0                                 
+                                                                  
+                                                                  
+                                                                  
+  sampling       underbagging    tuning_measure   holdout_measure 
+ Mode :logical   Mode :logical   Min.   :0.8609   Min.   :0.8495  
+ FALSE:3         FALSE:3         1st Qu.:0.8609   1st Qu.:0.8751  
+ NA's :0         NA's :0         Median :0.8610   Median :0.9007  
+                                 Mean   :0.8633   Mean   :0.8886  
+                                 3rd Qu.:0.8644   3rd Qu.:0.9082  
+                                 Max.   :0.8679   Max.   :0.9156  
+ holdout_measure_residual iteration_count
+ Min.   :0.8588           Min.   :1.0    
+ 1st Qu.:0.8595           1st Qu.:1.5    
+ Median :0.8603           Median :2.0    
+ Mean   :0.8602           Mean   :2.0    
+ 3rd Qu.:0.8608           3rd Qu.:2.5    
+ Max.   :0.8614           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space              measure sampling underbagging
+1 classif.randomForest        FALSE Area under the curve    FALSE        FALSE
+2 classif.randomForest        FALSE Area under the curve    FALSE        FALSE
+3 classif.randomForest        FALSE Area under the curve    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.8609622       0.8494639                0.8602937               1
+2      0.8609341       0.9156145                0.8614003               2
+3      0.8679134       0.9007244                0.8588030               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Area_under_the_curve_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                    measure 
+ classif.randomForest:3   Mode :logical   Area under the curve:3  
+                          FALSE:3                                 
+                          NA's :0                                 
+                                                                  
+                                                                  
+                                                                  
+  sampling       underbagging   tuning_measure   holdout_measure 
+ Mode :logical   Mode:logical   Min.   :0.8829   Min.   :0.8947  
+ FALSE:3         TRUE:3         1st Qu.:0.8848   1st Qu.:0.8969  
+ NA's :0         NA's:0         Median :0.8867   Median :0.8991  
+                                Mean   :0.8880   Mean   :0.9037  
+                                3rd Qu.:0.8905   3rd Qu.:0.9082  
+                                Max.   :0.8943   Max.   :0.9172  
+ holdout_measure_residual iteration_count
+ Min.   :0.8789           Min.   :1.0    
+ 1st Qu.:0.8793           1st Qu.:1.5    
+ Median :0.8798           Median :2.0    
+ Mean   :0.8796           Mean   :2.0    
+ 3rd Qu.:0.8799           3rd Qu.:2.5    
+ Max.   :0.8801           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space              measure sampling underbagging
+1 classif.randomForest        FALSE Area under the curve    FALSE         TRUE
+2 classif.randomForest        FALSE Area under the curve    FALSE         TRUE
+3 classif.randomForest        FALSE Area under the curve    FALSE         TRUE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.8828886       0.8990707                0.8800797               1
+2      0.8943307       0.8946765                0.8788807               2
+3      0.8866518       0.9172393                0.8797545               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_F1_measure_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space          measure   sampling      
+ classif.randomForest:3   Mode :logical   F1 measure:3   Mode :logical  
+                          FALSE:3                        FALSE:3        
+                          NA's :0                        NA's :0        
+                                                                        
+                                                                        
+                                                                        
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.3066   Min.   :0.3692   Min.   :0.3734          
+ FALSE:3         1st Qu.:0.3086   1st Qu.:0.4052   1st Qu.:0.3789          
+ NA's :0         Median :0.3106   Median :0.4412   Median :0.3844          
+                 Mean   :0.3147   Mean   :0.4247   Mean   :0.3815          
+                 3rd Qu.:0.3188   3rd Qu.:0.4525   3rd Qu.:0.3855          
+                 Max.   :0.3270   Max.   :0.4638   Max.   :0.3866          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space    measure sampling underbagging
+1 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+2 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+3 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.3270034       0.3692308                0.3844041               1
+2      0.3105949       0.4411765                0.3734043               2
+3      0.3066145       0.4637681                0.3866202               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_F1_measure_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space          measure   sampling      
+ classif.randomForest:3   Mode :logical   F1 measure:3   Mode :logical  
+                          FALSE:3                        FALSE:3        
+                          NA's :0                        NA's :0        
+                                                                        
+                                                                        
+                                                                        
+ ruspool        tuning_measure    holdout_measure   holdout_measure_residual
+ Mode:logical   Min.   :0.07246   Min.   :0.07023   Min.   :0.8488          
+ TRUE:3         1st Qu.:0.07302   1st Qu.:0.07160   1st Qu.:0.8492          
+ NA's:0         Median :0.07357   Median :0.07297   Median :0.8497          
+                Mean   :0.07460   Mean   :0.07357   Mean   :0.8502          
+                3rd Qu.:0.07566   3rd Qu.:0.07524   3rd Qu.:0.8509          
+                Max.   :0.07775   Max.   :0.07752   Max.   :0.8520          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space    measure sampling underbagging
+1 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+2 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+3 classif.randomForest        FALSE F1 measure    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1     0.07357070      0.07751938                0.8487889               1
+2     0.07775388      0.07296539                0.8497037               2
+3     0.07246471      0.07023144                0.8520255               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_F1_measure_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space          measure   sampling
+ classif.randomForest:3   Mode :logical   F1 measure:3   SMOTE:3  
+                          FALSE:3                                 
+                          NA's :0                                 
+                                                                  
+                                                                  
+                                                                  
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9920   Min.   :0.1053   Min.   :0.2299          
+ FALSE:3         1st Qu.:0.9921   1st Qu.:0.1144   1st Qu.:0.2302          
+ NA's :0         Median :0.9922   Median :0.1235   Median :0.2306          
+                 Mean   :0.9921   Mean   :0.1193   Mean   :0.2427          
+                 3rd Qu.:0.9922   3rd Qu.:0.1262   3rd Qu.:0.2491          
+                 Max.   :0.9922   Max.   :0.1290   Max.   :0.2676          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space    measure sampling underbagging
+1 classif.randomForest        FALSE F1 measure    SMOTE        FALSE
+2 classif.randomForest        FALSE F1 measure    SMOTE        FALSE
+3 classif.randomForest        FALSE F1 measure    SMOTE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9922098       0.1234568                0.2299169               1
+2      0.9921603       0.1052632                0.2305655               2
+3      0.9919650       0.1290323                0.2675691               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_G-mean_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space      measure   sampling      
+ classif.randomForest:3   Mode :logical   G-mean:3   Mode :logical  
+                          FALSE:3                    FALSE:3        
+                          NA's :0                    NA's :0        
+                                                                    
+                                                                    
+                                                                    
+ underbagging   tuning_measure   holdout_measure  holdout_measure_residual
+ Mode:logical   Min.   :0.8091   Min.   :0.7977   Min.   :0.8019          
+ TRUE:3         1st Qu.:0.8094   1st Qu.:0.8161   1st Qu.:0.8051          
+ NA's:0         Median :0.8097   Median :0.8345   Median :0.8083          
+                Mean   :0.8106   Mean   :0.8248   Mean   :0.8083          
+                3rd Qu.:0.8114   3rd Qu.:0.8383   3rd Qu.:0.8115          
+                Max.   :0.8131   Max.   :0.8421   Max.   :0.8147          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space measure sampling underbagging
+1 classif.randomForest        FALSE  G-mean    FALSE         TRUE
+2 classif.randomForest        FALSE  G-mean    FALSE         TRUE
+3 classif.randomForest        FALSE  G-mean    FALSE         TRUE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.8130844       0.8344628                0.8147225               1
+2      0.8096653       0.8421243                0.8082597               2
+3      0.8090974       0.7977075                0.8018957               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Matthews_correlation_coefficient_FALSE_ADASYN"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                                measure 
+ classif.randomForest:3   Mode :logical   Matthews correlation coefficient:3  
+                          FALSE:3                                             
+                          NA's :0                                             
+                                                                              
+                                                                              
+                                                                              
+   sampling tuning_measure   holdout_measure   holdout_measure_residual
+ ADASYN:3   Min.   :0.9824   Min.   :0.03407   Min.   :0.1883          
+            1st Qu.:0.9830   1st Qu.:0.03804   1st Qu.:0.1889          
+            Median :0.9835   Median :0.04201   Median :0.1894          
+            Mean   :0.9834   Mean   :0.07535   Mean   :0.1937          
+            3rd Qu.:0.9839   3rd Qu.:0.09599   3rd Qu.:0.1964          
+            Max.   :0.9844   Max.   :0.14998   Max.   :0.2034          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space                          measure sampling
+1 classif.randomForest        FALSE Matthews correlation coefficient   ADASYN
+2 classif.randomForest        FALSE Matthews correlation coefficient   ADASYN
+3 classif.randomForest        FALSE Matthews correlation coefficient   ADASYN
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9843590      0.04200612                0.1882752
+2        FALSE      0.9823781      0.03406548                0.1894378
+3        FALSE      0.9835407      0.14998183                0.2033509
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Matthews_correlation_coefficient_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                                measure 
+ classif.randomForest:3   Mode :logical   Matthews correlation coefficient:3  
+                          FALSE:3                                             
+                          NA's :0                                             
+                                                                              
+                                                                              
+                                                                              
+  sampling       underbagging   tuning_measure   holdout_measure 
+ Mode :logical   Mode:logical   Min.   :0.1495   Min.   :0.1340  
+ FALSE:3         TRUE:3         1st Qu.:0.1564   1st Qu.:0.1394  
+ NA's :0         NA's:0         Median :0.1633   Median :0.1449  
+                                Mean   :0.1600   Mean   :0.1484  
+                                3rd Qu.:0.1653   3rd Qu.:0.1556  
+                                Max.   :0.1673   Max.   :0.1664  
+ holdout_measure_residual iteration_count
+ Min.   :0.6228           Min.   :1.0    
+ 1st Qu.:0.6247           1st Qu.:1.5    
+ Median :0.6266           Median :2.0    
+ Mean   :0.6259           Mean   :2.0    
+ 3rd Qu.:0.6274           3rd Qu.:2.5    
+ Max.   :0.6282           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space                          measure sampling
+1 classif.randomForest        FALSE Matthews correlation coefficient    FALSE
+2 classif.randomForest        FALSE Matthews correlation coefficient    FALSE
+3 classif.randomForest        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1         TRUE      0.1494926       0.1663720                0.6227938
+2         TRUE      0.1632832       0.1448780                0.6282196
+3         TRUE      0.1673170       0.1339926                0.6266345
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.randomForest_Matthews_correlation_coefficient_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+                 learner  weight_space                                measure 
+ classif.randomForest:3   Mode :logical   Matthews correlation coefficient:3  
+                          FALSE:3                                             
+                          NA's :0                                             
+                                                                              
+                                                                              
+                                                                              
+  sampling underbagging    tuning_measure   holdout_measure 
+ SMOTE:3   Mode :logical   Min.   :0.9839   Min.   :0.0967  
+           FALSE:3         1st Qu.:0.9841   1st Qu.:0.1080  
+           NA's :0         Median :0.9843   Median :0.1193  
+                           Mean   :0.9842   Mean   :0.1123  
+                           3rd Qu.:0.9844   3rd Qu.:0.1202  
+                           Max.   :0.9844   Max.   :0.1210  
+ holdout_measure_residual iteration_count
+ Min.   :0.2183           Min.   :1.0    
+ 1st Qu.:0.2212           1st Qu.:1.5    
+ Median :0.2240           Median :2.0    
+ Mean   :0.2288           Mean   :2.0    
+ 3rd Qu.:0.2340           3rd Qu.:2.5    
+ Max.   :0.2441           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+               learner weight_space                          measure sampling
+1 classif.randomForest        FALSE Matthews correlation coefficient    SMOTE
+2 classif.randomForest        FALSE Matthews correlation coefficient    SMOTE
+3 classif.randomForest        FALSE Matthews correlation coefficient    SMOTE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9844443      0.11928654                0.2240074
+2        FALSE      0.9843446      0.09670293                0.2183219
+3        FALSE      0.9839492      0.12102371                0.2440596
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.rusboost_Accuracy_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+             learner  weight_space        measure   sampling      
+ classif.rusboost:3   Mode :logical   Accuracy:3   Mode :logical  
+                      FALSE:3                      FALSE:3        
+                      NA's :0                      NA's :0        
+                                                                  
+                                                                  
+                                                                  
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.7726   Min.   :0.7248   Min.   :0.7911          
+ FALSE:3         1st Qu.:0.7767   1st Qu.:0.7326   1st Qu.:0.7933          
+ NA's :0         Median :0.7808   Median :0.7403   Median :0.7955          
+                 Mean   :0.7796   Mean   :0.7509   Mean   :0.7977          
+                 3rd Qu.:0.7832   3rd Qu.:0.7639   3rd Qu.:0.8009          
+                 Max.   :0.7856   Max.   :0.7875   Max.   :0.8064          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+           learner weight_space  measure sampling underbagging tuning_measure
+1 classif.rusboost        FALSE Accuracy    FALSE        FALSE      0.7855538
+2 classif.rusboost        FALSE Accuracy    FALSE        FALSE      0.7807832
+3 classif.rusboost        FALSE Accuracy    FALSE        FALSE      0.7725508
+  holdout_measure holdout_measure_residual iteration_count
+1       0.7875075                0.7911392               1
+2       0.7403093                0.7954905               2
+3       0.7248443                0.8064082               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.rusboost_F1_measure_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+             learner  weight_space          measure   sampling      
+ classif.rusboost:3   Mode :logical   F1 measure:3   Mode :logical  
+                      FALSE:3                        FALSE:3        
+                      NA's :0                        NA's :0        
+                                                                    
+                                                                    
+                                                                    
+ underbagging    tuning_measure    holdout_measure   holdout_measure_residual
+ Mode :logical   Min.   :0.06983   Min.   :0.05104   Min.   :0.8213          
+ FALSE:3         1st Qu.:0.06986   1st Qu.:0.05813   1st Qu.:0.8300          
+ NA's :0         Median :0.06990   Median :0.06522   Median :0.8387          
+                 Mean   :0.07014   Mean   :0.06273   Mean   :0.8364          
+                 3rd Qu.:0.07030   3rd Qu.:0.06857   3rd Qu.:0.8440          
+                 Max.   :0.07071   Max.   :0.07193   Max.   :0.8494          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+           learner weight_space    measure sampling underbagging tuning_measure
+1 classif.rusboost        FALSE F1 measure    FALSE        FALSE     0.06983083
+2 classif.rusboost        FALSE F1 measure    FALSE        FALSE     0.07070618
+3 classif.rusboost        FALSE F1 measure    FALSE        FALSE     0.06989664
+  holdout_measure holdout_measure_residual iteration_count
+1      0.07192982                0.8212593               1
+2      0.06521739                0.8387013               2
+3      0.05104408                0.8493778               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.rusboost_G-mean_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+             learner  weight_space      measure   sampling      
+ classif.rusboost:3   Mode :logical   G-mean:3   Mode :logical  
+                      FALSE:3                    FALSE:3        
+                      NA's :0                    NA's :0        
+                                                                
+                                                                
+                                                                
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.8044   Min.   :0.8115   Min.   :0.7888          
+ FALSE:3         1st Qu.:0.8069   1st Qu.:0.8167   1st Qu.:0.7896          
+ NA's :0         Median :0.8094   Median :0.8219   Median :0.7904          
+                 Mean   :0.8088   Mean   :0.8292   Mean   :0.7919          
+                 3rd Qu.:0.8109   3rd Qu.:0.8381   3rd Qu.:0.7934          
+                 Max.   :0.8125   Max.   :0.8543   Max.   :0.7963          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+           learner weight_space measure sampling underbagging tuning_measure
+1 classif.rusboost        FALSE  G-mean    FALSE        FALSE      0.8044094
+2 classif.rusboost        FALSE  G-mean    FALSE        FALSE      0.8124979
+3 classif.rusboost        FALSE  G-mean    FALSE        FALSE      0.8093913
+  holdout_measure holdout_measure_residual iteration_count
+1       0.8114958                0.7904440               1
+2       0.8218615                0.7888417               2
+3       0.8542814                0.7962691               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.rusboost_Matthews_correlation_coefficient_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+             learner  weight_space                                measure 
+ classif.rusboost:3   Mode :logical   Matthews correlation coefficient:3  
+                      FALSE:3                                             
+                      NA's :0                                             
+                                                                          
+                                                                          
+                                                                          
+  sampling       underbagging    tuning_measure   holdout_measure 
+ Mode :logical   Mode :logical   Min.   :0.1406   Min.   :0.1185  
+ FALSE:3         FALSE:3         1st Qu.:0.1421   1st Qu.:0.1326  
+ NA's :0         NA's :0         Median :0.1436   Median :0.1467  
+                                 Mean   :0.1437   Mean   :0.1380  
+                                 3rd Qu.:0.1452   3rd Qu.:0.1478  
+                                 Max.   :0.1468   Max.   :0.1489  
+ holdout_measure_residual iteration_count
+ Min.   :0.5728           Min.   :1.0    
+ 1st Qu.:0.5801           1st Qu.:1.5    
+ Median :0.5874           Median :2.0    
+ Mean   :0.5839           Mean   :2.0    
+ 3rd Qu.:0.5895           3rd Qu.:2.5    
+ Max.   :0.5915           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+           learner weight_space                          measure sampling
+1 classif.rusboost        FALSE Matthews correlation coefficient    FALSE
+2 classif.rusboost        FALSE Matthews correlation coefficient    FALSE
+3 classif.rusboost        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.1435965       0.1488533                0.5727826
+2        FALSE      0.1468234       0.1466598                0.5874350
+3        FALSE      0.1405885       0.1184881                0.5915082
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Accuracy_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space        measure    sampling underbagging   
+ classif.xgboost:3   Mode :logical   Accuracy:3   ADASYN:3   Mode :logical  
+                     FALSE:3                                 FALSE:3        
+                     NA's :0                                 NA's :0        
+                                                                            
+                                                                            
+                                                                            
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9927   Min.   :0.9877   Min.   :0.5170           Min.   :1.0    
+ 1st Qu.:0.9937   1st Qu.:0.9878   1st Qu.:0.5208           1st Qu.:1.5    
+ Median :0.9948   Median :0.9879   Median :0.5247           Median :2.0    
+ Mean   :0.9941   Mean   :0.9884   Mean   :0.5266           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.9888   3rd Qu.:0.5314           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.9896   Max.   :0.5381           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space  measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE Accuracy   ADASYN        FALSE      0.9926582
+2 classif.xgboost        FALSE Accuracy   ADASYN        FALSE      0.9947848
+3 classif.xgboost        FALSE Accuracy   ADASYN        FALSE      0.9949955
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9877485                0.5380538               1
+2       0.9879494                0.5246835               2
+3       0.9895561                0.5170095               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Accuracy_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space        measure   sampling      
+ classif.xgboost:3   Mode :logical   Accuracy:3   Mode :logical  
+                     FALSE:3                      FALSE:3        
+                     NA's :0                      NA's :0        
+                                                                 
+                                                                 
+                                                                 
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9913   Min.   :0.9914   Min.   :0.5025          
+ FALSE:3         1st Qu.:0.9914   1st Qu.:0.9915   1st Qu.:0.5090          
+ NA's :0         Median :0.9916   Median :0.9916   Median :0.5155          
+                 Mean   :0.9915   Mean   :0.9919   Mean   :0.5115          
+                 3rd Qu.:0.9916   3rd Qu.:0.9922   3rd Qu.:0.5160          
+                 Max.   :0.9917   Max.   :0.9928   Max.   :0.5165          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space  measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE Accuracy    FALSE        FALSE      0.9913158
+2 classif.xgboost        FALSE Accuracy    FALSE        FALSE      0.9915667
+3 classif.xgboost        FALSE Accuracy    FALSE        FALSE      0.9917174
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9913637                0.5024525               1
+2       0.9915646                0.5155063               2
+3       0.9927696                0.5165348               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Accuracy_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space        measure   sampling      
+ classif.xgboost:3   Mode :logical   Accuracy:3   Mode :logical  
+                     FALSE:3                      FALSE:3        
+                     NA's :0                      NA's :0        
+                                                                 
+                                                                 
+                                                                 
+ underbagging   tuning_measure   holdout_measure  holdout_measure_residual
+ Mode:logical   Min.   :0.7933   Min.   :0.8002   Min.   :0.8134          
+ TRUE:3         1st Qu.:0.7979   1st Qu.:0.8052   1st Qu.:0.8158          
+ NA's:0         Median :0.8024   Median :0.8102   Median :0.8182          
+                Mean   :0.8011   Mean   :0.8076   Mean   :0.8204          
+                3rd Qu.:0.8051   3rd Qu.:0.8113   3rd Qu.:0.8239          
+                Max.   :0.8077   Max.   :0.8124   Max.   :0.8297          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space  measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE Accuracy    FALSE         TRUE      0.8076905
+2 classif.xgboost        FALSE Accuracy    FALSE         TRUE      0.8024193
+3 classif.xgboost        FALSE Accuracy    FALSE         TRUE      0.7933334
+  holdout_measure holdout_measure_residual iteration_count
+1       0.8124121                0.8181962               1
+2       0.8102029                0.8133703               2
+3       0.8001607                0.8296677               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Accuracy_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space        measure   sampling underbagging   
+ classif.xgboost:3   Mode :logical   Accuracy:3   SMOTE:3   Mode :logical  
+                     FALSE:3                                FALSE:3        
+                     NA's :0                                NA's :0        
+                                                                           
+                                                                           
+                                                                           
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9945   Min.   :0.9894   Min.   :0.5081           Min.   :1.0    
+ 1st Qu.:0.9946   1st Qu.:0.9894   1st Qu.:0.5137           1st Qu.:1.5    
+ Median :0.9948   Median :0.9894   Median :0.5192           Median :2.0    
+ Mean   :0.9948   Mean   :0.9895   Mean   :0.5168           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.9896   3rd Qu.:0.5212           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.9898   Max.   :0.5231           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space  measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE Accuracy    SMOTE        FALSE      0.9947865
+2 classif.xgboost        FALSE Accuracy    SMOTE        FALSE      0.9944813
+3 classif.xgboost        FALSE Accuracy    SMOTE        FALSE      0.9950408
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9897570                0.5192247               1
+2       0.9893553                0.5231013               2
+3       0.9893553                0.5081487               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Accuracy_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space       measure   sampling      
+ classif.xgboost:3   Mode:logical   Accuracy:3   Mode :logical  
+                     TRUE:3                      FALSE:3        
+                     NA's:0                      NA's :0        
+                                                                
+                                                                
+                                                                
+ underbagging    tuning_measure holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.99   Min.   :0.9902   Min.   :0.3955          
+ FALSE:3         1st Qu.:0.99   1st Qu.:0.9902   1st Qu.:0.3955          
+ NA's :0         Median :0.99   Median :0.9902   Median :0.3955          
+                 Mean   :0.99   Mean   :0.9902   Mean   :0.3955          
+                 3rd Qu.:0.99   3rd Qu.:0.9902   3rd Qu.:0.3955          
+                 Max.   :0.99   Max.   :0.9902   Max.   :0.3955          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space  measure sampling underbagging tuning_measure
+1 classif.xgboost         TRUE Accuracy    FALSE        FALSE      0.9899603
+2 classif.xgboost         TRUE Accuracy    FALSE        FALSE      0.9899603
+3 classif.xgboost         TRUE Accuracy    FALSE        FALSE      0.9899603
+  holdout_measure holdout_measure_residual iteration_count
+1       0.9901587                0.3954905               1
+2       0.9901587                0.3954905               2
+3       0.9901587                0.3954905               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Area_under_the_curve_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                    measure    sampling
+ classif.xgboost:3   Mode :logical   Area under the curve:3   ADASYN:3  
+                     FALSE:3                                            
+                     NA's :0                                            
+                                                                        
+                                                                        
+                                                                        
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9995   Min.   :0.8453   Min.   :0.8667          
+ FALSE:3         1st Qu.:0.9995   1st Qu.:0.8506   1st Qu.:0.8681          
+ NA's :0         Median :0.9996   Median :0.8560   Median :0.8694          
+                 Mean   :0.9996   Mean   :0.8532   Mean   :0.8708          
+                 3rd Qu.:0.9996   3rd Qu.:0.8572   3rd Qu.:0.8729          
+                 Max.   :0.9996   Max.   :0.8585   Max.   :0.8764          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space              measure sampling underbagging
+1 classif.xgboost        FALSE Area under the curve   ADASYN        FALSE
+2 classif.xgboost        FALSE Area under the curve   ADASYN        FALSE
+3 classif.xgboost        FALSE Area under the curve   ADASYN        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9994990       0.8559879                0.8763737               1
+2      0.9996105       0.8584634                0.8694190               2
+3      0.9995687       0.8452912                0.8667413               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Area_under_the_curve_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                    measure   sampling      
+ classif.xgboost:3   Mode :logical   Area under the curve:3   Mode :logical  
+                     FALSE:3                                  FALSE:3        
+                     NA's :0                                  NA's :0        
+                                                                             
+                                                                             
+                                                                             
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9132   Min.   :0.8948   Min.   :0.8984          
+ FALSE:3         1st Qu.:0.9143   1st Qu.:0.8978   1st Qu.:0.9002          
+ NA's :0         Median :0.9154   Median :0.9009   Median :0.9019          
+                 Mean   :0.9167   Mean   :0.9002   Mean   :0.9024          
+                 3rd Qu.:0.9184   3rd Qu.:0.9029   3rd Qu.:0.9043          
+                 Max.   :0.9214   Max.   :0.9050   Max.   :0.9067          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space              measure sampling underbagging
+1 classif.xgboost        FALSE Area under the curve    FALSE        FALSE
+2 classif.xgboost        FALSE Area under the curve    FALSE        FALSE
+3 classif.xgboost        FALSE Area under the curve    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9132234       0.9049923                0.9067351               1
+2      0.9153979       0.8947924                0.9018882               2
+3      0.9213539       0.9008548                0.8984331               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Area_under_the_curve_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                    measure   sampling      
+ classif.xgboost:3   Mode :logical   Area under the curve:3   Mode :logical  
+                     FALSE:3                                  FALSE:3        
+                     NA's :0                                  NA's :0        
+                                                                             
+                                                                             
+                                                                             
+ underbagging   tuning_measure   holdout_measure  holdout_measure_residual
+ Mode:logical   Min.   :0.8935   Min.   :0.8896   Min.   :0.8868          
+ TRUE:3         1st Qu.:0.8962   1st Qu.:0.8939   1st Qu.:0.8872          
+ NA's:0         Median :0.8990   Median :0.8981   Median :0.8876          
+                Mean   :0.8979   Mean   :0.9019   Mean   :0.8886          
+                3rd Qu.:0.9002   3rd Qu.:0.9081   3rd Qu.:0.8895          
+                Max.   :0.9014   Max.   :0.9180   Max.   :0.8914          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space              measure sampling underbagging
+1 classif.xgboost        FALSE Area under the curve    FALSE         TRUE
+2 classif.xgboost        FALSE Area under the curve    FALSE         TRUE
+3 classif.xgboost        FALSE Area under the curve    FALSE         TRUE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.8934711       0.8896303                0.8867733               1
+2      0.9013637       0.8981310                0.8875867               2
+3      0.8989722       0.9180465                0.8914174               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Area_under_the_curve_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                    measure   sampling
+ classif.xgboost:3   Mode :logical   Area under the curve:3   SMOTE:3  
+                     FALSE:3                                           
+                     NA's :0                                           
+                                                                       
+                                                                       
+                                                                       
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.9996   Min.   :0.8495   Min.   :0.8659          
+ FALSE:3         1st Qu.:0.9996   1st Qu.:0.8699   1st Qu.:0.8667          
+ NA's :0         Median :0.9996   Median :0.8904   Median :0.8675          
+                 Mean   :0.9996   Mean   :0.8800   Mean   :0.8686          
+                 3rd Qu.:0.9996   3rd Qu.:0.8953   3rd Qu.:0.8699          
+                 Max.   :0.9996   Max.   :0.9002   Max.   :0.8724          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space              measure sampling underbagging
+1 classif.xgboost        FALSE Area under the curve    SMOTE        FALSE
+2 classif.xgboost        FALSE Area under the curve    SMOTE        FALSE
+3 classif.xgboost        FALSE Area under the curve    SMOTE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.9996198       0.8494598                0.8658938               1
+2      0.9995908       0.9001739                0.8723536               2
+3      0.9995717       0.8903589                0.8675078               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Area_under_the_curve_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                   measure   sampling      
+ classif.xgboost:3   Mode:logical   Area under the curve:3   Mode :logical  
+                     TRUE:3                                  FALSE:3        
+                     NA's:0                                  NA's :0        
+                                                                            
+                                                                            
+                                                                            
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.8513   Min.   :0.8317   Min.   :0.8490          
+ FALSE:3         1st Qu.:0.8550   1st Qu.:0.8350   1st Qu.:0.8538          
+ NA's :0         Median :0.8588   Median :0.8384   Median :0.8587          
+                 Mean   :0.8588   Mean   :0.8466   Mean   :0.8565          
+                 3rd Qu.:0.8625   3rd Qu.:0.8541   3rd Qu.:0.8603          
+                 Max.   :0.8662   Max.   :0.8697   Max.   :0.8618          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space              measure sampling underbagging
+1 classif.xgboost         TRUE Area under the curve    FALSE        FALSE
+2 classif.xgboost         TRUE Area under the curve    FALSE        FALSE
+3 classif.xgboost         TRUE Area under the curve    FALSE        FALSE
+  tuning_measure holdout_measure holdout_measure_residual iteration_count
+1      0.8588026       0.8383616                0.8587160               1
+2      0.8512843       0.8697479                0.8489704               2
+3      0.8662222       0.8317361                0.8618354               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_F1_measure_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space          measure    sampling underbagging   
+ classif.xgboost:3   Mode :logical   F1 measure:3   ADASYN:3   Mode :logical  
+                     FALSE:3                                   FALSE:3        
+                     NA's :0                                   NA's :0        
+                                                                              
+                                                                              
+                                                                              
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9927   Min.   :0.1667   Min.   :0.3365           Min.   :1.0    
+ 1st Qu.:0.9937   1st Qu.:0.2119   1st Qu.:0.3455           1st Qu.:1.5    
+ Median :0.9948   Median :0.2571   Median :0.3545           Median :2.0    
+ Mean   :0.9941   Mean   :0.2354   Mean   :0.3586           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.2697   3rd Qu.:0.3697           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.2824   Max.   :0.3848           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space    measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE F1 measure   ADASYN        FALSE      0.9926707
+2 classif.xgboost        FALSE F1 measure   ADASYN        FALSE      0.9947832
+3 classif.xgboost        FALSE F1 measure   ADASYN        FALSE      0.9949757
+  holdout_measure holdout_measure_residual iteration_count
+1       0.2823529                0.3847856               1
+2       0.1666667                0.3545337               2
+3       0.2571429                0.3364852               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_F1_measure_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space          measure   sampling      
+ classif.xgboost:3   Mode :logical   F1 measure:3   Mode :logical  
+                     FALSE:3                        FALSE:3        
+                     NA's :0                        NA's :0        
+                                                                   
+                                                                   
+                                                                   
+ underbagging    tuning_measure   holdout_measure  holdout_measure_residual
+ Mode :logical   Min.   :0.3083   Min.   :0.2759   Min.   :0.3314          
+ FALSE:3         1st Qu.:0.3101   1st Qu.:0.3183   1st Qu.:0.3327          
+ NA's :0         Median :0.3119   Median :0.3607   Median :0.3340          
+                 Mean   :0.3123   Mean   :0.3637   Mean   :0.3383          
+                 3rd Qu.:0.3143   3rd Qu.:0.4076   3rd Qu.:0.3418          
+                 Max.   :0.3166   Max.   :0.4545   Max.   :0.3496          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space    measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE F1 measure    FALSE        FALSE      0.3165979
+2 classif.xgboost        FALSE F1 measure    FALSE        FALSE      0.3082751
+3 classif.xgboost        FALSE F1 measure    FALSE        FALSE      0.3119256
+  holdout_measure holdout_measure_residual iteration_count
+1       0.3606557                0.3496383               1
+2       0.2758621                0.3314410               2
+3       0.4545455                0.3339510               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_F1_measure_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space          measure   sampling      
+ classif.xgboost:3   Mode :logical   F1 measure:3   Mode :logical  
+                     FALSE:3                        FALSE:3        
+                     NA's :0                        NA's :0        
+                                                                   
+                                                                   
+                                                                   
+ underbagging   tuning_measure    holdout_measure   holdout_measure_residual
+ Mode:logical   Min.   :0.07540   Min.   :0.08126   Min.   :0.8408          
+ TRUE:3         1st Qu.:0.07725   1st Qu.:0.08144   1st Qu.:0.8431          
+ NA's:0         Median :0.07910   Median :0.08163   Median :0.8454          
+                Mean   :0.07794   Mean   :0.08240   Mean   :0.8480          
+                3rd Qu.:0.07922   3rd Qu.:0.08297   3rd Qu.:0.8515          
+                Max.   :0.07933   Max.   :0.08431   Max.   :0.8577          
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space    measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE F1 measure    FALSE         TRUE     0.07933061
+2 classif.xgboost        FALSE F1 measure    FALSE         TRUE     0.07910354
+3 classif.xgboost        FALSE F1 measure    FALSE         TRUE     0.07539725
+  holdout_measure holdout_measure_residual iteration_count
+1      0.08431373                0.8453567               1
+2      0.08163265                0.8408340               2
+3      0.08125577                0.8577281               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_F1_measure_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space          measure   sampling underbagging   
+ classif.xgboost:3   Mode :logical   F1 measure:3   SMOTE:3   Mode :logical  
+                     FALSE:3                                  FALSE:3        
+                     NA's :0                                  NA's :0        
+                                                                             
+                                                                             
+                                                                             
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9945   Min.   :0.2090   Min.   :0.3161           Min.   :1.0    
+ 1st Qu.:0.9946   1st Qu.:0.2312   1st Qu.:0.3288           1st Qu.:1.5    
+ Median :0.9948   Median :0.2535   Median :0.3415           Median :2.0    
+ Mean   :0.9947   Mean   :0.2481   Mean   :0.3359           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.2676   3rd Qu.:0.3458           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.2817   Max.   :0.3502           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space    measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE F1 measure    SMOTE        FALSE      0.9947655
+2 classif.xgboost        FALSE F1 measure    SMOTE        FALSE      0.9944577
+3 classif.xgboost        FALSE F1 measure    SMOTE        FALSE      0.9950162
+  holdout_measure holdout_measure_residual iteration_count
+1       0.2816901                0.3415321               1
+2       0.2089552                0.3501509               2
+3       0.2535211                0.3161368               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_F1_measure_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space         measure   sampling      
+ classif.xgboost:3   Mode:logical   F1 measure:3   Mode :logical  
+                     TRUE:3                        FALSE:3        
+                     NA's:0                        NA's :0        
+                                                                  
+                                                                  
+                                                                  
+ underbagging    tuning_measure holdout_measure holdout_measure_residual
+ Mode :logical   Min.   :0      Min.   :0       Min.   :0               
+ FALSE:3         1st Qu.:0      1st Qu.:0       1st Qu.:0               
+ NA's :0         Median :0      Median :0       Median :0               
+                 Mean   :0      Mean   :0       Mean   :0               
+                 3rd Qu.:0      3rd Qu.:0       3rd Qu.:0               
+                 Max.   :0      Max.   :0       Max.   :0               
+ iteration_count
+ Min.   :1.0    
+ 1st Qu.:1.5    
+ Median :2.0    
+ Mean   :2.0    
+ 3rd Qu.:2.5    
+ Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space    measure sampling underbagging tuning_measure
+1 classif.xgboost         TRUE F1 measure    FALSE        FALSE              0
+2 classif.xgboost         TRUE F1 measure    FALSE        FALSE              0
+3 classif.xgboost         TRUE F1 measure    FALSE        FALSE              0
+  holdout_measure holdout_measure_residual iteration_count
+1               0                        0               1
+2               0                        0               2
+3               0                        0               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_G-mean_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space      measure    sampling underbagging   
+ classif.xgboost:3   Mode :logical   G-mean:3   ADASYN:3   Mode :logical  
+                     FALSE:3                               FALSE:3        
+                     NA's :0                               NA's :0        
+                                                                          
+                                                                          
+                                                                          
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9927   Min.   :0.3493   Min.   :0.4496           Min.   :1.0    
+ 1st Qu.:0.9937   1st Qu.:0.3887   1st Qu.:0.4567           1st Qu.:1.5    
+ Median :0.9948   Median :0.4280   Median :0.4639           Median :2.0    
+ Mean   :0.9941   Mean   :0.4237   Mean   :0.4670           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.4609   3rd Qu.:0.4758           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.4937   Max.   :0.4877           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE  G-mean   ADASYN        FALSE      0.9926570
+2 classif.xgboost        FALSE  G-mean   ADASYN        FALSE      0.9947858
+3 classif.xgboost        FALSE  G-mean   ADASYN        FALSE      0.9949897
+  holdout_measure holdout_measure_residual iteration_count
+1       0.4936656                0.4876747               1
+2       0.3493233                0.4639030               2
+3       0.4280495                0.4495609               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_G-mean_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space      measure   sampling       underbagging   
+ classif.xgboost:3   Mode :logical   G-mean:3   Mode :logical   Mode :logical  
+                     FALSE:3                    FALSE:3         FALSE:3        
+                     NA's :0                    NA's :0         NA's :0        
+                                                                               
+                                                                               
+                                                                               
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.4313   Min.   :0.4040   Min.   :0.4457           Min.   :1.0    
+ 1st Qu.:0.4317   1st Qu.:0.4389   1st Qu.:0.4467           1st Qu.:1.5    
+ Median :0.4321   Median :0.4738   Median :0.4477           Median :2.0    
+ Mean   :0.4372   Mean   :0.4770   Mean   :0.4512           Mean   :2.0    
+ 3rd Qu.:0.4401   3rd Qu.:0.5135   3rd Qu.:0.4540           3rd Qu.:2.5    
+ Max.   :0.4481   Max.   :0.5532   Max.   :0.4603           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE  G-mean    FALSE        FALSE      0.4481496
+2 classif.xgboost        FALSE  G-mean    FALSE        FALSE      0.4321394
+3 classif.xgboost        FALSE  G-mean    FALSE        FALSE      0.4312777
+  holdout_measure holdout_measure_residual iteration_count
+1       0.4737555                0.4602617               1
+2       0.4040200                0.4456740               2
+3       0.5531711                0.4476797               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_G-mean_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space      measure   sampling       underbagging  
+ classif.xgboost:3   Mode :logical   G-mean:3   Mode :logical   Mode:logical  
+                     FALSE:3                    FALSE:3         TRUE:3        
+                     NA's :0                    NA's :0         NA's:0        
+                                                                              
+                                                                              
+                                                                              
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.8159   Min.   :0.8331   Min.   :0.8107           Min.   :1.0    
+ 1st Qu.:0.8179   1st Qu.:0.8386   1st Qu.:0.8119           1st Qu.:1.5    
+ Median :0.8198   Median :0.8440   Median :0.8131           Median :2.0    
+ Mean   :0.8203   Mean   :0.8516   Mean   :0.8137           Mean   :2.0    
+ 3rd Qu.:0.8224   3rd Qu.:0.8608   3rd Qu.:0.8151           3rd Qu.:2.5    
+ Max.   :0.8251   Max.   :0.8776   Max.   :0.8172           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE  G-mean    FALSE         TRUE      0.8159410
+2 classif.xgboost        FALSE  G-mean    FALSE         TRUE      0.8250727
+3 classif.xgboost        FALSE  G-mean    FALSE         TRUE      0.8198019
+  holdout_measure holdout_measure_residual iteration_count
+1       0.8440171                0.8171734               1
+2       0.8330851                0.8107411               2
+3       0.8776005                0.8130602               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_G-mean_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space      measure   sampling underbagging   
+ classif.xgboost:3   Mode :logical   G-mean:3   SMOTE:3   Mode :logical  
+                     FALSE:3                              FALSE:3        
+                     NA's :0                              NA's :0        
+                                                                         
+                                                                         
+                                                                         
+ tuning_measure   holdout_measure  holdout_measure_residual iteration_count
+ Min.   :0.9945   Min.   :0.3775   Min.   :0.4331           Min.   :1.0    
+ 1st Qu.:0.9946   1st Qu.:0.4028   1st Qu.:0.4434           1st Qu.:1.5    
+ Median :0.9948   Median :0.4280   Median :0.4536           Median :2.0    
+ Mean   :0.9948   Mean   :0.4189   Mean   :0.4491           Mean   :2.0    
+ 3rd Qu.:0.9949   3rd Qu.:0.4396   3rd Qu.:0.4571           3rd Qu.:2.5    
+ Max.   :0.9950   Max.   :0.4512   Max.   :0.4605           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space measure sampling underbagging tuning_measure
+1 classif.xgboost        FALSE  G-mean    SMOTE        FALSE      0.9947830
+2 classif.xgboost        FALSE  G-mean    SMOTE        FALSE      0.9944768
+3 classif.xgboost        FALSE  G-mean    SMOTE        FALSE      0.9950333
+  holdout_measure holdout_measure_residual iteration_count
+1       0.4512038                0.4536084               1
+2       0.3775426                0.4605105               2
+3       0.4280060                0.4330997               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_G-mean_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space     measure   sampling       underbagging   
+ classif.xgboost:3   Mode:logical   G-mean:3   Mode :logical   Mode :logical  
+                     TRUE:3                    FALSE:3         FALSE:3        
+                     NA's:0                    NA's :0         NA's :0        
+                                                                              
+                                                                              
+                                                                              
+ tuning_measure holdout_measure holdout_measure_residual iteration_count
+ Min.   :0      Min.   :0       Min.   :0                Min.   :1.0    
+ 1st Qu.:0      1st Qu.:0       1st Qu.:0                1st Qu.:1.5    
+ Median :0      Median :0       Median :0                Median :2.0    
+ Mean   :0      Mean   :0       Mean   :0                Mean   :2.0    
+ 3rd Qu.:0      3rd Qu.:0       3rd Qu.:0                3rd Qu.:2.5    
+ Max.   :0      Max.   :0       Max.   :0                Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space measure sampling underbagging tuning_measure
+1 classif.xgboost         TRUE  G-mean    FALSE        FALSE              0
+2 classif.xgboost         TRUE  G-mean    FALSE        FALSE              0
+3 classif.xgboost         TRUE  G-mean    FALSE        FALSE              0
+  holdout_measure holdout_measure_residual iteration_count
+1               0                        0               1
+2               0                        0               2
+3               0                        0               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Matthews_correlation_coefficient_FALSE_ADASYN_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                                measure 
+ classif.xgboost:3   Mode :logical   Matthews correlation coefficient:3  
+                     FALSE:3                                             
+                     NA's :0                                             
+                                                                         
+                                                                         
+                                                                         
+   sampling underbagging    tuning_measure   holdout_measure 
+ ADASYN:3   Mode :logical   Min.   :0.9853   Min.   :0.1732  
+            FALSE:3         1st Qu.:0.9874   1st Qu.:0.2247  
+            NA's :0         Median :0.9896   Median :0.2761  
+                            Mean   :0.9883   Mean   :0.2430  
+                            3rd Qu.:0.9898   3rd Qu.:0.2779  
+                            Max.   :0.9900   Max.   :0.2797  
+ holdout_measure_residual iteration_count
+ Min.   :0.2976           Min.   :1.0    
+ 1st Qu.:0.3024           1st Qu.:1.5    
+ Median :0.3071           Median :2.0    
+ Mean   :0.3096           Mean   :2.0    
+ 3rd Qu.:0.3155           3rd Qu.:2.5    
+ Max.   :0.3239           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space                          measure sampling
+1 classif.xgboost        FALSE Matthews correlation coefficient   ADASYN
+2 classif.xgboost        FALSE Matthews correlation coefficient   ADASYN
+3 classif.xgboost        FALSE Matthews correlation coefficient   ADASYN
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9853202       0.2796663                0.3239343
+2        FALSE      0.9895761       0.1732373                0.3071327
+3        FALSE      0.9899989       0.2760649                0.2975970
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Matthews_correlation_coefficient_FALSE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                                measure 
+ classif.xgboost:3   Mode :logical   Matthews correlation coefficient:3  
+                     FALSE:3                                             
+                     NA's :0                                             
+                                                                         
+                                                                         
+                                                                         
+  sampling       underbagging    tuning_measure   holdout_measure 
+ Mode :logical   Mode :logical   Min.   :0.3801   Min.   :0.3789  
+ FALSE:3         FALSE:3         1st Qu.:0.3908   1st Qu.:0.4152  
+ NA's :0         NA's :0         Median :0.4015   Median :0.4515  
+                                 Mean   :0.3981   Mean   :0.4493  
+                                 3rd Qu.:0.4071   3rd Qu.:0.4844  
+                                 Max.   :0.4127   Max.   :0.5174  
+ holdout_measure_residual iteration_count
+ Min.   :0.2984           Min.   :1.0    
+ 1st Qu.:0.2990           1st Qu.:1.5    
+ Median :0.2996           Median :2.0    
+ Mean   :0.3026           Mean   :2.0    
+ 3rd Qu.:0.3046           3rd Qu.:2.5    
+ Max.   :0.3096           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space                          measure sampling
+1 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+2 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+3 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.3800861       0.4515313                0.3096384
+2        FALSE      0.4015270       0.3789449                0.2984351
+3        FALSE      0.4126647       0.5173541                0.2996169
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Matthews_correlation_coefficient_FALSE_FALSE_TRUE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                                measure 
+ classif.xgboost:3   Mode :logical   Matthews correlation coefficient:3  
+                     FALSE:3                                             
+                     NA's :0                                             
+                                                                         
+                                                                         
+                                                                         
+  sampling       underbagging   tuning_measure   holdout_measure 
+ Mode :logical   Mode:logical   Min.   :0.1548   Min.   :0.1653  
+ FALSE:3         TRUE:3         1st Qu.:0.1564   1st Qu.:0.1654  
+ NA's :0         NA's:0         Median :0.1580   Median :0.1656  
+                                Mean   :0.1576   Mean   :0.1675  
+                                3rd Qu.:0.1590   3rd Qu.:0.1687  
+                                Max.   :0.1600   Max.   :0.1717  
+ holdout_measure_residual iteration_count
+ Min.   :0.6176           Min.   :1.0    
+ 1st Qu.:0.6221           1st Qu.:1.5    
+ Median :0.6267           Median :2.0    
+ Mean   :0.6245           Mean   :2.0    
+ 3rd Qu.:0.6280           3rd Qu.:2.5    
+ Max.   :0.6293           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space                          measure sampling
+1 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+2 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+3 classif.xgboost        FALSE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1         TRUE      0.1579907       0.1717379                0.6267361
+2         TRUE      0.1599502       0.1655693                0.6175563
+3         TRUE      0.1548250       0.1652888                0.6293420
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Matthews_correlation_coefficient_FALSE_SMOTE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                                measure 
+ classif.xgboost:3   Mode :logical   Matthews correlation coefficient:3  
+                     FALSE:3                                             
+                     NA's :0                                             
+                                                                         
+                                                                         
+                                                                         
+  sampling underbagging    tuning_measure   holdout_measure 
+ SMOTE:3   Mode :logical   Min.   :0.9890   Min.   :0.2313  
+           FALSE:3         1st Qu.:0.9893   1st Qu.:0.2504  
+           NA's :0         Median :0.9896   Median :0.2694  
+                           Mean   :0.9895   Mean   :0.2670  
+                           3rd Qu.:0.9898   3rd Qu.:0.2848  
+                           Max.   :0.9901   Max.   :0.3001  
+ holdout_measure_residual iteration_count
+ Min.   :0.2846           Min.   :1.0    
+ 1st Qu.:0.2927           1st Qu.:1.5    
+ Median :0.3007           Median :2.0    
+ Mean   :0.2973           Mean   :2.0    
+ 3rd Qu.:0.3036           3rd Qu.:2.5    
+ Max.   :0.3065           Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space                          measure sampling
+1 classif.xgboost        FALSE Matthews correlation coefficient    SMOTE
+2 classif.xgboost        FALSE Matthews correlation coefficient    SMOTE
+3 classif.xgboost        FALSE Matthews correlation coefficient    SMOTE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE      0.9895752       0.3001191                0.3007412
+2        FALSE      0.9889656       0.2312949                0.3064635
+3        FALSE      0.9900888       0.2694430                0.2845620
+  iteration_count
+1               1
+2               2
+3               3
+[1] "[DEBUG]File path:  /home/rodrigoaf/estudo_cost_learning/UCI/adult/summary_files0.01/classif.xgboost_Matthews_correlation_coefficient_TRUE_FALSE_FALSE"
+[1] "[DEBUG]Dataset corrent:"
+            learner  weight_space                               measure 
+ classif.xgboost:3   Mode:logical   Matthews correlation coefficient:3  
+                     TRUE:3                                             
+                     NA's:0                                             
+                                                                        
+                                                                        
+                                                                        
+  sampling       underbagging    tuning_measure holdout_measure
+ Mode :logical   Mode :logical   Min.   :0      Min.   :0      
+ FALSE:3         FALSE:3         1st Qu.:0      1st Qu.:0      
+ NA's :0         NA's :0         Median :0      Median :0      
+                                 Mean   :0      Mean   :0      
+                                 3rd Qu.:0      3rd Qu.:0      
+                                 Max.   :0      Max.   :0      
+ holdout_measure_residual iteration_count
+ Min.   :0                Min.   :1.0    
+ 1st Qu.:0                1st Qu.:1.5    
+ Median :0                Median :2.0    
+ Mean   :0                Mean   :2.0    
+ 3rd Qu.:0                3rd Qu.:2.5    
+ Max.   :0                Max.   :3.0    
+[1] "[DEBUG]Dataset corrigido:"
+          learner weight_space                          measure sampling
+1 classif.xgboost         TRUE Matthews correlation coefficient    FALSE
+2 classif.xgboost         TRUE Matthews correlation coefficient    FALSE
+3 classif.xgboost         TRUE Matthews correlation coefficient    FALSE
+  underbagging tuning_measure holdout_measure holdout_measure_residual
+1        FALSE              0               0                        0
+2        FALSE              0               0                        0
+3        FALSE              0               0                        0
+  iteration_count
+1               1
+2               2
+3               3
+[1] "class(df_final)"
+[1] "data.frame"
+[1] "Summary final"
+                 learner   weight_space   
+ classif.ksvm        :72   Mode :logical  
+ classif.randomForest:42   FALSE:168      
+ classif.rusboost    :12   TRUE :33       
+ classif.xgboost     :75   NA's :0        
+                                          
+                                          
+                             measure     sampling   underbagging   
+ Accuracy                        :45   ADASYN: 36   Mode :logical  
+ Area under the curve            :36   SMOTE : 36   FALSE:162      
+ F1 measure                      :42   NA's  :129   TRUE :39       
+ G-mean                          :36                NA's :0        
+ Matthews correlation coefficient:42                               
+                                                                   
+ tuning_measure   holdout_measure     holdout_measure_residual iteration_count
+ Min.   :0.0000   Min.   :-0.009305   Min.   :0.0000           Min.   :1      
+ 1st Qu.:0.3062   1st Qu.: 0.077519   1st Qu.:0.2441           1st Qu.:1      
+ Median :0.8829   Median : 0.428006   Median :0.4603           Median :2      
+ Mean   :0.6765   Mean   : 0.475636   Mean   :0.4757           Mean   :2      
+ 3rd Qu.:0.9917   3rd Qu.: 0.877601   3rd Qu.:0.7911           3rd Qu.:3      
+ Max.   :0.9996   Max.   : 0.992770   Max.   :0.9067           Max.   :3      
+[1] "[DEBUG]Summary compilado e salvo em: /home/rodrigoaf/estudo_cost_learning/UCI/adult/ds_0.01_summary.csv"
