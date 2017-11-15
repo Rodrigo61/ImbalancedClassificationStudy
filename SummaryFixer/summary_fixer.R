@@ -101,7 +101,6 @@ fix_missing_combination = function(summary, missing_stats){
         update_stats(missing_stats, combination_id)
       }else if(combination_count != 3){
         print(paste("A combinacao a seguir tem um número inesperado de medicoes = ", combination_count ," (!= 0 & != 3) [ ", "leaner = ", learner, " measure = ", measure, " technique = NULL (NORMAL)]", sep =""))
-
       }
     }
 
@@ -132,6 +131,14 @@ for(summary_file_name in summary_list[,1]){
     levels(summary[,'sampling']) = c(levels(summary[,'sampling']), 'FALSE')
   }
   summary[which(is.na(summary[,'sampling'])),'sampling'] = 'FALSE'
+  
+  #TODO: Essa linha é necessaria, pois existem arquivos que ainda carregam 'underbagging' como 'ruspool'
+  # mas isso deve ser removido assim que todos os arquivos estiverem atualizados
+  library(dplyr)
+  result = tryCatch({
+    rename(summary, underbagging = ruspool)
+  })
+  
 
   # Verifica todas as combinacoes que deveriam ter medicoes, mas nao tem e as completa com NA's
   summary = fix_missing_combination(summary, missing_stats)
