@@ -93,6 +93,9 @@ for(file_path in summary_file_list){
     # Rearranjando as colunas para a ordem correta
     df = df[, COLUMNS_NAMES]
     
+    print_debug("Dataset corrigido:")
+    print(df)
+    
     #acumulando no dataframe final
     df_final = rbind(df_final, df)
   }
