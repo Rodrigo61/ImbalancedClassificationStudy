@@ -268,7 +268,14 @@ predictLearner.classif.rusboost = function(.learner, .model, .newdata, threshold
   .newdata[1, 'y_data'] = 0
   .newdata[, 'y_data'] = as.factor(.newdata[, 'y_data'])
   
+  print("DEBUGGGGGGG")
+  print("summary(.newdata)")
+  print(summary(.newdata))
+  
   p = predict(.model$learner.model, newdata = .newdata)
+  
+  print("summary(p$prob)")
+  print(summary(p$prob))
   
   if (.learner$predict.type == "response") 
     return(as.factor(p$class)) else return(p$prob)

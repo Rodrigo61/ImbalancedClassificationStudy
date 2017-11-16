@@ -66,7 +66,7 @@ summary(ds)
 
 Computando as médias das iteracoes
 ```{r collapse=T}
-ds = group_by(ds, learner , weight_space , measure , sampling , ruspool , dataset , imba.rate)
+ds = group_by(ds, learner , weight_space , measure , sampling , underbagging , dataset , imba.rate)
 ds = summarise(ds, tuning_measure = mean(tuning_measure), holdout_measure = mean(holdout_measure),
                holdout_measure_residual = mean(holdout_measure_residual))
 
