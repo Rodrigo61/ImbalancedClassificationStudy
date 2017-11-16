@@ -1,4 +1,4 @@
-N=225
+N=228
 universe                = vanilla
 executable            = gmeans_svm_adasyn.sh
 arguments               = $(Process)

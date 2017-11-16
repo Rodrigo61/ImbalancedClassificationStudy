@@ -78,7 +78,7 @@ for(file_path in summary_file_list){
     df = read.csv(file_path, header = T)
   
     print_debug("Dataset corrent:")
-    print(df)
+    print(summary(df))
     
     # Vamos adicionar ao arquivo de summary individual as colunas
     # que ele não era responsável por informar, mas que precisamos
@@ -98,8 +98,15 @@ for(file_path in summary_file_list){
     
     #acumulando no dataframe final
     df_final = rbind(df_final, df)
+
+    
   }
 }
+
+print("class(df_final)")
+print(class(df_final))
+print("Summary final")
+print(summary(df_final))
 
 #Salvando dados do dataframe final
 out_filename = paste("ds_", dataset_imba_rate, "_summary.csv", sep ="")

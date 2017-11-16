@@ -39,8 +39,8 @@ C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
-#DATASET_LIST_PATH = "../dataset_list_RECOD"
-DATASET_LIST_PATH = "../dataset_list"
+DATASET_LIST_PATH = "../dataset_list_RECOD"
+#DATASET_LIST_PATH = "../dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
