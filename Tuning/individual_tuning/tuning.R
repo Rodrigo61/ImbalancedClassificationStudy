@@ -19,11 +19,9 @@ library(smotefamily)
 #library(rusboost)
 library(rpart)
 set.seed(3)
-#source("../RUSBoost.R")
-#source("../UnderBagging.R")
-#TODO
-source("Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/RUSBoost.R")
-source("Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/UnderBagging.R")
+source("../RUSBoost.R")
+source("../UnderBagging.R")
+
 
 
 #**************************************************************#
@@ -42,10 +40,9 @@ C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
-#DATASET_LIST_PATH = "../dataset_list_RECOD"
+DATASET_LIST_PATH = "../dataset_list_RECOD"
 #DATASET_LIST_PATH = "../dataset_list"
-#TODO
-DATASET_LIST_PATH = "Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/dataset_list"
+
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -159,7 +156,6 @@ c.get_majority_weight = function(){
       #Definimos essa razao como o custo de erro da classe majoritária.
       MAJORITY_weight = length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))    
     }
-    
     
   }else{
     #Desabilita o class weight
@@ -534,26 +530,19 @@ opt = c.get_args()
 dataset_list = read.csv(DATASET_LIST_PATH, header=F)
 
 #Selecionando dataset pela posicao na lista
-#TODO
-#dataset_id = as.numeric(opt$dataset_id) + 1
-dataset_id = 1
+dataset_id = as.numeric(opt$dataset_id) + 1
 c.dataset_path = as.character(dataset_list[dataset_id,])
 dataset_dir = dirname(c.dataset_path)
 c.dataset_imba_rate = str_extract(c.dataset_path, "0.[0-9]{2,3}")
 
 
-#TODO
 #Selecionando os parametros para o tuning
-#c.measure = c.select_measure(opt$measure)
-c.measure = auc
-#c.learner_str = c.select_learner(opt$model)
-c.learner_str = XGBOOST_STR
-#c.weight_space = c.select_weight_space(opt$weight_space)
-c.weight_space = TRUE
-#c.oversampling_method = c.select_oversampling(opt$oversampling)
-c.oversampling_method = FALSE
-#c.underbagging = c.select_underbagging(opt$underbagging)
-c.underbagging = FALSE
+c.measure = c.select_measure(opt$measure)
+c.learner_str = c.select_learner(opt$model)
+c.weight_space = c.select_weight_space(opt$weight_space)
+c.oversampling_method = c.select_oversampling(opt$oversampling)
+c.underbagging = c.select_underbagging(opt$underbagging)
+
 
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Parametros escolhidos:")
