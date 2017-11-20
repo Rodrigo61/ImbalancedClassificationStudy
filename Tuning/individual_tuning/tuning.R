@@ -19,9 +19,12 @@ library(smotefamily)
 #library(rusboost)
 library(rpart)
 set.seed(3)
-source("../RUSBoost.R")
-source("../UnderBagging.R")
-source("../measures.R")
+#source("../RUSBoost.R")
+#source("../UnderBagging.R")
+#TODO
+source("Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/RUSBoost.R")
+source("Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/UnderBagging.R")
+
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
@@ -39,8 +42,10 @@ C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
-DATASET_LIST_PATH = "../dataset_list_RECOD"
+#DATASET_LIST_PATH = "../dataset_list_RECOD"
 #DATASET_LIST_PATH = "../dataset_list"
+#TODO
+DATASET_LIST_PATH = "Dropbox/UNICAMP/IC/estudo_cost_learning/Tuning/individual_tuning/dataset_list"
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -148,8 +153,14 @@ c.create_holdout_train_test = function(k){
 #Funcao que retorna o custo da classe majoritaria para o class_weight learning
 c.get_majority_weight = function(){
   if(c.weight_space == T){
-    #Definimos essa razao como o custo de erro da classe majoritária.
-    MAJORITY_weight = length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))  
+    if(c.learner_str == XGBOOST_STR){
+      MAJORITY_weight = 1 - length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))    
+    }else{
+      #Definimos essa razao como o custo de erro da classe majoritária.
+      MAJORITY_weight = length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))    
+    }
+    
+    
   }else{
     #Desabilita o class weight
     MAJORITY_weight = 1 #remove a influencia do cost learning, uma vez que ambas as classes tem o mesmo custo.
@@ -209,6 +220,7 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   learner = c.makeLearnerWrapped() 
   
+  
   res_tuneParams = tuneParams(learner, 
                               task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                               resampling = rdesc,
@@ -223,6 +235,7 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x)
 
+  
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
   #Holdout normal
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS))
@@ -521,17 +534,26 @@ opt = c.get_args()
 dataset_list = read.csv(DATASET_LIST_PATH, header=F)
 
 #Selecionando dataset pela posicao na lista
-dataset_id = as.numeric(opt$dataset_id) + 1
+#TODO
+#dataset_id = as.numeric(opt$dataset_id) + 1
+dataset_id = 1
 c.dataset_path = as.character(dataset_list[dataset_id,])
 dataset_dir = dirname(c.dataset_path)
 c.dataset_imba_rate = str_extract(c.dataset_path, "0.[0-9]{2,3}")
 
+
+#TODO
 #Selecionando os parametros para o tuning
-c.measure = c.select_measure(opt$measure)
-c.learner_str = c.select_learner(opt$model)
-c.weight_space = c.select_weight_space(opt$weight_space)
-c.oversampling_method = c.select_oversampling(opt$oversampling)
-c.underbagging = c.select_underbagging(opt$underbagging)
+#c.measure = c.select_measure(opt$measure)
+c.measure = auc
+#c.learner_str = c.select_learner(opt$model)
+c.learner_str = XGBOOST_STR
+#c.weight_space = c.select_weight_space(opt$weight_space)
+c.weight_space = TRUE
+#c.oversampling_method = c.select_oversampling(opt$oversampling)
+c.oversampling_method = FALSE
+#c.underbagging = c.select_underbagging(opt$underbagging)
+c.underbagging = FALSE
 
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Parametros escolhidos:")
@@ -544,6 +566,7 @@ c.print_debug(paste("underbagging: ", c.underbagging))
 
 # Validando parametros para o tuning
 c.validate_params()
+
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
@@ -570,3 +593,4 @@ c.save_tuning(measure_list = measure_list)
 # [1] R. Barandela, J.S. Sánchez, V. García, E. Rangel, Strategies for learning in class imbalance problems, Pattern Recognition 36 (3) (2003) 849–851
 # [2] https://github.com/mlr-org/mlr/blob/master/R/RLearner_classif_ksvm.R
 # [3] Hyper-parameter Tuning of a Decision Tree Induction Algorithm paper
+
