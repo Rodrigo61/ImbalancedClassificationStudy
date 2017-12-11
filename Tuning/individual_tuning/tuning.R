@@ -23,20 +23,39 @@ source("../RUSBoost.R")
 source("../UnderBagging.R")
 
 
+## Define a function that calculates the misclassification rate
+measuremy.auc = function(probabilities, truth, negative, positive) {
+  library(pROC)
+  roc_obj <- roc(truth, probabilities)
+  auc(roc_obj)
+}
+
+## Generate the Measure object
+my.auc = makeMeasure(
+  id = "my.auc", name = "My AUC",
+  properties = c("classif", "req.pred", "req.truth", "req.prob"),
+  minimize = FALSE, best = 1, worst = 0,
+  fun = function(task, model, pred, feats, extra.args) {
+    measuremy.auc(getPredictionProbabilities(pred), pred$data$truth, pred$task.desc$negative, pred$task.desc$positive)
+  }
+)
+
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
 #**************************************************************#
 
 #Quantas iteracoes serao feitas no random search
-MAX_IT = 10L
+
+MAX_IT = 3L
+#MAX_IT = 10L   #TODO: voltar para 10l
 #parametro K do K-folds
 ITERS = 3L
-DEBUG = T
+DEBUG = F   #TODO: voltar para T
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
-C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
+#C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 SUMMARY_FOLDER_NAME = "summary_files"
@@ -185,6 +204,8 @@ c.makeLearnerWrapped = function(hiper.par.vals = NULL){
     learner = setPredictType(learner, "prob")
   }
   
+  #TODO: APAGAR
+  learner = setPredictType(learner, "prob")
   return(learner)
 }
 
@@ -305,6 +326,8 @@ c.select_measure = function(arg){
   }else if(arg == "gmeans"){
     return(gmean)   # Ref [1]
   }else if(arg == "auc"){
+    #TODO: APAGAR
+    return(my.auc)
     return(auc)
   }else if(arg == "mcc"){
     return(mcc)
@@ -443,7 +466,9 @@ c.exec_tuning = function(){
   # Prints de debug
   c.print_debug("Resultados do tuning:")
   c.print_debug(paste(COLUMNS_NAMES, collapse=" | "))
-  print(tuning_and_holdout)
+  if(DEBUG){
+    print(tuning_and_holdout)
+  }
   
   return(tuning_and_holdout)
 }
@@ -571,8 +596,26 @@ c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()
 
+# TODO: APAGAR
+c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
+c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
+c.measure = my.auc
+measure_list_2 = c.exec_tuning()
+
+measure_1 = (as.numeric(measure_list[[1]][8]) + as.numeric(measure_list[[2]][8]) + as.numeric(measure_list[[3]][8]))/3
+measure_2 = (as.numeric(measure_list_2[[1]][8]) + as.numeric(measure_list_2[[2]][8]) + as.numeric(measure_list_2[[3]][8]))/3
+
+if(abs(measure_1-measure_2) > 0.1){
+  print("metricas nao batem")
+  print("abs(measure_1-measure_2)")
+  print(abs(measure_1-measure_2))
+  print(paste("dataset_id = ", dataset_id, sep=""))
+}
+
+
+#TODO: Descomentar
 #Salvando os dados obtidos dos tuning
-c.save_tuning(measure_list = measure_list)
+#c.save_tuning(measure_list = measure_list)
 
 
 ##
