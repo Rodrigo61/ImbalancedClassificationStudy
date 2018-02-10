@@ -1,0 +1,27 @@
+Resumo:
+Módulo responsável pela transformacao dos data sets reais providos pelo estudo em data sets binários e artificialmente desbalanceados.
+Cada data set é binarizado escolhendo-se uma classe para ser a minoritária e aglomerando as demais em classe majoritária. Uma vez binarizado, o dataset entao sofre amostragens de modo a chegarmos nos níveis de desbalanco desejados. Cada passo desse módulo prezou por manter a maior quantidade possível de dados e gerar a maior quantidade possivel de data set artificialmente desbalanceados.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Arquivos:
+
+-> transform.R (.sh e .sub)
+Script(Condor"s job) responsável pela transformacao de todos os data sets. Ele utiliza os caminhos dados pelo arquivo "original_dataset_list" e processa
+um data set por vez. Os novos data sets são armazenados na mesma pasta do data set original, sufixados pelo seu desbalanco (e.g. ds_0.001.csv).
+
+-> original_dataset_list
+Lista gerada de caminhos absolutos para os .csv dos data sets. Esse arquivo deve conter apenas um caminho absoluto por linha. Esse arquivo é obrigatório para o funcionamento do script "transform.R"
+
+-> original_dataset_list_RECOD
+Lista gerada de caminhos absolutos para os .csv dos data sets na máquina do RECOD. Para alternar entre esta lista e a lista "original_dataset_list", altere a constante no script "transform.R"
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Instrucoes de uso:
+Esse módulo depende de execucao dos jobs do módulo "individual_tuning", pois presupoem a existencia de dos dados obtidos para cada combinacao de treinamento.
+
+1) Preencha o arquivo "original_dataset_list" com os caminhos absolutos para os data sets.
+2) Submeta no condor o job "transform.sub". Antes, verifique se a quantidade de linhas do arquivo "original_dataset_list" (i.e. wc -l original_dataset_list) está sendo utilizada como constante N do arquivo transform.sub.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+

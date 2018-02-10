@@ -1,1 +1,10 @@
-Este módulo é responsável por preencher com linhas vazias as informacoes faltantes em cada summary_file dos data sets artificialmente desbalanceados. Ou seja, se um data set desbalanceado não teve alguma informacao computada que deveria ter sido, entre todas as combinacoes de cenários esperadas, esse módulo deve preencher esse cenarios com NA's de modo que todos os summary_files contenham a mesma quantidade de linhas. Por fim essas linhas são ordenadas para que possamos comparar lado a lado quaisquer dois summary_files.
+Cada pasta dentro desta pasta é considerada um módulo. A sequencia lógica de utilizacao destes módulos é:
+
+1) TransformacaoDataset
+2) Tuning/individual_tuning
+3) Tuning/summary_compiler
+4) SummaryFixer
+5) SummaryResults
+6) TestesEstatisticos
+
+Dentro de cada módulo existe um arquivo README que orienta o leitor sobre seu funcionamento.

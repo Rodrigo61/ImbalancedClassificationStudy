@@ -1,0 +1,111 @@
+Esse script é responsável por realizar os testes estatísticos de significancia
+entre o RUSBoost e a combinacao (Algo+tecnica) vencedora para cada métrica
+
+```{r}
+library("scmamp")
+library(dplyr)
+```
+
+## Parametros do script
+```{r}
+
+# Aqui definimos o algoritmo que será comparado com o rusboost, sempre 1vs1
+
+#winner_algorithm = "classif.randomForest"   # combinacao vencedora para AUC
+#winner_technique = c(FALSE, FALSE, FALSE)
+
+winner_algorithm = "classif.randomForest"  # combinacao vencedora para demais métricas
+winner_technique = c(FALSE, FALSE, TRUE)
+
+# Aqui definimos quais das 3 performances vamos utilizar (HOLDOUT, RESIDUAL ou TUNING)
+HOLDOUT = "holdout_measure"
+RESIDUAL = "holdout_measure_residual"
+TUNING = "tuning_measure"
+selected_performance = RESIDUAL
+
+# Aqui definimos a métrica desejada
+ACC = 'Accuracy'
+AUC = 'Area under the curve'
+MCC = 'Matthews correlation coefficient'
+F1 = 'F1 measure'
+GMEAN = 'G-mean'
+selected_measure = F1
+```
+
+
+## Carregando data set compilado
+```{r}
+ds = read.csv("/home/rodrigo/Dropbox/UNICAMP/IC/estudo_cost_learning/SummaryResults/summary_compilation_fixed.csv", header = T)
+
+summary(ds)
+```
+
+## Filtrando pela métrica selecionada
+```{r}
+ds = filter(ds, measure == selected_measure)
+```
+
+
+## Computando as médias das iteracoes da combinacao (pré-processamento). Isso transforma cada trio de medicoes em apenas uma medicao (média das 3)
+```{r}
+ds = group_by(ds, learner , weight_space , measure , sampling , underbagging , dataset , imba.rate)
+ds = summarise(ds, tuning_measure = mean(tuning_measure), holdout_measure = mean(holdout_measure),
+               holdout_measure_residual = mean(holdout_measure_residual))
+
+ds = as.data.frame(ds)
+```
+
+
+## Selecionando medicoes da combinacao vencedora
+```{r}
+
+filter_names = c("learner", "sampling", "weight_space", "underbagging")
+filter_values = c(winner_algorithm, winner_technique)
+
+dots = paste0(filter_names," == '",filter_values,"'")
+ds_winner = filter_(ds, .dots = dots)
+
+summary(ds_winner)
+```
+
+
+## Selecionando medicoes do RUSBoost
+```{r}
+filter_names = c("learner")
+filter_values = c('classif.rusboost')
+
+dots = paste0(filter_names," == '",filter_values,"'")
+ds_rusboost = filter_(ds, .dots = dots)
+```
+
+
+
+
+## Pareando data frame de medicoes entre os dois algoritmos
+```{r}
+
+# Filtrando apenas pela performance selecionada
+ds_winner = select(ds_winner, matches(paste("^", selected_performance, "$|", selected_performance, "[^_]", sep="")))
+ds_rusboost = select(ds_rusboost, matches(paste("^", selected_performance, "$|", selected_performance, "[^_]", sep="")))
+
+# Juntando cada uma das partes horizontalmente em um só data set (pareando resultados)
+df_tec_wide = do.call("cbind", sapply(list(winner = ds_winner, rusb = ds_rusboost), function(x){x}))
+
+# Renomeando a variavel
+df = df_tec_wide
+
+summary(df)
+```
+
+
+## Plotando grafico de Critical Diference
+```{r}
+result = tryCatch({
+    plotCD(df, alpha=0.05, cex = 0.95)
+}, error = function(e) {})
+```
+
+
+
+
+

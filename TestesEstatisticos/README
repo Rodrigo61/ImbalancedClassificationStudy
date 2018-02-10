@@ -1,0 +1,40 @@
+Resumo:
+Módulo responsável por analisar as diferencas estatísticas dos resultados obtidos e contidos no .csv único gerado pelo módulo "SummaryResults". Para a melhor compreensão dos testes estatísticos realizados, pode-se olhar diretamente para qualquer .pdf gerado como saída deste módulo. 
+
+Basicamente foram realizados 4 cenários de comparacao:
+
+I) Cenário de melhor técnica: Neste cenário, as técnicas de tratamento são comparadas entre si utilizando todas as medições de performance feitas no processo de treinamento, ou seja, a performance entre duas técnicas é comparada estatisticamente para cada conjunto possível de data set x desbalanço x algoritmo. Esse cenário recebe este nome, pois a intenção dele é demonstrar com um alto grau de generalidade qual técnica se mostra mais eficiente.
+
+II) Cenário de melhor algoritmo: Este cenário é análogo ao cenário I (i.e. Cenário de melhor técnica), mas aqui estamos comparando os algoritmos entre si. Novamente, esse cenário tem como objetivo prover para a comunidade uma resposta empírica de qual algoritmo é mais indicado, de forma geral, para os problema de classificação desbalanceada. É claro que como estamos estudando o comportamento apenas do algoritmo só utilizamos as medições realizadas no cenário de treinamento normal, ou seja, nos cenários onde não foram aplicadas nenhuma das técnicas de tratamento.
+
+III) Cenário de melhor combinação: Este cenário nada mais é do que a junção dos objetivos do cenário I e II, pois agora queremos prover indícios empíricos de qual combinação de algoritmo e técnica de tratamento é a melhor de maneira geral.
+
+IV) Cenário RUSBoost vs Melhor combinação: Neste cenário queremos verificar se uma técnica especificamente criada para combater o problema de aprendizado desbalanceado é superior à técnicas de tratamento utilizadas sobre algoritmos ordinários. A realização desse cenário depende do resultado do cenário IV, pois as medições do RUSBoost são diretamente comparadas com a melhor combinação obtida no cenário III.
+
+OBS: para os cenários I, II e III, foram realizados testes mais especificos, onde utilizamos como dados de testes apenas medicoes referentes a uma determinada faixa de desbalanco. 
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Arquivos:
+
+-> run_statistical_comparisons.R:
+Script para automatizar a execucao dos scripts RMDs. Este script ajuda a definir os cenários de comparacao através de parametros passados aos scripts RMDs.
+
+-> RUSBoost_comparison.Rmd
+Script RMD especializado em comparar estatisticamente a performance do RUSBoost com alguma outra técnica.
+
+-> statistical_comparisons.Rmd
+Script RMD especializado em comparar estatisticamente a performance entre as técnicas (com excecao do RUSBoost). Esse script aceita parametros que permitem especializar ainda mais as comparacoes.
+
+-> outputs (DIRETORIO)
+Pasta com todos os .pdf de saida gerados pelos scripts RMDs. Esse diretorio é subdividido em qual medicao de performance foi realizado os testes estatisticos e depois em qual medida.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Instrucoes de uso:
+Para rodar esse script voce deve ter resultado da execucao do módulo "SummaryResults", pois ele preve a existencia dos arquivos do tipo de um único .csv corretamente formatado que contem todos os dados do experimento. 
+
+1) Basta apenas executar o script run_statistical_comparisons.R. Os resultados serão gerados no diretorio "outputs"
+
+
+
+

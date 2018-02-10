@@ -1,12 +1,14 @@
 ##
-# Script responsável por calcular a melhor performance a respeito
-# das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
-# hiperparametros. Alguns parametros sao setados ao inicio do 
-# script. O script deve ser extensivel e totalmente independente, de modo que o tuning
-# eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez.
+# Script responsável por calcular a performance obtidade para uma determinada combinacao de treinamento
+# passada como parametro para este script. Para obtencao dessa performance, é realizado um CV k-fold 
+# e um random grid search para a busca de hiperparametros. O script foi feito de modo a tentar um bom
+# nível de paralelismo, por isso é necessário informar os parametros de treinamento, como: dataset, 
+# algoritmo, técnica de tratamento, métrica. E este script irá realizar somente o treinamento dessa 
+# combinacao.
+# Para melhor compreender o funcionamento dos parametros deste script, utilize o comando:
+#         Rscript --vanilla tuning.R --help
 #
-#
-# Veja o README para informacoes de como adicionar novas combinacoes de tuning.
+# Veja o README para mais informacoes de funcionamento e modificacao destes 
 ##
 
 
@@ -16,52 +18,45 @@ library(xgboost)
 library(caret)
 library(optparse)
 library(smotefamily)
-#library(rusboost)
 library(rpart)
-set.seed(3)
 source("../RUSBoost.R")
 source("../UnderBagging.R")
 
+# Seed para dados aleatorios
+set.seed(3)
 
-## Define a function that calculates the misclassification rate
-measuremy.auc = function(probabilities, truth, negative, positive) {
-  library(pROC)
-  roc_obj <- roc(truth, probabilities)
-  auc(roc_obj)
-}
-
-## Generate the Measure object
-my.auc = makeMeasure(
-  id = "my.auc", name = "My AUC",
-  properties = c("classif", "req.pred", "req.truth", "req.prob"),
-  minimize = FALSE, best = 1, worst = 0,
-  fun = function(task, model, pred, feats, extra.args) {
-    measuremy.auc(getPredictionProbabilities(pred), pred$data$truth, pred$task.desc$negative, pred$task.desc$positive)
-  }
-)
 
 
 #**************************************************************#
 #*******************  CONSTANTES   ****************************#
 #**************************************************************#
 
-#Quantas iteracoes serao feitas no random search
-
-MAX_IT = 3L
-#MAX_IT = 10L   #TODO: voltar para 10l
-#parametro K do K-folds
+# Quantas iteracoes serao feitas no random search
+MAX_IT = 10L
+# Parametro K do K-folds
 ITERS = 3L
-DEBUG = F   #TODO: voltar para T
+# Habilita saidas de debug no script
+DEBUG = T
+
+# Algoritmos
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
-#C45_STR = "classif.J48" #J48 é a implementacao do C4.5 no Weka
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
+
+# Técnicas de tratamento
+SMOTE_STR = "SMOTE"
+ADASYN_STR = "ADASYN"
+UNDERBAGGING_STR = "UNDERBAGGING"
+
+# Constantes de filesystem
 SUMMARY_FOLDER_NAME = "summary_files"
 DATASET_LIST_PATH = "../dataset_list_RECOD"
 #DATASET_LIST_PATH = "../dataset_list"
 
+
+# Colunas do data frame gerado pelo script
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
@@ -69,9 +64,6 @@ COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbaggin
 POSITIVE_CLASS = "1"
 NEGATIVE_CLASS = "0"
 
-SMOTE_STR = "SMOTE"
-ADASYN_STR = "ADASYN"
-UNDERBAGGING_STR = "UNDERBAGGING"
 
 
 #**************************************************************#
@@ -103,30 +95,41 @@ c.print_debug = function(str){
 #----------------------#
 
 c.get_args = function(){
-  description = " Script responsável por calcular a melhor performance a respeito
-  das métricas para cada algoritmo desejado. É realizado um CV k-fold e um randomSearch para
-  hiperparametros. Alguns parametros sao setados ao inicio do 
-  script. O script deve ser extensivel e totalmente independente, de modo que o tuning
-  eh feito apenas para uma das possiveis combinacoes de metrica X algoritmo X cenario por vez"
+  description = " Script responsável por calcular a performance obtidade para uma determinada combinacao de treinamento
+ passada como parametro para este script. Para obtencao dessa performance, é realizado um CV k-fold 
+ e um random grid search para a busca de hiperparametros. O script foi feito de modo a tentar um bom
+ nível de paralelismo, por isso é necessário informar os parametros de treinamento, como: dataset, 
+ algoritmo, técnica de tratamento, métrica. E este script irá realizar somente o treinamento dessa 
+ combinacao. São gerados como resultado arquivos .csv contendo as performances medidas para cada
+ combinacao. Os .csv são salvos nas pastas dos respectivos data sets que os originaram."
   
   option_list = list(
     make_option(c("--dataset_id"), type="integer", default=NULL, 
-                help="ID do dataset a ser utilizado"),
+                help="ID do data set a ser utilizado, 
+                  esse ID nada mais é que a posicao do data set no arquivo lista de data sets,
+                  representado pela constante DATASET_LIST_PATH neste script."),
     
     make_option(c("--measure"), type="character", default=NULL, 
-                help="nome da métrica utilizada para otimizacao"),
+                help="nome da métrica utilizada para avalicao. Atente-se ao nome exato da métrica,
+                caso contrário o script produzira um erro. Os nomes aceitos são descritos na 
+                rotina 'c.select_measure' deste script"),
     
     make_option(c("--model"), type="character", default=NULL, 
-                help="nome do algoritmo que será realizado o tuning"),
+                help="nome do algoritmo de classificacao. Atente-se ao nome exato do algoritmo,
+                caso contrário o script produzira um erro. Os nomes aceitos são descritos na 
+                rotina 'c.select_learner' deste script "),
     
     make_option(c("--weight_space"), action= "store_true", default=NULL, 
-                help="se presente a flag o treinamento será feito com weight_space"),
+                help="FLAG BOOLEANA, se presente esta flag o script a técnica de Cost-sensitive learning"),
     
     make_option(c("--oversampling"), type= "character", default=NULL, 
-                help="nome do algoritmo de oversampling que será utilizado no dataset corrente"),
+                help="nome do algoritmo de oversampling. Atente-se ao nome exato do algoritmo,
+                caso contrário o script produzira um erro. Os nomes aceitos são descritos na 
+                rotina 'c.select_oversampling' deste script"),
     
     make_option(c("--underbagging"), action= "store_true", default=NULL, 
-                help="se presente a flag o modelo será encapsulado por um ensamble underbagging")
+                help="FLAG BOOLEANA, se presente esta flag o script utilizará um 
+                encapsulamento do algoritmo de classificacao escolhido por um ensemble underbagging")
     
   )
   
@@ -204,8 +207,7 @@ c.makeLearnerWrapped = function(hiper.par.vals = NULL){
     learner = setPredictType(learner, "prob")
   }
   
-  #TODO: APAGAR
-  learner = setPredictType(learner, "prob")
+  
   return(learner)
 }
 
@@ -326,8 +328,6 @@ c.select_measure = function(arg){
   }else if(arg == "gmeans"){
     return(gmean)   # Ref [1]
   }else if(arg == "auc"){
-    #TODO: APAGAR
-    return(my.auc)
     return(auc)
   }else if(arg == "mcc"){
     return(mcc)
@@ -560,14 +560,12 @@ c.dataset_path = as.character(dataset_list[dataset_id,])
 dataset_dir = dirname(c.dataset_path)
 c.dataset_imba_rate = str_extract(c.dataset_path, "0.[0-9]{2,3}")
 
-
 #Selecionando os parametros para o tuning
 c.measure = c.select_measure(opt$measure)
 c.learner_str = c.select_learner(opt$model)
 c.weight_space = c.select_weight_space(opt$weight_space)
 c.oversampling_method = c.select_oversampling(opt$oversampling)
 c.underbagging = c.select_underbagging(opt$underbagging)
-
 
 #Executando e armazenando os valores obtidos com o tuning
 c.print_debug("Parametros escolhidos:")
@@ -578,9 +576,9 @@ c.print_debug(paste("Weitgh space: ", c.weight_space))
 c.print_debug(paste("Oversampling method: ", c.oversampling_method))
 c.print_debug(paste("underbagging: ", c.underbagging))
 
+
 # Validando parametros para o tuning
 c.validate_params()
-
 
 #Carregando dataset
 c.dataset = read.csv(c.dataset_path, header = T)
@@ -592,30 +590,11 @@ c.dataset[, "y_data"] = as.factor(c.dataset[, "y_data"])
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 
-
 #Executando e obtendo os resultados para o tuning com os parametros dados
 measure_list = c.exec_tuning()
 
-# TODO: APAGAR
-c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
-c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
-c.measure = my.auc
-measure_list_2 = c.exec_tuning()
-
-measure_1 = (as.numeric(measure_list[[1]][8]) + as.numeric(measure_list[[2]][8]) + as.numeric(measure_list[[3]][8]))/3
-measure_2 = (as.numeric(measure_list_2[[1]][8]) + as.numeric(measure_list_2[[2]][8]) + as.numeric(measure_list_2[[3]][8]))/3
-
-if(abs(measure_1-measure_2) > 0.1){
-  print("metricas nao batem")
-  print("abs(measure_1-measure_2)")
-  print(abs(measure_1-measure_2))
-  print(paste("dataset_id = ", dataset_id, sep=""))
-}
-
-
-#TODO: Descomentar
 #Salvando os dados obtidos dos tuning
-#c.save_tuning(measure_list = measure_list)
+c.save_tuning(measure_list = measure_list)
 
 
 ##

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Este script é responsável pela criacao de forma automática de jobs para serem executados pelo Condor.
-# É um script de execucao manual.
-# Ele cria em uma pasta de submissao todos os pares de arquivo .sh e .sub para todas as combinacoes pos-
-# síveis de execucao do script tuning.R
+# É um script de execucao manual (i.e. deve ser chamado pelo usuario antes de executar os jobs).
+# Ele cria em uma pasta de submissao todos os pares de arquivo .sh e .sub de todas as combinacoes possíveis de execucao 
+# do script tuning.R
 # São responsabilidades deste script:
 #	* Listar todas as métricas a serem utilizadas
 #	* Listar todos os Learners a serem utilizados
@@ -27,7 +27,7 @@ mkdir -p $submission_files_dir
 echo "pasta 'submission_files' criado no diretorio $HOME_PATH"
 
 
-## recriando run_all.sh
+## recriando script 'run_all.sh'
 run_all_path="run_all.sh"
 echo "#!/bin/bash" > $run_all_path
 echo "cd $submission_files_dir" >> $run_all_path
@@ -38,15 +38,16 @@ chmod 755 $run_all_path
 cd $submission_files_dir
 
 
-## criando combinacoes
+## criando os pares de arquivos (.sh) e (.sub) de todas as combinacoes
 for measure in "${measures[@]}"
 do
 	for learner in "${learners[@]}"
 	do
 
 ###############
-#Begin Normal
+#Begin Normal (sem técnica de tratamento)
 ###############	
+
 		#gerando arquivo com aprendizado normal (.SH)
 		normal_file="${measure}_${learner}.sh"
 		content_normal='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner''
@@ -70,17 +71,18 @@ queue $(N) ' > $normal_file_sub
 
 
 ###############
-#Begin Class W
+#Begin Cost-sensitive learning
 ###############	
 
-		#gerando arquivo com aprendizado weight space
+		#gerando arquivo com aprendizado Cost-sensitive learning
 		ws_file="${measure}_${learner}_weight.sh"
 		content_ws='Rscript --vanilla ../tuning.R --dataset_id=$@ --measure='$measure' --model='$learner' --weight_space'
 		echo "#!/bin/bash
 export PATH=/home/rodrigoaf/R-3.3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 $content_ws" > $ws_file
 		chmod 755 $ws_file
-		#gerando arquivo com aprendizado weight space (.sub)
+
+		#gerando arquivo com aprendizado Cost-sensitive learning (.sub)
 		ws_file_sub="${measure}_${learner}_weight.sub"
 		echo 'N=228
 universe                = vanilla

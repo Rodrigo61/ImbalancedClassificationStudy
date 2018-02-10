@@ -4,8 +4,8 @@
 # esse cenarios com NA's de modo que todos os summary_files contenham a mesma quantidade de linhas. Por fim essas
 # linhas são ordenadas para que possamos comparar lado a lado quaisquer dois summary_files.
 #
-#
-# Verifique o README para informacoes sobre como adicionar novas verificacoes de colunas
+
+
 
 
 library(stringr)
@@ -140,9 +140,8 @@ for(summary_file_name in summary_list[,1]){
   summary = summary[do.call(order, lapply(1:NCOL(summary), function(i) summary[, i])), ]
 
   #Salvando summary atualizado
-  #write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
-  #print(paste("Summary atualizado e salvo em: ", summary_file_name), sep="")
-  print("ATENCAO: O script está com a atualizacao de datasets inoperante(comentada), para voltar o funcionamento normal descomente o codigo acima")
+  write.table(summary, summary_file_name, col.names = T, row.names = F, sep=",")
+  print(paste("Summary atualizado e salvo em: ", summary_file_name), sep="")
 
 }
 

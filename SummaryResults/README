@@ -1,17 +1,38 @@
 Resumo:
-Scripts responsÃ¡vel por compilar os dados obtidos pelo tuning dos modelos em cada um dos dataset
- gerados. A compilacao Ã© feita em um Ãºnico arquivo .csv
+Módulo responsável por compilar os dados obtidos pelo módulo "Tuning/individual_tuning", e posteriormente processados pelo módulo "Tuning/summary_compiler", em um único arquivo .csv que contém todas as medicoes realizadas. Esse arquivo .csv gerado por esse módulo
+será o arquivo que será processado e analisado no módulo "TestesEstatisticos" posteriormente.
 
+-----------------------------------------------------------------------------------------------------------------------------------------
 Arquivos:
 
-*generate_summary_list.sh:
-Script de execucao manual obrigatÃ³ria. Nao tem nenhum parametro e sua saida Ã© um arquivo que lista todos
-os arquivos de summary.
+-> generate_summary_list.sh:
+Script de execucao manual facultativa. Nao demanda parametros e como saida gera uma lista de todos os arquivos do tipo "ds_Y_summary" (veja README do módulo "Tuning/summary_compiler").
 
+-> compile_all_summary_files.R (.sh e .sub)
+Script(Condor's job) utilizado para a combilacao do .csv final. 
+
+-> csv_fixer.R:
+Arquivo temporário, ele corrige qualquer campo que esteja marcado como NA. A formatacao correta dos .csv exige que todo campo gerado pelo módulo "Tuning/individual_tuning" seja conhecido, de modo que se existe um NA ele deve ser corrigido para o valor FALSE.
+
+-> summary_compilation.csv:
+Arquivo de saida gerado pelo módulo. O .csv unico com a compilacao de todas as medicoes.
+
+-> summary_compilation_fixed.csv:
+Arquivo summary_compilation.csv corrigido pelo script temporário csv_fixer.R
+
+-> summary_list:
+Lista gerada de caminhos absolutos para os arquivos do tipo "ds_Y_summary" que serão compiladas pelo script. Esse arquivo deve conter
+apenas um caminho absoluto por linha. Esse arquivo é obrigatório para o funcionamento do script "compile_all_summary_files.R"
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 Instrucoes de uso:
-Para rodar esse script voce deve ter resultado da execucao do mÃ³dulo summary_compiler. Uma vez
-que se tenha esses arquivos basta executar o job compile_all_summary_files.
-Antes de executar O job(Ã apenas um) Ã© necessÃ¡ria a execucao do script generate_summary_list.
+Para rodar esse script voce deve ter resultado da execucao do módulo "summary_compiler", pois ele preve a existencia dos arquivos do tipo "ds_Y_summary" (veja README do módulo "Tuning/summary_compiler"). 
+
+ATENCAO: É altamente recomendado que antes da utilizacao deste módulo seja executado o módulo "SummaryFixer", pois este módulo supoem a corretude dos arquivos do tipo "ds_Y_summary" e apenas com a execucao do módulo "SummaryFixer" temos essa garantia.
+
+Passos:
+1) Preencha o arquivo "summary_list" com os caminhos absolutos para todas os arquivos do tipo "ds_Y_summary"  (veja README do módulo "Tuning/summary_compiler"). A utilizacao do script "generate_summary_list.sh" facilita esse processo.
+2) Submeta no condor o job "compile_all_summary_files.sub". Não existem ajustes de parametros para esse job.
 
 
 

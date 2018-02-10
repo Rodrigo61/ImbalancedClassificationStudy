@@ -44,6 +44,8 @@ ADASYN = "ADASYN"
 Carregando data set compilado
 ```{r hide=T}
 ds = read.csv("/home/rodrigo/Dropbox/UNICAMP/IC/estudo_cost_learning/SummaryResults/summary_compilation_fixed.csv", header = T)
+
+ds = filter(ds, learner != "classif.rusboost")
 summary(ds)
 ```
 
@@ -56,7 +58,8 @@ ds = filter(ds, measure == params$measure)
 Filtrando o data set
 ```{r}
 if(params$filter_keys != 'NULL' && !is.null(params$filter_keys)){
-  ds = filter_at(ds, .vars = params$filter_keys, .vars_predicate = any_vars(. == params$filter_values))
+  dots = paste0(params$filter_keys," == '",params$filter_values,"'")
+  ds = filter_(ds, .dots = dots)
 }
 
 summary(ds)
@@ -104,6 +107,13 @@ dim(df_tec_wide_residual)
 df = df_tec_wide_residual
 
 summary(df)
+```
+
+# Verificando a média de cada coluna selecionada
+```{r}
+for(i in (1:dim(df)[2])){
+  print(paste("Media da coluna ", colnames(df)[i], " = ", mean(df[,i], na.rm = TRUE), sep=""))
+}
 ```
 
 

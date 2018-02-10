@@ -1,22 +1,31 @@
 ##
-# Script responsável por compilar as informacoes obtidadas pelo tuning individual de
-# cada uma das possibilidade de metrica X algoritmo X cenario em um soh CSV para o dataset
-# em questao.
+# Script responsável por compilar os resultados obtidados pelo tuning individual de
+# cada uma das possibilidade de metrica X algoritmo X cenario, obtidos no módulo 'individual_tuning',
+# em um só .csv para cada data set. 
+#
+# PARAMETROS: Esse script só tem como parametro qual item da lista 'summary_dir_list' será compilado.
+#
+#
+# Para mais informacoes do funcionamento deste script e deste módulo veja o README
 ##
 
 library(stringr)
 
-# Lista de colunas da compilacao final, nem todos os arquivos individuais devem respeitar
-# essa lista
+#**************************************************************#
+#*******************  CONSTANTES   ****************************#
+#**************************************************************#
+
+# Lista de colunas da compilacao final de dataframe, nem todos os arquivos individuais devem respeitar
+# essa lista, mas serão convertidos para ela
 COLUMNS_NAMES = c("learner", "weight_space", "measure", "sampling", "underbagging",
                   "tuning_measure", "holdout_measure", 
                   "holdout_measure_residual", "iteration_count")
 
-#**************************************************************#
-#*******************  CONSTANTES   ****************************#
-#**************************************************************#
-SUMMARY_LIST_FILENAME = "summary_dir_list"
 DEBUG = T
+
+# Constantes de filesystem
+SUMMARY_LIST_FILENAME = "summary_dir_list"
+
 
 #**************************************************************#
 #*******************  FUNCOES     *****************************#

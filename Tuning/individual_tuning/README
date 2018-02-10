@@ -1,41 +1,59 @@
 Resumo:
-Módulo responsável pela a execucao do tuning e teste de todos os algoritmos que tratam o problema do
-desbalanceamento presente nos datasets gerados.
+Módulo responsável pela a execucao do tuning e medicao de performance de todos as combinacoes que tratam o problema do
+desbalanco presente nos datasets gerados. 
+São gerados como resultado arquivos .csv contendo as performances medidas para cada combinacao. Os .csv são salvos nas pastas dos respectivos data sets que os originaram. Esses arquivos são agrupados em pastas chamadas de 'summary_files', onde são agrupados resultados correspondentes a uma porcentagem específica de classe minoritária. Por exemplo, todos os resultados obtidos para um data set X em uma porcentagem Y são armazenados em uma pasta chamada 'summary_filesY' na mesma pasta que contém o data set X.  
+Essas pastas de summary e seus respectivos .csv serão tratados e compilados pelo próximo módulo,  chamado 'summary_compiler'. 
 
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 Arquivos:
 ->generate_ds_list.sh 
-É um script de execucao manual para facilitar a busca dos datasets gerados. Em geral redirecionamos a saida padrao de seu resultado para o arquivo dataset_list
+É um script de execucao manual para facilitar a busca dos data sets artificialmente desbalanceados gerados. Em geral redirecionamos a saida padrao de seu resultado para o arquivo dataset_list.
 
 ->dataset_list
-Lista do caminho absoluto dos datasets desbalanceados gerados. Essa lista é gerada pelo generate_ds_list.sh
+Lista do caminho absoluto dos data sets artificialmente desbalanceados gerados. Essa lista pode ser facilmente gerada pelo  script generate_ds_list.sh.
 
 ->dataset_list_RECOD
-Análogo ao dataset_list, mas com o sufixo RECOD, apontando que utilizo os caminhos absolutos no RECOD
+Análogo ao dataset_list, mas com o sufixo RECOD, apontando que utilizo os caminhos absolutos no condor (RECOD).
 
-->Combination_gen.sh
-Script responsável por gerar todas as combinacoes de Learner X Measure X preprocessing no formato de Condor's job. A principal saida desse script é o script run_all.sh
+->combination_gen.sh
+Script responsável por gerar todas as combinacoes de Learner X Measure X tecnica no formato de Condor's job. Ou seja, para cada combinacao possivel é gerado um arquivo de script (.sh) e um de submissao (.sub), esses arquivos são salvos na pasta 'submission_files'. A principal saida desse script é o script run_all.sh.
 
 ->run_all.sh
-Script que submete para o condor todas as combinacoes geradas pelo scrip combination_gen.sh
+Script que submete para o condor todas as combinacoes geradas pelo scrip combination_gen.sh.
 
+->tuning.R
+Script em R responsável pela execucao  dos jobs. Sua utilizacao é mascarada pelos demais scripts, mas caso o usuário precise de melhores
+compreensoes sobre seu uso, ele pode utilizar o comando de ajuda: 'Rscript --vanilla tuning.R --help'
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 Instrucoes de uso:
-Esse módulo depende de execucao do módulo "TransformacaoDataset", pois presupoem a existencia de datasets desbalanceados gerados. 
-O job "tuning" executa por vez apenas 1 Learner + 1 Measure + 1 pre-processing method, de modo a ter grande poder de paralelismo.
+Esse módulo depende de execucao prévia do módulo "TransformacaoDataset", pois presupoem a existencia de data sets artificalmente desbalanceados gerados. 
+Os jobs do script "tuning.R" executam por vez apenas 1 Learner + 1 Measure + 1 técnica, de modo a ter grande poder de paralelismo.
+
+1) Gere um arquivo contendo uma lista de todos os caminhos absolutos de data sets que serão utilizados. Essa lista pode ser facilmente
+gerada pelo script 'generate_ds_list.sh'. É importante que a lista contenha um caminho absoluto por linha.
+2) Execute o script 'combination_gen.sh'.
+3) Execute o script run_all.sh para rodar os jobs de todas as combinacoes feitas pelo script 'combination_gen.sh', ou entre na pasta 'submission_files' e submeta manualmente um job.
+
+4) (FACULTATIVO) Utilize o script 'find_failed_scripts.sh' na pasta ancestral 'estudo_cost_learning' para verificar se houve algum erro na execucao dos jobs. Exemplo de uso a partir da pasta raiz deste módulo: '../../find_failed_scripts.sh ./submission_files/'
 
 
-Adicionando novas combinacoes:
-Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job prévio, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um dataset com as ferramentas atuais, ele não precisa prever quais novas ferramentas serão anexadas no futuro. 
-Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas:
+-----------------------------------------------------------------------------------------------------------------------------------------
+Adicionando novas combinacoes (PARA DESENVOLVIMENTO):
+Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job já feito, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um data set com as ferramentas atuais. Logo, ele não precisa prever quais novas ferramentas serão anexadas no futuro. Ou seja, os resultados (.csv) gerados por jobs antigos não precisam ser refeitos para terem compatibilidade com jobs recentes, essa compatibilidade será obtida pelo módulo "summary_compiler".
+
+Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas caso o usuário queira adicionar uma nova combinacao ao resultado:
 
 --> tuning.R (Obrigatório)
 Claramente toda a nova logica da nova combinacao deve ser inserida nesse arquivo. Mas nao se esqueca: 
-	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria. OBS: é bom já adiantar que essa nova coluna também deve ser inserida no template do módulo "summary_compiler".
-	* Adicionar ao arguments, tanto em sua descricao quanto no codigo propriamento dito
-	* Criar uma funcao "Select" para selecionar de forma organizada o seu argumento e tratar os possiveis erros
-	* Criar uma variavel global com o valor selecionado do argumento
+	* Adicionar na variavel global COLUMN_NAME, caso seja uma nova categoria que altere o formato do data frame de resultado. OBS: é bom já adiantar que essa nova coluna também deve ser inserida no template do módulo "summary_compiler" (veja README desse módulo).
+	* Adicionar sua nova categoria ao arguments do script (rotina 'c.get_args'), tanto em sua descricao quanto no codigo propriamento dito.
+	* Criar uma funcao "Select" para selecionar de forma organizada o sua nova categoria e tratar os possiveis erros.
+	* Criar uma variavel global com o valor selecionado da sua nova categoria.
 	* Adicionar o valor da variavel global criada como coluna na funcao "c.gen_all_measures_inline"
-	  (Nao se esqueca de converter NULL -> FALSE caso seja o caso)
-	* Alterar o nome dos arquivo de saída na funcao 'c.save_tuning', caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posteriormente. IMPORTANTE: Mantenha a ordem original dos nomes, i.e, caso adicione um novo nome ele deve ser o último a ser inserido
+	  (Nao se esqueca de converter NULL -> FALSE caso seja o caso).
+	* Alterar o nome dos arquivo de saída na funcao 'c.save_tuning', caso seja uma nova categoria. Perceba que essa obrigacao pode gerar repeticao de informacao, dois arquivos com os mesmos resultados mais com nomes diferentes (e.g. classif.xgboost_Area_under_the_curve_FALSE e classif.xgboost_Area_under_the_curve_FALSE_FALSE). Mas este script nao precisa se preocupar com isso, será resolvido com pré-processamento posteriormente. IMPORTANTE: Mantenha a ordem original dos nomes, i.e, caso adicione um novo nome a cadeia acumulada ele deve ser o último a ser inserido.
 	* Se for um novo modelo, adicione um search space para o mesmo, dentro da funcao 'c.select_search_space'
 
 --> Combination_gen.sh (Facultativo)

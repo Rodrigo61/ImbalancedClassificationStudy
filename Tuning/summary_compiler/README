@@ -1,20 +1,29 @@
 Resumo:
-Módulo responsável pela compilacao de todos os resultados obtidos de um data set em apenas um arquivo .csv
+Módulo responsável pela compilacao de todos os resultados obtidos pelo módulo "individual_tuning" sobre um data set em apenas um arquivo .csv.
+O Script tem como parametro o caminho absoluto de uma pasta do tipo "summary_filesY" (veja README do módulo individual_tuning), e realiza
+uma compilacao de todos os .csv que existem nela em um só arquivo do tipo "ds_Y_summary", onde Y é a porcentagem da classe minoritária. Esses arquivos compilados serão utilizados pelo módulo posterior "SummaryResults".
 
+Observacao: Este módulo tem como responsábilidade fazer a compilacao respeitando a formatacao final de colunas esperada no data frame final. Ou seja, ajustar qualquer variacao de formato dos .csv dos arquivos produzidos pelo módulo "individual_tuning" (i.e. arquivos presentes nas pastas do tipo "summary_filesY"). Além disso, esse módulo é responsável por eliminar informacao repetida, ou seja, detectar se existem 2 arquivos que correspondem a mesma combinacao de execucao do módulo "individual_tuning" (essa logica é implementado pelo arquivo summary_compiler.R).
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 Arquivos:
 ->summary_compiler.R (e .sh e .sub)
-Script(Job) utilizando para a compilacao de cada data set.
+Script(Condor"s job) utilizado para a compilacao de cada pasta "summary_filesY" em um só arquivo do tipo "ds_Y_summary".
 
 ->generate_summary_dir_list.sh
-Script auxiliar de utilizacao manual obrigatóia. Gera uma lista de pastas cujo conteudo sao os os arquivos de summary
+Script auxiliar de utilizacao manual facultativa. Gera uma lista de caminhos para as pastas do tipo "summary_filesY".
 
 ->summary_dir_list
-Lista gerada pelo script generate_summary_dir_list.sh
+Lista gerada de caminhos absolutos para as pastas do tipo "summary_filesY" que serão compiladas pelo script. Esse arquivo deve conter
+apenas um caminho absoluto por linha. Esse arquivo é obrigatório para o funcionamento do script "summary_compiler.R"
 
-
+-----------------------------------------------------------------------------------------------------------------------------------------
 Instrucoes de uso:
-Esse módulo depende de execucao dos jobs do módulo "individual_tuning", pois presupoem a existencia de dos dados obtidos pelo tuning dos datasets. 
-O job "summary_compilar" executa para cada um dos datasets uma busca pelos seus arquivos de summary e os compila em um único csv, que é salvo  na pasta do dataset.
-Eh obrigatória a execucao do script generate_summary_dir_list.sh antes da submissao dos JOBs, pois esses serão baseados no conteudo do arquivo de saida do script.
-Também verifique se a quantidade de linhas do arquivo summary_dir_list (wc -l summary_dir_list) etstá sendo utilizada como constante N do arquivo summary_compiler.sub
-Observacao: Como os arquivos individuais de summary só tem como responsábilidade calcular e armazenar aquilo que calcularam, este módulo tem como responsábilidade fazer a compilacao respeitando a formatacao final de colunas esperada. Além disso, esse módulo é responsável por eliminar informacao repetida, i.e, detectar se existem 2 arquivos que correspondem a mesma combinacao de execucao do módulo "individual_tuning" (essa logica é implementado pelo arquivo summary_compiler.R)
+Esse módulo depende de execucao dos jobs do módulo "individual_tuning", pois presupoem a existencia de dos dados obtidos para cada combinacao de treinamento.
+
+1) Preencha o arquivo "summary_dir_list" com os caminhos absolutos para todas as pastas do tipo "summary_filesY" (veja README do módulo individual_tuning). A utilizacao do script "generate_summary_dir_list.sh" facilita esse processo.
+2) Submeta no condor o job summary_compiler.sub. Antes, verifique se a quantidade de linhas do arquivo summary_dir_list (i.e. wc -l summary_dir_list) está sendo utilizada como constante N do arquivo summary_compiler.sub.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+

@@ -1,0 +1,28 @@
+Resumo:
+Este módulo é responsável por preencher com linhas vazias as informacoes faltantes em cada arquivo do tipo "ds_Y_summary" (veja README do módulo "Tuning/summary_compiler"). Ou seja, se um data set desbalanceado não teve alguma informacao computada que deveria ter sido, entre todas as combinacoes de cenários esperadas, este módulo deve preencher as linhas referentes a estes cenarios com NA's, de modo que todos os arquivos do tipo "ds_Y_summary" contenham a mesma quantidade de linhas. Por fim essas linhas são ordenadas para que possamos comparar lado a lado quaisquer dois summary_files.
+
+Ao final, além de adicionar as linhas faltantes aos arquivos do tipo "ds_Y_summary", é gerado um relatório de quantas linhas foram criadas, para o usuário saber quantos cenários deixaram de ser calculados no módulo "Tuning/individual_tuning".
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Arquivos:
+
+-> summary_fixer.R (.sh e .sub):
+Script(Condor's job) responsável por corrigir os arquivos do tipo "ds_Y_summary". O script corrige um arquivo por vez.
+
+-> summary_list:
+Lista gerada de caminhos absolutos para os arquivos do tipo "ds_Y_summary" que serão corrigidos pelo script. Esse arquivo deve conter
+apenas um caminho absoluto por linha. Esse arquivo é obrigatório para o funcionamento do script "summary_fixer.R". A criacao desse arquivo é facilitada pela execucao do script "generate_summary_list.sh"
+
+-> generate_summary_list.sh:
+Script de execucao manual facultativa que gera, em linhas, os caminhos absolutos para todos os arquivos do tipo "ds_Y_summary", que foram gerados pelo módulo anterior "Tuning/summary_compiler".
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+Instrucoes de uso:
+Para rodar esse script voce deve ter resultado da execucao do módulo "summary_compiler", pois ele preve a existencia dos arquivos do tipo "ds_Y_summary" (veja README do módulo "Tuning/summary_compiler"). 
+
+1) Preencha o arquivo "summary_list" com os caminhos absolutos para todas os arquivos do tipo "ds_Y_summary"  (veja README do módulo "Tuning/summary_compiler"). A utilizacao do script "generate_summary_list.sh" facilita esse processo.
+2) Submeta no condor o job "summary_fixer.sub". Não existem ajustes de parametros para esse job.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
