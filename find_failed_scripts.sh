@@ -5,6 +5,9 @@ PATH_2_ANALYZE=$1
 #Todos os erros
 #grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error' -e 'warnings()'
 
+#grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
+
+grep -rIwl $PATH_2_ANALYZE -e 'num_syn_i'
 
 #Erros conhecidos
 # A ideia desse comando é detectar novos erros. A lista de erros conhecidossao:
@@ -12,7 +15,7 @@ PATH_2_ANALYZE=$1
 # * Erro logico de IF no ADASYN
 # * Erro Sigmoid
 # * Erro de loop infinito (Muito raro)
-grep -rL 'irrecoverable' $(grep -rL 'Sigmoid' $(grep -rL 'ADAS' $(grep -rL 'cannot allocate vector of size' $(grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error'))))
+#grep -rL 'irrecoverable' $(grep -rL 'Sigmoid' $(grep -rL 'ADAS' $(grep -rL 'cannot allocate vector of size' $(grep -rwl $PATH_2_ANALYZE -e 'halted' -e 'error' -e 'predictLearner'))))
 
 
 
