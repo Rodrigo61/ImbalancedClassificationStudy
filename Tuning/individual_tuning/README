@@ -29,7 +29,7 @@ compreensoes sobre seu uso, ele pode utilizar o comando de ajuda: 'Rscript --van
 -----------------------------------------------------------------------------------------------------------------------------------------
 Instrucoes de uso:
 Esse módulo depende de execucao prévia do módulo "TransformacaoDataset", pois presupoem a existencia de data sets artificalmente desbalanceados gerados. 
-Os jobs do script "tuning.R" executam por vez apenas 1 Learner + 1 Measure + 1 técnica, de modo a ter grande poder de paralelismo.
+Os jobs do script "tuning.R" executam por vez apenas 1 Learner + 1 Metric + 1 técnica, de modo a ter grande poder de paralelismo.
 
 1) Gere um arquivo contendo uma lista de todos os caminhos absolutos de data sets que serão utilizados. Essa lista pode ser facilmente
 gerada pelo script 'generate_ds_list.sh'. É importante que a lista contenha um caminho absoluto por linha.

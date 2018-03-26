@@ -33,8 +33,10 @@ set.seed(3)
 
 # Quantas iteracoes serao feitas no random search
 MAX_IT = 10L
-# Parametro K do K-folds
+# Quantidade de repeticoes totais que faremos nas medicoes
 ITERS = 3L
+# Porcentagem (total/HOLDOUT_FRAC) que será destinada ao conjunto de testes do holdout
+HOLDOUT_FRAC = 5
 # Habilita saidas de debug no script
 DEBUG = T
 
@@ -44,6 +46,7 @@ RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
+C45_STR = "classif.J48"
 
 # Técnicas de tratamento
 SMOTE_STR = "SMOTE"
@@ -147,8 +150,8 @@ c.create_holdout_train_test = function(k){
   c.dataset = c.dataset[sample(nrow(c.dataset)), ]
   
   # Definindo os indices que serao destinados para o test. Isso é feito com uma simples divisao 
-  # de quantas observacoes deveriam ir para cada um dos 5 folds. Lembrando que o teste corresponde
-  # a 1 dos 5 folds. Nao era possivel usar o createFolds do caret, pois o mesmo nao garantia estratificacao
+  # de quantas observacoes deveriam ir para cada um dos k folds. Lembrando que o teste corresponde
+  # a 1 dos k folds. Nao era possivel usar o createFolds do caret, pois o mesmo nao garantia estratificacao
   # com datasets com raridade absoluta.
   positive_indexes = which(c.dataset[, 'y_data'] == 1)
   positive_count = length(positive_indexes)
@@ -171,14 +174,15 @@ c.create_holdout_train_test = function(k){
 #----------------------#
 #Funcao que retorna o custo da classe majoritaria para o class_weight learning
 c.get_majority_weight = function(){
+  
   if(c.weight_space == T){
     if(c.learner_str == XGBOOST_STR){
+      #O custo para o XGBOOST é invertido, por isso aqui o invertemos.
       MAJORITY_weight = 1 - length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))    
     }else{
       #Definimos essa razao como o custo de erro da classe majoritária.
       MAJORITY_weight = length(which(c.dataset[, 'y_data'] == 1))/length(which(c.dataset[, 'y_data'] == 0))    
     }
-    
   }else{
     #Desabilita o class weight
     MAJORITY_weight = 1 #remove a influencia do cost learning, uma vez que ambas as classes tem o mesmo custo.
@@ -191,7 +195,7 @@ c.makeLearnerWrapped = function(hiper.par.vals = NULL){
 
   learner = makeLearner(c.learner_str)  
   
-  # Fazendo um wrapper para Weighted classes. Lembrar que 0 nos ds estudados a classe majoritaria vem antes
+  # Fazendo um wrapper para Weighted classes. Lembrar que nos ds estudados a classe majoritaria vem antes
   if(c.weight_space == TRUE){
     majority_weight = c.get_majority_weight()
     learner = makeWeightedClassesWrapper(learner, wcw.weight = majority_weight) 
@@ -234,6 +238,8 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
     )
     search_space = makeParamSet(params = c(search_space$pars, underbagging_params$pars))
     learner_aux = c.learner_str
+    
+    #Atualiza o learner atual para o underbagging, uma vez que já encapsulamos
     c.learner_str <<- underbagging_STR
   }
   
@@ -252,10 +258,9 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   #Armazenando melhor resultado obtido internamente no tuning
   result$performance_tuned = res_tuneParams$y
   
-  learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x)
-
-  
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
+  learner = c.makeLearnerWrapped(hiper.par.vals =res_tuneParams$x)
+  
   #Holdout normal
   learner_res = mlr::train(learner, makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS))
   p = predict(learner_res, task = makeClassifTask(data=test, target='y_data', positive=POSITIVE_CLASS))
@@ -287,7 +292,7 @@ c.gen_all_measures_inline = function(){
     
     #Seperando treino e teste (Holdout estratificado). 80%(4/5) dos dados para treino e 
     #o restante para teste.
-    holdout_aux = c.create_holdout_train_test(5);
+    holdout_aux = c.create_holdout_train_test(HOLDOUT_FRAC);
     train = holdout_aux$train
     test = holdout_aux$test
     
@@ -415,6 +420,7 @@ c.validate_params = function(){
     }
   }
 }
+
 #----------------------#
 c.select_search_space = function(){
   if(c.learner_str == SVM_STR){
@@ -446,12 +452,8 @@ c.select_search_space = function(){
       )
     )
   }else if(c.learner_str == C45_STR){
-    return(
-      makeParamSet(
-        makeDiscreteParam("M", c(1:50)), #Ref [3]
-        makeNumericParam("C", lower = 0.001, upper = 0.05)
-      )
-    )
+    # Para o C45 , não é feita busca de H.P.
+    return()
   }else{
     warning(paste("Nao existe um search_space definido para o algoritmo ", c.learner_str, sep=""))
     stop()
