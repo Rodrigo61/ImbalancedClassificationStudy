@@ -592,11 +592,12 @@ c.dataset[, "y_data"] = as.factor(c.dataset[, "y_data"])
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 
+summary(c.residual_dataset)
 #Executando e obtendo os resultados para o tuning com os parametros dados
-measure_list = c.exec_tuning()
+#measure_list = c.exec_tuning()
 
 #Salvando os dados obtidos dos tuning
-c.save_tuning(measure_list = measure_list)
+#c.save_tuning(measure_list = measure_list)
 
 
 ##

@@ -106,6 +106,7 @@ dim(df_tec_wide_residual)
 # Renomeando a variavel
 df = df_tec_wide_residual
 
+head(df)
 summary(df)
 ```
 
@@ -133,6 +134,12 @@ friedmanTest(df)
 test <- nemenyiTest (df, alpha=0.05)
 abs(test$diff.matrix) > test$statistic
 ```
+
+# Plotando os ranks
+```{r}
+print(colMeans(rankMatrix(df)))
+```
+
 
 # Plotando grafico de Critical Diference
 
