@@ -592,7 +592,15 @@ c.dataset[, "y_data"] = as.factor(c.dataset[, "y_data"])
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 
-summary(c.residual_dataset)
+MEAN = read.csv("MEAN", header = F)
+obs_count = dim(c.residual_dataset)[1]
+y_mean = colMeans(c.residual_dataset['y_data'])
+MEAN[1] = MEAN[1]+1
+MEAN[2] = MEAN[2] + obs_count*y_mean
+write.table(MEAN, "MEAN", col.names = F, row.names = F, sep=",")
+
+
+summary()
 #Executando e obtendo os resultados para o tuning com os parametros dados
 #measure_list = c.exec_tuning()
 
