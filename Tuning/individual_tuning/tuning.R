@@ -256,6 +256,8 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   
   #Armazenando melhor resultado obtido internamente no tuning
+  print("res_tuneParams$y: ")
+  print(res_tuneParams$y)
   result$performance_tuned = res_tuneParams$y
   
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
@@ -454,7 +456,9 @@ c.select_search_space = function(){
   }else if(c.learner_str == RPART_STR){
     # Para o RPART , não é feita busca de H.P.
     return(
-      list(xval = 0L)
+      makeParamSet(
+        makeDiscreteParam("xval", c(0))
+      )
     )
   }else{
     warning(paste("Nao existe um search_space definido para o algoritmo ", c.learner_str, sep=""))
