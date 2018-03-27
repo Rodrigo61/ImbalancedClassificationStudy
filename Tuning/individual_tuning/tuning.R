@@ -47,6 +47,7 @@ XGBOOST_STR = "classif.xgboost"
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 RPART_STR = "classif.rpart"
+KNN_STR = "classif.knn"
 
 # Técnicas de tratamento
 SMOTE_STR = "SMOTE"
@@ -256,8 +257,6 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   
   #Armazenando melhor resultado obtido internamente no tuning
-  print("res_tuneParams$x: ")
-  print(res_tuneParams$x)
   result$performance_tuned = res_tuneParams$y
   
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
@@ -361,8 +360,10 @@ c.select_learner = function(arg){
     return(RUSBOOST_STR)
   }else if(arg == "rpart"){
     return(RPART_STR)
+  }else if(arg == "knn"){
+    return(KNN_STR)
   }else{
-    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rpart ou rusboost")
+    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rpart, knn ou rusboost")
     stop()
   }
 }
@@ -454,10 +455,19 @@ c.select_search_space = function(){
       )
     )
   }else if(c.learner_str == RPART_STR){
-    # Para o RPART , não é feita busca de H.P.
+    # Para o RPART , não é feita busca de H.P. Mas para seguir o template dos outros classificadores
+    # colocamos uma busca de parametro fixada em xval = 0 (valor default desse h.p)
     return(
       makeParamSet(
         makeDiscreteParam("xval", c(0))
+      )
+    )
+  }else if(c.learner_str == KNN_STR){
+    # Para o KNN , não é feita busca de H.P. Mas para seguir o template dos outros classificadores
+    # colocamos uma busca de parametro fixada em k = 1
+    return(
+      makeParamSet(
+        makeDiscreteParam("k", c(1))
       )
     )
   }else{
