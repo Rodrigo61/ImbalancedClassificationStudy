@@ -47,7 +47,7 @@ XGBOOST_STR = "classif.xgboost"
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
 RPART_STR = "classif.rpart"
-KNN_STR = "classif.knn"
+KNN_STR = "classif.kknn"
 
 # Técnicas de tratamento
 SMOTE_STR = "SMOTE"
