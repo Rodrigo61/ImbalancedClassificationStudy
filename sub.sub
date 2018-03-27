@@ -1,0 +1,10 @@
+
+universe                = vanilla
+Requirements = ((Machine == "x04.recod"))
+executable              = runR.sh
+arguments               = teste.R $(Process)
+should_transfer_files  = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = teste.R
+output                  = x04.recod.out
+queue 
