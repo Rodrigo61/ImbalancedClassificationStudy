@@ -453,7 +453,11 @@ c.select_search_space = function(){
     )
   }else if(c.learner_str == RPART_STR){
     # Para o RPART , não é feita busca de H.P.
-    return()
+    return(
+      makeParamSet(
+        makeDiscreteParam("xval", c(0))
+      )
+    )
   }else{
     warning(paste("Nao existe um search_space definido para o algoritmo ", c.learner_str, sep=""))
     stop()
