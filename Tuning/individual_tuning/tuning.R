@@ -256,8 +256,8 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   
   #Armazenando melhor resultado obtido internamente no tuning
-  print("res_tuneParams$y: ")
-  print(res_tuneParams$y)
+  print("res_tuneParams$x: ")
+  print(res_tuneParams$x)
   result$performance_tuned = res_tuneParams$y
   
   #Obtendo e armazenando o resultado do holdout com os hp. obtidos pelo tuning
