@@ -46,7 +46,7 @@ RF_STR = "classif.randomForest"
 XGBOOST_STR = "classif.xgboost" 
 underbagging_STR = "classif.underbagging"
 RUSBOOST_STR = "classif.rusboost"
-C45_STR = "classif.J48"
+RPART_STR = "classif.rpart"
 
 # Técnicas de tratamento
 SMOTE_STR = "SMOTE"
@@ -357,10 +357,10 @@ c.select_learner = function(arg){
     return(XGBOOST_STR)
   }else if(arg == "rusboost"){
     return(RUSBOOST_STR)
-  }else if(arg == "c45"){
-    return(C45_STR)
+  }else if(arg == "rpart"){
+    return(RPART_STR)
   }else{
-    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, c45 ou rusboost")
+    warning("Selecione um dos seguintes algoritmos: svm, rf, xgboost, rpart ou rusboost")
     stop()
   }
 }
@@ -451,8 +451,8 @@ c.select_search_space = function(){
         makeDiscreteParam("learner_count", c(10,20,30,40,50,60))
       )
     )
-  }else if(c.learner_str == C45_STR){
-    # Para o C45 , não é feita busca de H.P.
+  }else if(c.learner_str == RPART_STR){
+    # Para o RPART , não é feita busca de H.P.
     return()
   }else{
     warning(paste("Nao existe um search_space definido para o algoritmo ", c.learner_str, sep=""))
@@ -592,20 +592,18 @@ c.dataset[, "y_data"] = as.factor(c.dataset[, "y_data"])
 c.residual_dataset_path = paste(dirname(c.dataset_path),"/residual_", c.dataset_imba_rate, ".csv", sep="")
 c.residual_dataset = read.csv(c.residual_dataset_path, header = T)
 
-MEAN = read.csv("MEAN", header = F)
-obs_count = dim(c.residual_dataset)[1]
-y_mean = colMeans(c.residual_dataset['y_data'])
-MEAN[1] = MEAN[1]+1
-MEAN[2] = MEAN[2] + obs_count*y_mean
-write.table(MEAN, "MEAN", col.names = F, row.names = F, sep=",")
-
-
-summary()
+#MEAN = read.csv("MEAN", header = F)
+#obs_count = dim(c.residual_dataset)[1]
+#y_mean = colMeans(c.residual_dataset['y_data'])
+#MEAN[1] = MEAN[1]+1
+#MEAN[2] = MEAN[2] + obs_count*y_mean
+#write.table(MEAN, "MEAN", col.names = F, row.names = F, sep=",")
+  
 #Executando e obtendo os resultados para o tuning com os parametros dados
-#measure_list = c.exec_tuning()
+measure_list = c.exec_tuning()
 
 #Salvando os dados obtidos dos tuning
-#c.save_tuning(measure_list = measure_list)
+c.save_tuning(measure_list = measure_list)
 
 
 ##
