@@ -158,7 +158,7 @@ makeRLearner.classif.underbagging = function() {
     par.set = makeParamSet(
       makeNumericLearnerParam(id = "learner_count", default = 40),
       makeDiscreteLearnerParam(id = "learner_name", default = SVM_STR,
-                               values = c(RF_STR, XGBOOST_STR, SVM_STR)),
+                               values = c(RF_STR, XGBOOST_STR, SVM_STR, RPART_STR, KNN_STR)),
       # SVM params
       makeNumericLearnerParam(id = "C"),
       makeNumericLearnerParam(id = "sigma"),
