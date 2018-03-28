@@ -62,6 +62,7 @@ $content_normal" > $normal_file
 universe                = vanilla
 executable            = '$normal_file'
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod") || (Machine == "dl-03.recod") || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
@@ -88,6 +89,7 @@ $content_ws" > $ws_file
 universe                = vanilla
 executable            = '$ws_file'
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod") || (Machine == "dl-03.recod") || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
@@ -115,6 +117,7 @@ $content_oversampling" > $oversampling_file
 universe                = vanilla
 executable            = '$oversampling_file'
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod") || (Machine == "dl-03.recod") || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
@@ -141,6 +144,7 @@ $content_underbagging" > $underbagging_file
 universe                = vanilla
 executable            = '$underbagging_file'
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod") || (Machine == "dl-03.recod") || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
@@ -172,6 +176,7 @@ $content_ensemble" > $ensemble_file
 universe                = vanilla
 executable            = '$ensemble_file'
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod") || (Machine == "dl-03.recod") || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)

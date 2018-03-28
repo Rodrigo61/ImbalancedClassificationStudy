@@ -12,6 +12,8 @@
 #   -> Adicione na lista de parametros os parametros do seu novo classificador (funcao 'makeRLearner.classif.underbagging')
 #   -> Adicione como parametros da funcao 'trainLearner.classif.underbagging' os parametros adicionados acima
 #   -> Crie um fluxo adicional para seu classificador na funcao 'trainLearner.classif.underbagging'
+#   -> Adicione sua constante CL como possivel valor de value na chamada makeDiscreteLearnerParam(id = "learner_name", ... dentro da funcao
+#      makeRLearner.classif.underbagging 
 
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
