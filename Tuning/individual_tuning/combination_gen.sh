@@ -15,7 +15,7 @@
 declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
 
 ## vetor de algoritmos
-declare -a learners=("svm" "rf" "xgboost" "c45")
+declare -a learners=("svm" "rf" "xgboost" "rpart" "knn")
 
 ## vetor de algoritmos oversampling
 declare -a oversamplings=("smote" "adasyn")
