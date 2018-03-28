@@ -15,7 +15,9 @@
 
 SVM_STR = "classif.ksvm"
 RF_STR = "classif.randomForest"
-XGBOOST_STR = "classif.xgboost" 
+XGBOOST_STR = "classif.xgboost"
+RPART_STR = "classif.rpart"
+KNN_STR = "classif.kknn"
 
 #' @param x matriz de atributos
 #' @param y factor da variável dependente
@@ -108,7 +110,7 @@ predict.underbagging = function(models_pool, new_data, threshold, positive = 1, 
 ################################################################
 
 trainLearner.classif.underbagging = function(.learner, .task, .subset, .weights = NULL, 
-                                        learner_count, learner_name, C, sigma, mtry, ntree, max_depth, eta, nrounds, ...) {
+                                        learner_count, learner_name, C, sigma, mtry, ntree, max_depth, eta, nrounds, xval, k, ...) {
   
   learner = makeLearner(learner_name)
   
@@ -124,6 +126,10 @@ trainLearner.classif.underbagging = function(.learner, .task, .subset, .weights 
     pars$max_depth = max_depth
     pars$eta = eta
     pars$nrounds = nrounds
+  }else if(learner_name == RPART_STR){
+    pars$xval = xval
+  }else if(learner_name == XGBOOST_STR){
+    pars$k = k
   }else{
     warning(paste("Nao conheco os hiperparametros para o learner_name = ", learner_name, sep=""))
     stop()
@@ -162,7 +168,11 @@ makeRLearner.classif.underbagging = function() {
       # XGBoost Params
       makeIntegerLearnerParam(id = "max_depth"),
       makeNumericLearnerParam(id = "eta"),
-      makeIntegerLearnerParam(id = "nrounds", default = 1L, lower = 1L)
+      makeIntegerLearnerParam(id = "nrounds", default = 1L, lower = 1L),
+      # Rpart Params
+      makeIntegerLearnerParam(id = "xval", default = 0),
+      # knn Params
+      makeIntegerLearnerParam(id = "k", default = 1)
     ),
     properties = c("twoclass", "numerics", "factors", "prob"),
     name = "Random Undersampling Bagging",
