@@ -246,7 +246,7 @@ c.get_measures_from_tuneParams = function(search_space, train, test){
   
   learner = c.makeLearnerWrapped() 
   
-  
+  c.print_debug(paste("Learner = ", c.learner_str, sep = ""))
   res_tuneParams = tuneParams(learner, 
                               task = makeClassifTask(data=train, target='y_data', positive=POSITIVE_CLASS), 
                               resampling = rdesc,
