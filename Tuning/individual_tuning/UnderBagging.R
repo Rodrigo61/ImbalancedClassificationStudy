@@ -128,7 +128,7 @@ trainLearner.classif.underbagging = function(.learner, .task, .subset, .weights 
     pars$nrounds = nrounds
   }else if(learner_name == RPART_STR){
     pars$xval = xval
-  }else if(learner_name == XGBOOST_STR){
+  }else if(learner_name == KNN_STR){
     pars$k = k
   }else{
     warning(paste("Nao conheco os hiperparametros para o learner_name = ", learner_name, sep=""))
