@@ -29,17 +29,6 @@ library("scmamp")
 library(dplyr)
 ```
 
-```{r echo=F}
-# Constantes
-AUC = "Area under the curve"
-KSVM = "classif.ksvm"
-RF = "classif.randomForest"
-XGB = "classif.xgboost"
-SMOTE = "SMOTE"
-ADASYN = "ADASYN"
-```
-
-
 # Tratamento dos dados
 Carregando data set compilado
 ```{r hide=T}

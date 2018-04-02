@@ -20,8 +20,12 @@ TUNING = "tuning_measure"
 for (performance in c(HOLDOUT, RESIDUAL, TUNING)){
   
   dir.create(paste("./outputs/", performance, "/", sep=""), showWarnings = FALSE)
-  for (measure in c(ACC, AUC, MCC, GMEAN, F1)){
+  #for (measure in c(ACC, AUC, MCC, GMEAN, F1)){
 
+    # TODO: O FOR foi removido para gerar apenas AUC 
+    measure = AUC
+    
+    
     dir_name = paste("./outputs/", performance, "/", measure, "/", sep="")
     if(!dir.exists(dir_name)){
       dir.create(dir_name, showWarnings = FALSE)    
@@ -84,7 +88,7 @@ for (performance in c(HOLDOUT, RESIDUAL, TUNING)){
                                       performance = performance),
                         output_file = paste(folder, "BD", imba, "(-VS-)Algo+Tecnica", performance, measure, ".pdf", sep="_"))
     }
-  }
+  #}
   
 }
 

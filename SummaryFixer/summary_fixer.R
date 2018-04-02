@@ -32,7 +32,7 @@ fix_missing_combination = function(summary, missing_stats){
   # SMOTE + CW
 
   measures = c('Accuracy', 'Area under the curve', "F1 measure", "G-mean", "Matthews correlation coefficient")
-  learners = c('classif.ksvm', 'classif.randomForest', 'classif.xgboost')
+  learners = c('classif.ksvm', 'classif.randomForest', 'classif.xgboost', 'classif.kknn', 'classif.rpart')
   techniques = list()
   techniques$sampling = c('SMOTE', 'ADASYN')
   techniques$underbagging = c('TRUE')
