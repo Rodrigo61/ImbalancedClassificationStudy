@@ -7,7 +7,7 @@ PATH_2_ANALYZE=$1
 
 #grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
 
-grep -rIwl $PATH_2_ANALYZE -e 'num_syn_i'
+grep -rwl $PATH_2_ANALYZE -e 'libicuuc.so.52'
 
 #Erros conhecidos
 # A ideia desse comando é detectar novos erros. A lista de erros conhecidossao:

@@ -2,6 +2,7 @@ N=228
 universe                = vanilla
 executable            = acc_rf_adasyn.sh
 arguments               = $(Process)
+Requirements = ((Machine == "cerebro.recod") || (Machine == "deepthought.recod")  || (Machine == "eddie.recod") || (Machine == "magi.recod") || (Machine == "theengine.recod") || (Machine == "twin01-a.recod") || (Machine == "twin01-b.recod") || (Machine == "twin01-c.recod") || (Machine == "twin01-d.recod") || (Machine == "twin02-a.recod") || (Machine == "twin02-c.recod") || (Machine == "viki.recod") || (Machine == "x04.recod") )
 output                = condor.out.$(CLUSTER).$(Process)
 log                     = condor.log.$(CLUSTER).($Process)
 error                   = condor.err.$(CLUSTER).$(Process)
