@@ -12,7 +12,7 @@
 
 
 ## vetor de metricas
-declare -a measures=("acc" "f1" "gmeans" "mcc" "auc")
+declare -a measures=("acc" "f1" "gmeans" "mcc" "auc" "bac")
 
 ## vetor de algoritmos
 declare -a learners=("svm" "rf" "xgboost" "rpart" "knn")

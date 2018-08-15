@@ -1,6 +1,5 @@
 Resumo:
-Módulo responsável pela a execucao do tuning e medicao de performance de todos as combinacoes que tratam o problema do
-desbalanco presente nos datasets gerados. 
+Módulo responsável pela a execucao do tuning e medicao de performance de todos as combinacoes que tratam o problema do desbalanco presente nos datasets gerados. 
 São gerados como resultado arquivos .csv contendo as performances medidas para cada combinacao. Os .csv são salvos nas pastas dos respectivos data sets que os originaram. Esses arquivos são agrupados em pastas chamadas de 'summary_files', onde são agrupados resultados correspondentes a uma porcentagem específica de classe minoritária. Por exemplo, todos os resultados obtidos para um data set X em uma porcentagem Y são armazenados em uma pasta chamada 'summary_filesY' na mesma pasta que contém o data set X.  
 Essas pastas de summary e seus respectivos .csv serão tratados e compilados pelo próximo módulo,  chamado 'summary_compiler'. 
 
@@ -41,7 +40,7 @@ gerada pelo script 'generate_ds_list.sh'. É importante que a lista contenha um 
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 Adicionando novas combinacoes (PARA DESENVOLVIMENTO):
-Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job já feito, pois a responsábilidade desse módulo é obter o máximo de informacoes possíveis sobre um data set com as ferramentas atuais. Logo, ele não precisa prever quais novas ferramentas serão anexadas no futuro. Ou seja, os resultados (.csv) gerados por jobs antigos não precisam ser refeitos para terem compatibilidade com jobs recentes, essa compatibilidade será obtida pelo módulo "summary_compiler".
+Para adicionar novas combinacoes, primeiro lembra-se de que essa adicao NAO irá afetar o resultado de qualquer job já feito, pois a responsabilidade desse módulo é obter o máximo de informacoes possíveis sobre um data set com as ferramentas atuais. Logo, ele não precisa prever quais novas ferramentas serão anexadas no futuro. Ou seja, os resultados (.csv) gerados por jobs antigos não precisam ser refeitos para terem compatibilidade com jobs recentes, essa compatibilidade será obtida pelo módulo "summary_compiler".
 
 Dito isso, alguns arquivos são passívos de mudancas obrigatórias ou facultativas caso o usuário queira adicionar uma nova combinacao ao resultado:
 
