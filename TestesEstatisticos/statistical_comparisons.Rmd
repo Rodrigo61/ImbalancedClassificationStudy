@@ -109,7 +109,7 @@ for(i in (1:dim(df)[2])){
 
 # Fazendo teste de normalidade
 ```{r}
-plotDensities(data = na.omit(df))
+#plotDensities(data = na.omit(df))
 ```
 
 
