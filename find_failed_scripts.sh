@@ -3,11 +3,11 @@
 PATH_2_ANALYZE=$1
 
 #Todos os erros
-#grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error' -e 'warnings()'
+grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
 
 #grep -rwl $PATH_2_ANALYZE -e 'NaN' -e 'halted' -e 'error'
 
-grep -rwl $PATH_2_ANALYZE -e 'libicuuc.so.52'
+#grep -rwl $PATH_2_ANALYZE -e 'libicuuc.so.52'
 
 #Erros conhecidos
 # A ideia desse comando é detectar novos erros. A lista de erros conhecidossao:

@@ -1,10 +1,10 @@
 
 universe                = vanilla
-Requirements = ((Machine == "x04.recod"))
+Requirements = ((Machine == "x03.recod"))
 executable              = runR.sh
 arguments               = teste.R $(Process)
 should_transfer_files  = YES
 when_to_transfer_output = ON_EXIT
 transfer_input_files = teste.R
-output                  = x04.recod.out
+output                  = x03.recod.out
 queue 
