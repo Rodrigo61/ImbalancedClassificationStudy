@@ -1,3 +1,4 @@
+Orientações sobre o projeto:
 Cada pasta dentro desta pasta é considerada um módulo. A sequencia lógica de utilizacao destes módulos é:
 
 1) TransformacaoDataset
